@@ -11,12 +11,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.v("Tag", "Test");
-
-        // cntrl alt k = commit and push
-
-        Log.v("Tag", "log in branch");
-
-        Log.v("Tag", "CONTRIBUTOR");
     }
 }
