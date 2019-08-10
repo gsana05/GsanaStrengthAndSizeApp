@@ -17,5 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v("Tag", "log in branch");
 
+        Log.v("Tag", "CONTRIBUTOR");
     }
 }
