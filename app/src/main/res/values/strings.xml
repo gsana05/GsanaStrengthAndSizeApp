@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GsanaStrengthAndSizeApp</string>
+
+    <string name="app_title">Strength and Size</string>
 </resources>
