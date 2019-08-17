@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ActivityLogIn"
-    android:background="#32236E"
+    android:background="#2F2929"
     >
 
     <View
@@ -33,7 +33,7 @@
         android:textColor="@color/ssBlack"
         app:layout_constraintDimensionRatio="1:1"
         android:scaleType="fitCenter"
-        android:background="#32236E"
+        android:background="#2F2929"
         />
 
     <TextView
@@ -68,6 +68,7 @@
         android:hint="Email"
         android:textColorHint="@color/ssWhite"
         android:textColor="@color/ssWhite"
+        android:background="@drawable/white_border"
         />
 
     <TextView
@@ -92,11 +93,25 @@
         app:layout_constraintTop_toBottomOf="@id/log_in_password_text"
         app:layout_constraintStart_toStartOf="@id/log_in_email_input"
         app:layout_constraintEnd_toEndOf="@id/log_in_email_input"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:hint="password"
         android:textColor="@color/ssWhite"
         android:textColorHint="@color/ssWhite"
         android:inputType="textPassword"
+        android:background="@drawable/white_border"
+        />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/log_in_password_input"
+        app:layout_constraintStart_toStartOf="@id/log_in_password_input"
+        app:layout_constraintEnd_toEndOf="@id/log_in_password_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/white_border"
+        android:text="Log In"
+        android:textColor="@color/ssWhite"
+        android:textSize="18sp"
+        android:textAllCaps="false"
         />
 
 
