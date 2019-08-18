@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,7 +86,7 @@ public class ActivityLogIn extends AppCompatActivity {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logIn();
+                logIn(email.toString(), password.toString());
             }
         });
     }
@@ -116,7 +118,9 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
-    public void logIn(){
+    public void logIn(String email, String password){
+
+        //FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password);
 
         /*EditText email = (EditText) this.findViewById(R.id.log_in_email_input);
         String emailUser = email.getText().toString();
