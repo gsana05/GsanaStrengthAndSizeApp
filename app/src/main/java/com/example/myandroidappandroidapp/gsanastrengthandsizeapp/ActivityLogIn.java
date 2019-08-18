@@ -17,12 +17,22 @@ import java.util.regex.Pattern;
 
 public class ActivityLogIn extends AppCompatActivity {
 
+    private EditText email;
+    private EditText password;
+    private ImageView emailChceck;
+    private ImageView passwordCheck;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        EditText email = (EditText) this.findViewById(R.id.log_in_email_input);
+        email = (EditText) this.findViewById(R.id.log_in_email_input);
+        password = (EditText) this.findViewById(R.id.log_in_password_input);
+        emailChceck = (ImageView) this.findViewById(R.id.log_in_email_check) ;
+        passwordCheck = (ImageView) this.findViewById(R.id.log_in_password_check);
+
+
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -36,20 +46,39 @@ public class ActivityLogIn extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Pattern pattern = Pattern.compile("^[A-Za-z0-9._]{1,16}+@{1}+[a-z]{1,7}\\.[a-z]{1,3}$");
-                Matcher mail = pattern.matcher(s);
-                if(mail.find()){
-                    ImageView email = (ImageView) findViewById(R.id.log_in_email_check);
-                    email.setVisibility(View.VISIBLE);
+
+                boolean validEmail = isValidEmail(s.toString());
+                if(validEmail){
+                    emailChceck.setVisibility(View.VISIBLE);
                 }
                 else {
-                    ImageView email = (ImageView) findViewById(R.id.log_in_email_check);
-                    email.setVisibility(View.INVISIBLE);
+                    emailChceck.setVisibility(View.INVISIBLE);
                 }
-
-                //Toast.makeText(getApplicationContext(), "3" ,Toast.LENGTH_LONG).show();
             }
         });
+
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                boolean isValidPassword = isValidPassword(s.toString());
+                if(isValidPassword){
+                    passwordCheck.setVisibility(View.VISIBLE);
+                }
+                else {
+                    passwordCheck.setVisibility(View.INVISIBLE);
+                }
+
+            }
+        });
+
 
         Button logInButton = (Button) this.findViewById(R.id.log_in_button);
         logInButton.setOnClickListener(new View.OnClickListener() {
@@ -60,17 +89,40 @@ public class ActivityLogIn extends AppCompatActivity {
         });
     }
 
+    public  boolean isValidEmail(final String email){
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String EMAIL_PATTERN = "^[A-Za-z0-9._]{1,16}+@{1}+[a-z]{1,7}\\.[a-z]{1,3}$";
+
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+
+        return matcher.matches();
+    }
+
+    public boolean isValidPassword(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
+
     public void logIn(){
-        EditText email = (EditText) this.findViewById(R.id.log_in_email_input);
+
+        /*EditText email = (EditText) this.findViewById(R.id.log_in_email_input);
         String emailUser = email.getText().toString();
 
-
-
-
         EditText password = (EditText) this.findViewById(R.id.log_in_password_input);
-        String passwordUser = password.getText().toString();
-
-
+        String passwordUser = password.getText().toString();*/
 
        // Toast.makeText(getApplicationContext(), "" ,Toast.LENGTH_LONG).show();
     }

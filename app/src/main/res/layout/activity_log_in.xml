@@ -122,8 +122,8 @@
         app:layout_constraintEnd_toEndOf="@+id/log_in_password_input"
         android:layout_marginEnd="10dp"
         android:src="@drawable/ic_baseline_check_circle_24px"
-        android:tint="@color/ssWhite"
         android:visibility="invisible"
+        android:tint="#0CF032"
         />
 
     <Button
