@@ -1,7 +1,10 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,18 +27,20 @@ public class ActivityLogIn extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
-    private ImageView emailChceck;
+    private ImageView emailCheck;
     private ImageView passwordCheck;
+    private boolean validEmailLogIn;
+    private boolean validPasswordLogIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        email = (EditText) this.findViewById(R.id.log_in_email_input);
-        password = (EditText) this.findViewById(R.id.log_in_password_input);
-        emailChceck = (ImageView) this.findViewById(R.id.log_in_email_check) ;
-        passwordCheck = (ImageView) this.findViewById(R.id.log_in_password_check);
+        email = this.findViewById(R.id.log_in_email_input);
+        password = this.findViewById(R.id.log_in_password_input);
+        emailCheck = this.findViewById(R.id.log_in_email_check) ;
+        passwordCheck = this.findViewById(R.id.log_in_password_check);
 
 
         email.addTextChangedListener(new TextWatcher() {
@@ -53,10 +59,12 @@ public class ActivityLogIn extends AppCompatActivity {
 
                 boolean validEmail = isValidEmail(s.toString());
                 if(validEmail){
-                    emailChceck.setVisibility(View.VISIBLE);
+                    emailCheck.setVisibility(View.VISIBLE);
+                    validEmailLogIn = true;
                 }
                 else {
-                    emailChceck.setVisibility(View.INVISIBLE);
+                    emailCheck.setVisibility(View.INVISIBLE);
+                    validEmailLogIn = false;
                 }
             }
         });
@@ -75,9 +83,11 @@ public class ActivityLogIn extends AppCompatActivity {
                 boolean isValidPassword = isValidPassword(s.toString());
                 if(isValidPassword){
                     passwordCheck.setVisibility(View.VISIBLE);
+                    validPasswordLogIn = true;
                 }
                 else {
                     passwordCheck.setVisibility(View.INVISIBLE);
+                    validPasswordLogIn = false;
                 }
 
             }
@@ -88,6 +98,29 @@ public class ActivityLogIn extends AppCompatActivity {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!validEmailLogIn){
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("You need a green tick")
+                            .setCancelable(false)
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Email is not valid");
+                    alert.show();
+                    return;
+                }
+
+                if(!validPasswordLogIn){
+                    return;
+                }
+
                 logIn(email.toString(), password.toString());
             }
         });
@@ -98,7 +131,12 @@ public class ActivityLogIn extends AppCompatActivity {
         Pattern pattern;
         Matcher matcher;
 
-        final String EMAIL_PATTERN = "^[A-Za-z0-9._]{1,16}+@{1}+[a-z]{1,7}\\.[a-z]{1,3}$";
+        final String EMAIL_PATTERN =  "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
