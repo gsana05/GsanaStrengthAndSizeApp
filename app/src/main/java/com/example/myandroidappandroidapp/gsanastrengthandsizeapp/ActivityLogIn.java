@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -102,7 +103,7 @@ public class ActivityLogIn extends AppCompatActivity {
                 if(!validEmailLogIn){
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("You need a green tick")
+                    builder.setMessage("You need a green tick on email")
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -118,10 +119,24 @@ public class ActivityLogIn extends AppCompatActivity {
                 }
 
                 if(!validPasswordLogIn){
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("You need a green tick on password")
+                            .setCancelable(false)
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("password is not valid");
+                    alert.show();
                     return;
                 }
 
-                logIn(email.toString(), password.toString());
+                logIn(email.getText().toString(), password.getText().toString(), v.getContext());
             }
         });
     }
@@ -158,16 +173,33 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
-    public void logIn(String email, String password){
+    public void logIn(String email, String password, final Context context){
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword("sanashee0555@hotmail.com", password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     Log.v("Tag", "");
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(context);
+                    builder.setMessage("success");
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("account created");
+                    alert.show();
+
                 }
                 else {
                     Log.v("Tag", task.getException().toString());
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(context);
+                    builder.setMessage(task.getException().toString());
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.setTitle("Error");
+                    alert.show();
                 }
 
             }
