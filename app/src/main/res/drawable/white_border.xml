@@ -4,18 +4,18 @@
 
     <!-- View background color -->
     <solid
-        android:color="#2F2929" >
+        android:color="#ffffff" >
     </solid>
 
     <!-- View border color and width -->
     <stroke
         android:width="2dp"
-        android:color="#fff" >
+        android:color="#a8834f" >
     </stroke>
 
     <!-- The radius makes the corners rounded -->
     <corners
-        android:radius="2dp"   >
+        android:radius="3dp"   >
     </corners>
 
 </shape>

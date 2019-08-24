@@ -10,10 +10,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,16 +34,20 @@ public class ActivityLogIn extends AppCompatActivity {
     private ImageView passwordCheck;
     private boolean validEmailLogIn;
     private boolean validPasswordLogIn;
+    private boolean mLogInProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
+        mLogInProgress = false;
+
         email = this.findViewById(R.id.log_in_email_input);
         password = this.findViewById(R.id.log_in_password_input);
         emailCheck = this.findViewById(R.id.log_in_email_check) ;
         passwordCheck = this.findViewById(R.id.log_in_password_check);
+
 
 
         email.addTextChangedListener(new TextWatcher() {
@@ -173,8 +179,23 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
-    public void logIn(String email, String password, final Context context){
+    public void updateUI(){
+        ProgressBar progress = this.findViewById(R.id.log_in_button_progress);
+        Button progressBtn = this.findViewById(R.id.log_in_button);
+        if(mLogInProgress){
 
+            progress.setVisibility(View.VISIBLE);
+            progressBtn.setVisibility(View.INVISIBLE);
+        }
+        else {
+            progress.setVisibility(View.INVISIBLE);
+            progressBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void logIn(String email, String password, final Context context){
+        mLogInProgress = true;
+        updateUI();
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -188,6 +209,8 @@ public class ActivityLogIn extends AppCompatActivity {
                     //Setting the title manually
                     alert.setTitle("account created");
                     alert.show();
+                    mLogInProgress = false;
+                    updateUI();
 
                 }
                 else {
@@ -200,17 +223,11 @@ public class ActivityLogIn extends AppCompatActivity {
                     //Setting the title manually
                     alert.setTitle("Error");
                     alert.show();
+                    mLogInProgress = false;
+                    updateUI();
                 }
 
             }
         });
-
-        /*EditText email = (EditText) this.findViewById(R.id.log_in_email_input);
-        String emailUser = email.getText().toString();
-
-        EditText password = (EditText) this.findViewById(R.id.log_in_password_input);
-        String passwordUser = password.getText().toString();*/
-
-       // Toast.makeText(getApplicationContext(), "" ,Toast.LENGTH_LONG).show();
     }
 }
