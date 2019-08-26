@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -214,6 +215,9 @@ public class ActivityLogIn extends AppCompatActivity {
                     logInAlert(context, isLogInSuccess, null);
                     mLogInProgress = false;
                     updateUI();
+
+                    Intent intent = new Intent(context, ActivityStartStates.class);
+                    startActivity(intent);
 
                 }
                 else {
