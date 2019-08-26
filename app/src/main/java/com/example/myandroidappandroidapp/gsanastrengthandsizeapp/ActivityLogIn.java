@@ -36,6 +36,12 @@ public class ActivityLogIn extends AppCompatActivity {
     private boolean validPasswordLogIn;
     private boolean mLogInProgress;
 
+    private final static int isValidEmail = 1;
+    private final static int isValidPassword = 2;
+    private final static int isLogInSuccess = 3;
+    private final static int isLogInUnsuccessful = 4;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,38 +113,12 @@ public class ActivityLogIn extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(!validEmailLogIn){
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("You need a green tick on email")
-                            .setCancelable(false)
-                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    //Creating dialog box
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.setTitle("Email is not valid");
-                    alert.show();
+                    logInAlert(v.getContext(), isValidEmail, null);
                     return;
                 }
 
                 if(!validPasswordLogIn){
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("You need a green tick on password")
-                            .setCancelable(false)
-                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    //Creating dialog box
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.setTitle("password is not valid");
-                    alert.show();
+                    logInAlert(v.getContext(), isValidPassword, null);
                     return;
                 }
 
@@ -183,13 +163,47 @@ public class ActivityLogIn extends AppCompatActivity {
         ProgressBar progress = this.findViewById(R.id.log_in_button_progress);
         Button progressBtn = this.findViewById(R.id.log_in_button);
         if(mLogInProgress){
-
             progress.setVisibility(View.VISIBLE);
             progressBtn.setVisibility(View.INVISIBLE);
         }
         else {
             progress.setVisibility(View.INVISIBLE);
             progressBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void logInAlert(Context context, int type, Exception exc){
+
+        String response;
+        if(exc != null){
+            response = exc.getMessage();
+        }
+        else {
+            switch(type){
+                case isValidEmail: response = "Email is not valid";
+                    break;
+                case isValidPassword: response = "password is not valid";
+                    break;
+                case isLogInSuccess: response = "Account created successfully";
+                    break;
+                default: response = "Error";
+            }
+        }
+
+        if(type != isLogInSuccess){
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(context);
+            builder.setMessage(response)
+                    .setCancelable(false)
+                    .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            //Setting the title manually
+            alert.show();
         }
     }
 
@@ -200,29 +214,15 @@ public class ActivityLogIn extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Log.v("Tag", "");
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(context);
-                    builder.setMessage("success");
-                    //Creating dialog box
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.setTitle("account created");
-                    alert.show();
+
+                    logInAlert(context, isLogInSuccess, null);
                     mLogInProgress = false;
                     updateUI();
 
                 }
                 else {
-                    Log.v("Tag", task.getException().toString());
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(context);
-                    builder.setMessage(task.getException().toString());
-                    //Creating dialog box
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.setTitle("Error");
-                    alert.show();
+
+                    logInAlert(context, isLogInUnsuccessful, task.getException());
                     mLogInProgress = false;
                     updateUI();
                 }
