@@ -149,10 +149,10 @@
         app:layout_constraintStart_toStartOf="@+id/log_in_button"
         app:layout_constraintEnd_toEndOf="@+id/log_in_button"
         android:visibility="invisible"
-        android:backgroundTint="#a8834f"
+        android:backgroundTint="@color/ssBrown"
         android:indeterminate="true"
         android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="#a8834f"
+        android:indeterminateTint="@color/ssBrown"
         />
 
     <Button
@@ -165,7 +165,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="50dp"
         android:background="@drawable/white_border"
-        android:backgroundTint="#a8834f"
+        android:backgroundTint="@color/ssBrown"
         android:text="@string/sign_up"
         android:textColor="@color/ssWhite"
         android:textSize="18sp"

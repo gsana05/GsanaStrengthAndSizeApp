@@ -12,8 +12,8 @@ public class ActivityStartStates extends AppCompatActivity {
         setContentView(R.layout.activity_start_states);
     }
 
-    @Override
+    /*@Override
     public void onBackPressed() {
         //disable
-    }
+    }*/
 }
