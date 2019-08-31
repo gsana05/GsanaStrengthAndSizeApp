@@ -15,9 +15,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
@@ -187,6 +187,7 @@ public class ActivityLogIn extends AppCompatActivity {
             }
         }
 
+        // only shows if you have not logged in successfully
         if(type != isLogInSuccess){
             AlertDialog.Builder builder;
             builder = new AlertDialog.Builder(context);
@@ -207,27 +208,42 @@ public class ActivityLogIn extends AppCompatActivity {
     public void logIn(String email, String password, final Context context){
         mLogInProgress = true;
         updateUI();
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
 
+        UserModel userModel = new UserModel();
+
+        DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
+            @Override
+            public void onComplete(Boolean data, Exception exception) {
+                if(data){
                     logInAlert(context, isLogInSuccess, null);
                     mLogInProgress = false;
                     updateUI();
-
-                    Intent intent = new Intent(context, ActivityStartStates.class);
-                    startActivity(intent);
-
+                    startStatsActivity();
                 }
                 else {
-
-                    logInAlert(context, isLogInUnsuccessful, task.getException());
+                    logInAlert(context, isLogInUnsuccessful, exception);
                     mLogInProgress = false;
                     updateUI();
                 }
-
             }
-        });
+        };
+
+        userModel.signUp(email, password, callback);
+    }
+
+    public void startStatsActivity(){
+        Intent intent = new Intent(this, ActivityStartStates.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id != null){
+            //startStatsActivity();
+        }
     }
 }
+

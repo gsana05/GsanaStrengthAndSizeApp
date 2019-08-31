@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -13,8 +15,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, ActivityLogIn.class);
-        startActivity(intent);
 
+
+        Intent intent = new Intent(this, ActivityLogIn.class);
+            startActivity(intent);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id == null){
+            /*Intent intent = new Intent(this, ActivityLogIn.class);
+            startActivity(intent);*/
+        }
     }
 }
