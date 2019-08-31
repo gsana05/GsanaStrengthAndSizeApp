@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="ssBlack">#000</color>
     <color name="ssWhite">#fff</color>
+
+    <color name="ssBackgroundBlack">#04090f</color>
+    <color name="ssGreen">#0CF032</color>
 </resources>
