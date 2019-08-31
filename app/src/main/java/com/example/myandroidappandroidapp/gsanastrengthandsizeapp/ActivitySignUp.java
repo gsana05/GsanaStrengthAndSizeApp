@@ -1,6 +1,5 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ActivityLogIn extends AppCompatActivity {
+public class ActivitySignUp extends AppCompatActivity {
 
     private EditText email;
     private EditText password;
@@ -42,7 +41,7 @@ public class ActivityLogIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
+        setContentView(R.layout.activity_sign_up);
 
         mLogInProgress = false;
 
@@ -242,7 +241,7 @@ public class ActivityLogIn extends AppCompatActivity {
 
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            //startStatsActivity();
+            startStatsActivity();
         }
     }
 }

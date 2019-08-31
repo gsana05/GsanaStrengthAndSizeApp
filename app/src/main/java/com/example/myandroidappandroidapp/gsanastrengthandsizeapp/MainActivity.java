@@ -4,8 +4,6 @@ import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        Intent intent = new Intent(this, ActivityLogIn.class);
+        Intent intent = new Intent(this, ActivitySignUp.class);
             startActivity(intent);
 
     }
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String id = FirebaseAuth.getInstance().getUid();
         if(id == null){
-            /*Intent intent = new Intent(this, ActivityLogIn.class);
+            /*Intent intent = new Intent(this, ActivitySignUp.class);
             startActivity(intent);*/
         }
     }

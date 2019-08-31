@@ -24,7 +24,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ActivityStartStates"></activity>
         <activity
-            android:name=".ActivityLogIn"
+            android:name=".ActivitySignUp"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
