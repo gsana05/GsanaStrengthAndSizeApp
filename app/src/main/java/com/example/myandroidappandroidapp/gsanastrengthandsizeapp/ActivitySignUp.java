@@ -241,7 +241,7 @@ public class ActivitySignUp extends AppCompatActivity {
 
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            //startStatsActivity();
+            startStatsActivity();
         }
     }
 }
