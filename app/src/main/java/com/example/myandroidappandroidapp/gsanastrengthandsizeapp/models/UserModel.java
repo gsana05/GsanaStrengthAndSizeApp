@@ -23,4 +23,14 @@ public class UserModel {
             }
         });
     }
+
+    public void saveUserStats(String gymName, String benchPress, String squat, String Deadlift, String overHeadPress){
+        String id = FirebaseAuth.getInstance().getUid();
+
+
+
+
+    }
+
+
 }

@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
+
 public class ActivityStartStates extends AppCompatActivity {
 
     private Button button;
@@ -18,6 +20,7 @@ public class ActivityStartStates extends AppCompatActivity {
     private EditText squat;
     private EditText deadlift;
     private EditText overHeadPress;
+    private EditText gymName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +34,18 @@ public class ActivityStartStates extends AppCompatActivity {
         squat =  this.findViewById(R.id.start_states_squat_input);
         deadlift =  this.findViewById(R.id.start_states_deadlift_input);
         overHeadPress =  this.findViewById(R.id.start_states_ohp_input);
+        gymName = this.findViewById(R.id.start_states_user_name_input);
 
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(isEmpty(gymName)){
+                    alert("User name");
+                    return;
+                }
+
                 if(isEmpty(benchPress)){
                     alert("Bench press");
                     return;
@@ -87,7 +97,10 @@ public class ActivityStartStates extends AppCompatActivity {
     public void saveUserStats(){
        alert("Data has been filled in correctly");
 
-
+        UserModel userModel = new UserModel();
+        userModel.saveUserStats(gymName.getText().toString(),benchPress.getText().toString(), squat.getText().toString(),
+                deadlift.getText().toString(), overHeadPress.getText().toString()
+                );
 
     }
 
