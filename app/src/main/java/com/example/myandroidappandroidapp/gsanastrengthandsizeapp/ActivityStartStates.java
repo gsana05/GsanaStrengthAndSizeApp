@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
 
 public class ActivityStartStates extends AppCompatActivity {
@@ -97,9 +99,26 @@ public class ActivityStartStates extends AppCompatActivity {
     public void saveUserStats(){
        alert("Data has been filled in correctly");
 
+        DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
+            @Override
+            public void onComplete(Boolean data, Exception exception) {
+                if(data){
+                    Toast.makeText(getApplicationContext(),"Data saved successfully",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(),"Data did not save",Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
         UserModel userModel = new UserModel();
-        userModel.saveUserStats(gymName.getText().toString(),benchPress.getText().toString(), squat.getText().toString(),
-                deadlift.getText().toString(), overHeadPress.getText().toString()
+        userModel.saveUserStats(
+                gymName.getText().toString(),
+                Float.valueOf(benchPress.getText().toString()),
+                Float.valueOf(squat.getText().toString()),
+                Float.valueOf(deadlift.getText().toString()),
+                Float.valueOf(overHeadPress.getText().toString()),
+                callback
                 );
 
     }

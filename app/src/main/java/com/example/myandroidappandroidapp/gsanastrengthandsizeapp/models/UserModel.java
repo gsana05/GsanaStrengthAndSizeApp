@@ -6,6 +6,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
 
 public class UserModel {
 
@@ -24,13 +28,28 @@ public class UserModel {
         });
     }
 
-    public void saveUserStats(String gymName, String benchPress, String squat, String Deadlift, String overHeadPress){
+    public void saveUserStats(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, final DataModelResult<Boolean> callback){
         String id = FirebaseAuth.getInstance().getUid();
 
+        if(id != null){
+            Date date = new Date(System.currentTimeMillis());
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date);
 
-
-
+            getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful()){
+                        callback.onComplete(true, null);
+                    }
+                    else {
+                        callback.onComplete(false, task.getException());
+                    }
+                }
+            });
+        }
     }
 
-
+    public CollectionReference getDatabaseRef(){
+        return FirebaseFirestore.getInstance().collection("workoutProfiles");
+    }
 }
