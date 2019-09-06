@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.regex.Matcher;
@@ -208,8 +209,6 @@ public class ActivitySignUp extends AppCompatActivity {
         mLogInProgress = true;
         updateUI();
 
-        UserModel userModel = new UserModel();
-
         DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
             @Override
             public void onComplete(Boolean data, Exception exception) {
@@ -227,7 +226,9 @@ public class ActivitySignUp extends AppCompatActivity {
             }
         };
 
-        userModel.signUp(email, password, callback);
+        UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+        userModelSingleton.signUp(email, password, callback);
+
     }
 
     public void startStatsActivity(){

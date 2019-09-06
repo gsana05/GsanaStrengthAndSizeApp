@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 
 public class ActivityStartStates extends AppCompatActivity {
 
@@ -111,16 +112,14 @@ public class ActivityStartStates extends AppCompatActivity {
             }
         };
 
-        UserModel userModel = new UserModel();
-        userModel.saveUserStats(
+        UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+        userModelSingleton.saveUserStats(
                 gymName.getText().toString(),
                 Float.valueOf(benchPress.getText().toString()),
                 Float.valueOf(squat.getText().toString()),
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
-                callback
-                );
-
+                callback);
     }
 
     @Override
