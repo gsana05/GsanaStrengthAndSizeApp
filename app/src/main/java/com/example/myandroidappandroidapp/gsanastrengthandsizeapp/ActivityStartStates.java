@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -105,6 +106,7 @@ public class ActivityStartStates extends AppCompatActivity {
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
                     Toast.makeText(getApplicationContext(),"Data saved successfully",Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"Data did not save",Toast.LENGTH_SHORT).show();

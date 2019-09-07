@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
-import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -46,10 +45,10 @@ public class ActivitySignUp extends AppCompatActivity {
 
         mLogInProgress = false;
 
-        email = this.findViewById(R.id.log_in_email_input);
-        password = this.findViewById(R.id.log_in_password_input);
-        emailCheck = this.findViewById(R.id.log_in_email_check) ;
-        passwordCheck = this.findViewById(R.id.log_in_password_check);
+        email = this.findViewById(R.id.sign_up_email_input);
+        password = this.findViewById(R.id.sign_up_password_input);
+        emailCheck = this.findViewById(R.id.sign_up_email_check) ;
+        passwordCheck = this.findViewById(R.id.sign_up_password_check);
 
 
 
@@ -104,8 +103,8 @@ public class ActivitySignUp extends AppCompatActivity {
         });
 
 
-        Button logInButton = this.findViewById(R.id.log_in_button);
-        logInButton.setOnClickListener(new View.OnClickListener() {
+        Button signUpButton = this.findViewById(R.id.sign_up_button);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -120,6 +119,14 @@ public class ActivitySignUp extends AppCompatActivity {
                 }
 
                 logIn(email.getText().toString(), password.getText().toString(), v.getContext());
+            }
+        });
+
+        Button logInButton = this.findViewById(R.id.sign_up_button_cancel);
+        logInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -157,8 +164,8 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     public void updateUI(){
-        ProgressBar progress = this.findViewById(R.id.log_in_button_progress);
-        Button progressBtn = this.findViewById(R.id.log_in_button);
+        ProgressBar progress = this.findViewById(R.id.sign_up_button_progress);
+        Button progressBtn = this.findViewById(R.id.sign_up_button);
         if(mLogInProgress){
             progress.setVisibility(View.VISIBLE);
             progressBtn.setVisibility(View.INVISIBLE);
@@ -242,7 +249,7 @@ public class ActivitySignUp extends AppCompatActivity {
 
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            startStatsActivity();
+            finish();
         }
     }
 }
