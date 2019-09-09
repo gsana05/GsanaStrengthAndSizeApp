@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
@@ -17,12 +18,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ActivityLogIn extends AppCompatActivity {
 
+    private Boolean mSignIn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
 
-        Button logInButton = this.findViewById(R.id.sign_up_button);
+        Button logInButton = this.findViewById(R.id.log_in_button);
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +61,7 @@ public class ActivityLogIn extends AppCompatActivity {
 
     public void doLogin(){
 
+
         EditText email = this.findViewById(R.id.log_in_email_input);
         EditText password = this.findViewById(R.id.log_in_password_input);
 
@@ -71,12 +75,18 @@ public class ActivityLogIn extends AppCompatActivity {
             return;
         }
 
+        mSignIn = true;
+        updateUI();
         DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
+                    mSignIn = false;
+                    updateUI();
                     finish();
                 }else {
+                    mSignIn = false;
+                    updateUI();
                     alertDialog(exception.getMessage());
                 }
             }
@@ -85,6 +95,19 @@ public class ActivityLogIn extends AppCompatActivity {
         UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
         userModelSingleton.logIn(email.getText().toString(), password.getText().toString(), callback);
 
+    }
+
+    public void updateUI(){
+        ProgressBar progress = this.findViewById(R.id.log_in_button_progress);
+        Button progressBtn = this.findViewById(R.id.log_in_button);
+        if(mSignIn){
+            progress.setVisibility(View.VISIBLE);
+            progressBtn.setVisibility(View.INVISIBLE);
+        }
+        else {
+            progress.setVisibility(View.INVISIBLE);
+            progressBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     public void startActivity(){

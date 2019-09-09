@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@id/sign_up_password_text"
         app:layout_constraintStart_toStartOf="@+id/log_in_email_input"
         app:layout_constraintEnd_toEndOf="@+id/log_in_email_input"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
+        app:layout_constraintBottom_toTopOf="@+id/log_in_button"
         android:layout_marginTop="10dp"
         android:padding="6dp"
         android:hint="@string/password"
@@ -111,13 +111,13 @@
         tools:targetApi="o" />
 
     <ProgressBar
-        android:id="@+id/sign_up_button_progress"
+        android:id="@+id/log_in_button_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/sign_up_button"
-        app:layout_constraintBottom_toBottomOf="@+id/sign_up_button"
-        app:layout_constraintStart_toStartOf="@+id/sign_up_button"
-        app:layout_constraintEnd_toEndOf="@+id/sign_up_button"
+        app:layout_constraintTop_toTopOf="@+id/log_in_button"
+        app:layout_constraintBottom_toBottomOf="@+id/log_in_button"
+        app:layout_constraintStart_toStartOf="@+id/log_in_button"
+        app:layout_constraintEnd_toEndOf="@+id/log_in_button"
         android:visibility="invisible"
         android:backgroundTint="@color/ssBrown"
         android:indeterminate="true"
@@ -126,27 +126,27 @@
         />
 
     <Button
-        android:id="@+id/sign_up_button"
+        android:id="@+id/log_in_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/log_in_password_input"
-        app:layout_constraintStart_toStartOf="@+id/log_in_password_input"
-        app:layout_constraintEnd_toEndOf="@+id/log_in_password_input"
-        app:layout_constraintBottom_toTopOf="@+id/log_in_create_account_btn"
         android:layout_marginTop="50dp"
         android:background="@drawable/white_border"
         android:backgroundTint="@color/ssBrown"
         android:text="@string/log_in"
+        android:textAllCaps="false"
         android:textColor="@color/ssWhite"
         android:textSize="18sp"
-        android:textAllCaps="false"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/log_in_create_account_btn"
+        app:layout_constraintEnd_toEndOf="@+id/log_in_password_input"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/log_in_password_input"
+        app:layout_constraintTop_toBottomOf="@+id/log_in_password_input" />
 
     <Button
         android:id="@+id/log_in_create_account_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_button"
+        app:layout_constraintTop_toBottomOf="@+id/log_in_button"
         app:layout_constraintStart_toStartOf="@+id/log_in_password_input"
         app:layout_constraintEnd_toEndOf="@+id/log_in_password_input"
         app:layout_constraintBottom_toBottomOf="parent"
