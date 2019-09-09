@@ -1,7 +1,9 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ActivityLogIn extends AppCompatActivity {
 
@@ -37,18 +40,44 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
+    public void alertDialog(String response){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(response)
+                .setCancelable(false)
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
+    }
+
     public void doLogin(){
 
         EditText email = this.findViewById(R.id.log_in_email_input);
         EditText password = this.findViewById(R.id.log_in_password_input);
 
+        if(email.getText().toString().isEmpty()){
+            alertDialog("Please enter email");
+            return;
+        }
+
+        if(password.getText().toString().isEmpty()){
+            alertDialog("Please enter password");
+            return;
+        }
+
         DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
-                    startMainActivity();
+                    finish();
                 }else {
-                    Toast.makeText(getApplicationContext(), exception.getMessage() , Toast.LENGTH_LONG).show();
+                    alertDialog(exception.getMessage());
                 }
             }
         };
@@ -58,14 +87,17 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
-    public void startMainActivity(){
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-
     public void startActivity(){
         Intent intent = new Intent(this, ActivitySignUp.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id != null){
+            finish();
+        }
     }
 }
