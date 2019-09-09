@@ -94,7 +94,7 @@ public class UserModelSingleton {
 
     }
 
-    public CollectionReference getDatabaseRef(){
+    private CollectionReference getDatabaseRef(){
         return FirebaseFirestore.getInstance().collection("workoutProfiles");
     }
 }

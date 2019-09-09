@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,18 +12,18 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
-import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModel;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 
 public class ActivityStartStates extends AppCompatActivity {
 
-    private Button button;
-    private ProgressBar progress;
     private EditText benchPress;
     private EditText squat;
     private EditText deadlift;
     private EditText overHeadPress;
     private EditText gymName;
+    private Button button;
+    private ProgressBar progress;
+    private boolean mSaveData = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +69,15 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
+                mSaveData = true;
+                updateUI();
                 saveUserStats();
             }
         });
     }
 
     private boolean isEmpty(EditText etText) {
-        if (etText.getText().toString().trim().length() > 0)
-            return false;
-
-        return true;
+        return etText.getText().toString().trim().length() <= 0;
     }
 
     public void alert(String response){
@@ -99,16 +97,20 @@ public class ActivityStartStates extends AppCompatActivity {
     }
 
     public void saveUserStats(){
-       alert("Data has been filled in correctly");
+       //alert("Data has been filled in correctly");
 
         DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
+                    mSaveData = false;
+                    updateUI();
                     Toast.makeText(getApplicationContext(),"Data saved successfully",Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 else {
+                    mSaveData = false;
+                    updateUI();
                     Toast.makeText(getApplicationContext(),"Data did not save",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -122,6 +124,18 @@ public class ActivityStartStates extends AppCompatActivity {
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
                 callback);
+    }
+
+    public void updateUI(){
+
+        if(mSaveData){
+            progress.setVisibility(View.VISIBLE);
+            button.setVisibility(View.INVISIBLE);
+        }
+        else {
+            progress.setVisibility(View.INVISIBLE);
+            button.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
