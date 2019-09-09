@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,8 +25,24 @@ public class MainActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity();
+
+                DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data, Exception exception) {
+                        if(data){
+                            startActivity();
+                        }
+                        else {
+                            Log.v("LOG OUT ERROR", "Something went wrong logging out");
+                        }
+
+                    }
+                };
+
+                UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+                userModelSingleton.logout(callback);
+
+
             }
         });
     }
