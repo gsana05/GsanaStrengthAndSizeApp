@@ -6,14 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <fragment
+        android:id="@+id/fragment5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.example.myandroidappandroidapp.gsanastrengthandsizeapp.FragmentToolBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn"
+        tools:layout="@layout/fragment_fragment_tool_bar"/>
+
     <Button
         android:id="@+id/btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello Gareth!"
+        app:layout_constraintTop_toBottomOf="@id/fragment5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+      />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
