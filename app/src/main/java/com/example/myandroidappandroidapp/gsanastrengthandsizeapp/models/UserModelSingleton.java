@@ -10,8 +10,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class UserModelSingleton {
+
+    private String userEmail;
+
     private static UserModelSingleton ourInstance;
 
     private UserModelSingleton() {
@@ -26,11 +30,12 @@ public class UserModelSingleton {
         return ourInstance;
     }
 
-    public void signUp(String email, String password, final DataModelResult<Boolean> callback){
+    public void signUp(final String email, String password, final DataModelResult<Boolean> callback){
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    userEmail = email;
                     callback.onComplete(true, null);
                 }
                 else {
@@ -46,7 +51,10 @@ public class UserModelSingleton {
 
         if(id != null){
             Date date = new Date(System.currentTimeMillis());
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date);
+            UUID uuid = UUID.randomUUID();
+            String pin = uuid.toString().substring(0,8);
+
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, pin, userEmail);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
