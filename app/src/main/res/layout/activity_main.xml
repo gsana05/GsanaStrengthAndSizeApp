@@ -8,24 +8,27 @@
 
     <fragment
         android:id="@+id/fragment5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:name="com.example.myandroidappandroidapp.gsanastrengthandsizeapp.FragmentToolBar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/btn"
-        tools:layout="@layout/fragment_fragment_tool_bar"/>
+        tools:layout="@layout/fragment_fragment_tool_bar"
+        app:layout_constraintVertical_weight="0.1"
+        />
 
-    <Button
+    <View
         android:id="@+id/btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello Gareth!"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/fragment5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/ssWhite"
+        app:layout_constraintVertical_weight="0.9"
       />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
