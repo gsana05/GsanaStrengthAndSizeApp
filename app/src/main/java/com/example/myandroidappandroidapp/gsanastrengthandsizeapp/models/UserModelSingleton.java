@@ -1,13 +1,19 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Date;
 import java.util.UUID;
@@ -28,6 +34,27 @@ public class UserModelSingleton {
         }
 
         return ourInstance;
+    }
+
+    public void getUserData(String userId, final DataModelResult<User> callback){
+
+        getDatabaseRef().document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+
+
+
+                if(snapshot.exists()){
+                    String gymName = snapshot.getString("gymName");
+                    Double bench = snapshot.getDouble("benchPress");
+                    Date date = snapshot.getDate("date");
+
+                    User user = new User(gymName, bench.floatValue(), 00.0f, 00.0f, 00.0f, date, "1721716e", "");
+
+                    callback.onComplete(user, null);
+                }
+            }
+        });
     }
 
     public void signUp(final String email, String password, final DataModelResult<Boolean> callback){
