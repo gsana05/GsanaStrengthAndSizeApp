@@ -36,27 +36,6 @@ public class UserModelSingleton {
         return ourInstance;
     }
 
-    public void getUserData(String userId, final DataModelResult<User> callback){
-
-        getDatabaseRef().document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-
-
-
-                if(snapshot.exists()){
-                    String gymName = snapshot.getString("gymName");
-                    Double bench = snapshot.getDouble("benchPress");
-                    Date date = snapshot.getDate("date");
-
-                    User user = new User(gymName, bench.floatValue(), 00.0f, 00.0f, 00.0f, date, "1721716e", "");
-
-                    callback.onComplete(user, null);
-                }
-            }
-        });
-    }
-
     public void signUp(final String email, String password, final DataModelResult<Boolean> callback){
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -124,9 +103,6 @@ public class UserModelSingleton {
         else {
             callback.onComplete(false, null);
         }
-
-
-
     }
 
     private CollectionReference getDatabaseRef(){

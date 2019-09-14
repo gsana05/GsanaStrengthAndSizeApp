@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserProfileModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class FragmentToolBar extends Fragment {
@@ -74,8 +75,8 @@ public class FragmentToolBar extends Fragment {
 
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
-            userModelSingleton.getUserData(id, callback);
+            UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
+            userProfileModelSingleton.getUserData(id, callback);
         }
     }
 }
