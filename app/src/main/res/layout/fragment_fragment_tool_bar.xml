@@ -31,7 +31,8 @@
         android:layout_marginBottom="20dp"
         android:text="User name"
         android:textSize="16sp"
-        android:textColor="@color/ssWhite"
+        android:textColor="@color/ssBrown"
+        android:textStyle="bold"
         />
 
     <TextView
@@ -58,7 +59,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Total Strength:"
         android:textSize="16sp"
-        android:textColor="@color/ssWhite"
+        android:textColor="@color/ssBrown"
+        android:textStyle="bold"
         />
 
     <TextView

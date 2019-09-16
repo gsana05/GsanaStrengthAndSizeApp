@@ -19,6 +19,8 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserMod
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserProfileModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
+
 public class FragmentToolBar extends Fragment {
 
     TextView userName;
@@ -48,7 +50,7 @@ public class FragmentToolBar extends Fragment {
 
                     Float total = bench + deadlift + squat + ohp;
 
-                    userResult.setText(total.toString());
+                    userResult.setText(String.format(Locale.UK,"%.02f KG", total));
                 }
                 else {
                     userName = view.findViewById(R.id.fragment_tool_bar_account_name_text);
