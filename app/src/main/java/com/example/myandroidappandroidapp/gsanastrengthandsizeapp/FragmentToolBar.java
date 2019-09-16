@@ -22,7 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class FragmentToolBar extends Fragment {
 
     TextView userName;
+    TextView userResult;
     private DataModelResult<User> callback;
+    private DataModelResult<User> callbackTest;
     private ImageView logout;
 
     @Override
@@ -37,6 +39,16 @@ public class FragmentToolBar extends Fragment {
                 if(data != null){
                     userName = view.findViewById(R.id.fragment_tool_bar_account_name_text);
                     userName.setText(data.getGymName());
+
+                    userResult = view.findViewById(R.id.fragment_tool_bar_account_strength_result);
+                    Float bench = data.getBenchPress();
+                    Float deadlift = data.getDeadlift();
+                    Float squat = data.getSquat();
+                    Float ohp = data.getOverHeadPress();
+
+                    Float total = bench + deadlift + squat + ohp;
+
+                    userResult.setText(total.toString());
                 }
                 else {
                     userName = view.findViewById(R.id.fragment_tool_bar_account_name_text);
@@ -45,6 +57,7 @@ public class FragmentToolBar extends Fragment {
             }
         };
 
+        // logout user
         final DataModelResult<Boolean> callbackLogout = new DataModelResult<Boolean>(){
 
             @Override
@@ -65,9 +78,20 @@ public class FragmentToolBar extends Fragment {
             }
         });
 
+
+
         return view;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id != null){
+            UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
+            userProfileModelSingleton.removeUserProfileListener(id, callback);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -76,7 +100,7 @@ public class FragmentToolBar extends Fragment {
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
             UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
-            userProfileModelSingleton.getUserData(id, callback);
+            userProfileModelSingleton.addUserProfileListener(id, callback);
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.google.firebase.firestore.CollectionReference;
@@ -33,21 +35,22 @@ public class UserProfileModelSingleton {
     private HashMap<String, User> mCachedProfile = new HashMap<>();
     private HashMap<String, ListenerRegistration> mRefs = new HashMap<>();
 
-    public void getUserData(final String userId, final DataModelResult<User> callback){
+    public void addUserProfileListener(final String userId, final DataModelResult<User> callback){
 
         ArrayList<DataModelResult<User>> callbacks = null;
 
-        if(mProfileCallbacks.containsKey(userId)){ // if the user data has been cached
-            if(mCachedProfile.get(userId) != null ){
-                callbacks = mProfileCallbacks.get(userId);
+        if(mProfileCallbacks.containsKey(userId)){ // does the user already have callbacks
+            if(mProfileCallbacks.get(userId) != null ){ // check if user callbacks is not null
+                callbacks = mProfileCallbacks.get(userId); // gets the arrayList of callbacks and sets local variable
             }
         }
         else {
-            callbacks = new ArrayList<>(); // first time getting user data
+            callbacks = new ArrayList<>(); // first time getting user data aka has no callbacks
         }
 
         if(callbacks != null){
-            if(!callbacks.contains(callback)){ // add the callback to the cache
+            Log.v("T", "kd");
+            if(!callbacks.contains(callback)){ // if it does not contain this callback then add it
                 callbacks.add(callback);
                 mProfileCallbacks.put(userId, callbacks);
             }
@@ -59,7 +62,7 @@ public class UserProfileModelSingleton {
             callback.onComplete(user, null);
         }
 
-        if(!mRefs.containsKey(userId)){
+        if(!mRefs.containsKey(userId)){// listener gets data and real time updates if anything changes
             ListenerRegistration ref = getDatabaseRef().document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -92,7 +95,28 @@ public class UserProfileModelSingleton {
                     }
                 }
             });
-            mRefs.put(userId, ref);
+            mRefs.put(userId, ref); // add firebase listener
+        }
+    }
+
+    public void removeUserProfileListener(final String userId, final DataModelResult<User> callback){
+        ArrayList<DataModelResult<User>> callbackList =  mProfileCallbacks.get(userId);
+        if(callbackList != null && callbackList.contains(callback)){
+            callbackList.remove(callback); // remove all the callbacks one by one
+
+            if(callbackList.size() == 0){ // when they are no callbacks left, its time to remove the firebase listener
+                mProfileCallbacks.remove(userId); // remove the key from hashmap so there is no reference to it
+
+                // remove firebase listener
+                ListenerRegistration lRef = mRefs.get(userId);
+                if(lRef != null){
+                    lRef.remove();
+                    mRefs.remove(userId);
+                }
+            }
+            else {
+                mProfileCallbacks.put(userId, callbackList);  // put the callback list back into list without the one just removed
+            }
         }
     }
 
