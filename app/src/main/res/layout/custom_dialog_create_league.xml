@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ssBackgroundBlack"
+    >
+
+
+    <TextView
+        android:id="@+id/custom_dialog_create_league_team_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/custom_dialog_create_league_team_input"
+        android:layout_marginTop="50dp"
+        android:text="Enter your league name"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/ssWhite"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <EditText
+        android:id="@+id/custom_dialog_create_league_team_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/custom_dialog_create_league_team_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/custom_dialog_create_league_cancel"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:padding="6dp"
+        android:background="@drawable/white_border"
+        android:inputType="text"
+        />
+
+    <Button
+        android:id="@+id/custom_dialog_create_league_cancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/custom_dialog_create_league_team_input"
+        app:layout_constraintEnd_toStartOf="@+id/custom_dialog_create_league_create"
+        app:layout_constraintTop_toBottomOf="@+id/custom_dialog_create_league_team_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="10dp"
+        android:text="Cancel"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssRed"
+        android:textAllCaps="false"
+        android:textColor="@color/ssWhite"
+        android:textSize="18dp"
+        />
+
+    <Button
+        android:id="@+id/custom_dialog_create_league_create"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/custom_dialog_create_league_cancel"
+        app:layout_constraintEnd_toEndOf="@+id/custom_dialog_create_league_team_input"
+        app:layout_constraintTop_toTopOf="@+id/custom_dialog_create_league_cancel"
+        app:layout_constraintBottom_toBottomOf="@+id/custom_dialog_create_league_cancel"
+        android:text="Create League"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssBrown"
+        android:textAllCaps="false"
+        android:textColor="@color/ssWhite"
+        android:textSize="18dp"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,4 +9,8 @@
     <color name="ssBackgroundBlack">#04090f</color>
     <color name="ssGreen">#0CF032</color>
     <color name="ssBrown">#a8834f</color>
+    <color name="ssRed">#E81F1F</color>
+
+
+
 </resources>
