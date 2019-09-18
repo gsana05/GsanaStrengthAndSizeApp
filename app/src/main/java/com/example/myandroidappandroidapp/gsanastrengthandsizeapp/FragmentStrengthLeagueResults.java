@@ -20,6 +20,7 @@ import java.util.Objects;
 public class FragmentStrengthLeagueResults extends Fragment {
 
     private Button createLeague;
+    private Button joinLeague;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,6 +32,14 @@ public class FragmentStrengthLeagueResults extends Fragment {
             @Override
             public void onClick(View v) {
                 alertDialog();
+            }
+        });
+
+        joinLeague = view.findViewById(R.id.fragment_strength_league_results_join_league_btn);
+        joinLeague.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -55,6 +64,19 @@ public class FragmentStrengthLeagueResults extends Fragment {
                 alert.dismiss();
             }
         });
+
+        Button createLeague;
+        createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        createLeague.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo
+                // add to database
+                // guuid
+            }
+        });
+
+
     }
 
     public void createLeagueDialog(){
