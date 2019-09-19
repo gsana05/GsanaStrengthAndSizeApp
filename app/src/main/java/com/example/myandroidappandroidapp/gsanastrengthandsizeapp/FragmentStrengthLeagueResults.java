@@ -14,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 
 import java.util.Objects;
 
@@ -92,6 +96,25 @@ public class FragmentStrengthLeagueResults extends Fragment {
                 }
 
                 Log.v("", "");
+
+                DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data, Exception exception) {
+
+                        if(data){
+                            Toast.makeText(getActivity(),"Data Saved",Toast.LENGTH_SHORT).show();
+                            alert.dismiss();
+                        }
+                        else {
+                            Toast.makeText(getActivity(),"Data NOT Saved",Toast.LENGTH_SHORT).show();
+                            alert.dismiss();
+                        }
+
+                    }
+                };
+
+                LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback);
 
 
             }
