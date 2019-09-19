@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.Objects;
 
@@ -65,14 +66,34 @@ public class FragmentStrengthLeagueResults extends Fragment {
             }
         });
 
-        Button createLeague;
-        createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        final EditText leagueName;
+        leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
+
+        Button createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo
-                // add to database
-                // guuid
+
+                if(leagueName.getText().toString().isEmpty()){
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+                    builder.setMessage("Please enter a league name")
+                            .setCancelable(false)
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.show();
+                    return;
+                }
+
+                Log.v("", "");
+
+
             }
         });
 
