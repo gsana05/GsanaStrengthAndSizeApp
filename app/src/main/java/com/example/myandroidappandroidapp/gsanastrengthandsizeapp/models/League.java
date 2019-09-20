@@ -1,5 +1,6 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class League {
@@ -7,11 +8,13 @@ public class League {
     String leagueName;
     String leaguePin;
     Date leagueCreatedDate;
+    ArrayList<String> listOfUiid;
 
-    public League(String leagueName, String leaguePin, Date leagueCreatedDate) {
+    public League(String leagueName, String leaguePin, Date leagueCreatedDate, ArrayList<String> listOfUiid) {
         this.leagueName = leagueName;
         this.leaguePin = leaguePin;
         this.leagueCreatedDate = leagueCreatedDate;
+        this.listOfUiid = listOfUiid;
     }
 
     public String getLeagueName() {
@@ -36,5 +39,13 @@ public class League {
 
     public void setLeagueCreatedDate(Date leagueCreatedDate) {
         this.leagueCreatedDate = leagueCreatedDate;
+    }
+
+    public ArrayList<String> getListOfUiid() {
+        return listOfUiid;
+    }
+
+    public void setListOfUiid(ArrayList<String> listOfUiid) {
+        this.listOfUiid = listOfUiid;
     }
 }

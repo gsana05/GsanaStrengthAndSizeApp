@@ -3,12 +3,15 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 public class LeagueModelSingleton {
@@ -28,29 +31,90 @@ public class LeagueModelSingleton {
         return ourInstance;
     }
 
-    public void setLeagueTable(String leagueName, final DataModelResult<Boolean> callback){
+    private void getLeagueTable(final DataModelResult<League> callback){
         String userId = FirebaseAuth.getInstance().getUid();
-        Date leagueStartDate = new Date(System.currentTimeMillis());
-        UUID uuid = UUID.randomUUID();
-        String leaguePin = uuid.toString().substring(0,8);
-
-        League league = new League(leagueName, leaguePin, leagueStartDate);
-
         if(userId != null){
-            getDatabaseRef().document(leaguePin).set(userId).addOnCompleteListener(new OnCompleteListener<Void>() {
+            getDatabaseRef().document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if(task.isSuccessful()){
-                        callback.onComplete(true, null);
+                        DocumentSnapshot snapshot = task.getResult();
+                        if(snapshot != null && snapshot.exists()){
+                            Date leagueStartDate = snapshot.getDate("leagueCreatedDate");
+                            String leagueName = snapshot.getString("leagueName");
+                            String leaguePin = snapshot.getString("leaguePin");
+
+                            ArrayList<String> list = null;
+                            Map hMap = snapshot.getData();
+                            if (hMap != null) {
+                                list = (ArrayList<String>) hMap.get("listOfUiid");
+                            }
+
+                            League league = new League(leagueName, leaguePin, leagueStartDate, list);
+                            callback.onComplete(league, null);
+                        }
+                        else {
+                            callback.onComplete(null, task.getException());
+                        }
                     }
                     else {
-                        callback.onComplete(false, task.getException());
+                        callback.onComplete(null, task.getException());
                     }
 
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callback.onComplete(null, null);
+                }
             });
         }
+    }
+
+    // each time a league is created it gets the old data updates the arraylist of league and creates new object
+    public void setLeagueTable(final String leagueName, final DataModelResult<Boolean> callback){
+
+        DataModelResult<League> leagueFromDatabase = new DataModelResult<League>() {
+            @Override
+            public void onComplete(League data, Exception exception) {
+
+                ArrayList<String> list = new ArrayList<>();
+
+                // if you have leagues created get them and make sure they are added to the new object
+                if(data != null){
+                    list = new ArrayList<>(data.listOfUiid);
+                }
+
+                String userId = FirebaseAuth.getInstance().getUid();
+                Date leagueStartDate = new Date(System.currentTimeMillis());
+                UUID uuid = UUID.randomUUID();
+                String leaguePin = uuid.toString().substring(0,8);
+
+                list.add(leaguePin);
+
+                League league = new League(leagueName, leaguePin, leagueStartDate, list);
+
+                if(userId != null){
+                    getDatabaseRef().document(userId).set(league).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if(task.isSuccessful()){
+                                callback.onComplete(true, null);
+                            }
+                            else {
+                                callback.onComplete(false, task.getException());
+                            }
+
+                        }
+                    });
+                }
+
+
+            }
+        };
+
+        getLeagueTable(leagueFromDatabase);
 
     }
 
