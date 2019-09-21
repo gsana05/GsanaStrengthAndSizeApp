@@ -5,47 +5,27 @@ import java.util.Date;
 
 public class League {
 
-    String leagueName;
-    String leaguePin;
-    Date leagueCreatedDate;
-    ArrayList<String> listOfUiid;
+    String leagueMasterId;
+    ArrayList<CreatedLeague> leaguesCreated;
 
-    public League(String leagueName, String leaguePin, Date leagueCreatedDate, ArrayList<String> listOfUiid) {
-        this.leagueName = leagueName;
-        this.leaguePin = leaguePin;
-        this.leagueCreatedDate = leagueCreatedDate;
-        this.listOfUiid = listOfUiid;
+    public League(String leagueMasterId, ArrayList<CreatedLeague> leaguesCreated) {
+        this.leagueMasterId = leagueMasterId;
+        this.leaguesCreated = leaguesCreated;
     }
 
-    public String getLeagueName() {
-        return leagueName;
+    public String getLeagueMasterId() {
+        return leagueMasterId;
     }
 
-    public void setLeagueName(String leagueName) {
-        this.leagueName = leagueName;
+    public void setLeagueMasterId(String leagueMasterId) {
+        this.leagueMasterId = leagueMasterId;
     }
 
-    public String getLeaguePin() {
-        return leaguePin;
+    public ArrayList<CreatedLeague> getLeaguesCreated() {
+        return leaguesCreated;
     }
 
-    public void setLeaguePin(String leaguePin) {
-        this.leaguePin = leaguePin;
-    }
-
-    public Date getLeagueCreatedDate() {
-        return leagueCreatedDate;
-    }
-
-    public void setLeagueCreatedDate(Date leagueCreatedDate) {
-        this.leagueCreatedDate = leagueCreatedDate;
-    }
-
-    public ArrayList<String> getListOfUiid() {
-        return listOfUiid;
-    }
-
-    public void setListOfUiid(ArrayList<String> listOfUiid) {
-        this.listOfUiid = listOfUiid;
+    public void setLeaguesCreated(ArrayList<CreatedLeague> leaguesCreated) {
+        this.leaguesCreated = leaguesCreated;
     }
 }

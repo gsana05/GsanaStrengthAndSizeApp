@@ -32,7 +32,7 @@ public class LeagueModelSingleton {
     }
 
     private void getLeagueTable(final DataModelResult<League> callback){
-        String userId = FirebaseAuth.getInstance().getUid();
+        final String userId = FirebaseAuth.getInstance().getUid();
         if(userId != null){
             getDatabaseRef().document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -44,13 +44,13 @@ public class LeagueModelSingleton {
                             String leagueName = snapshot.getString("leagueName");
                             String leaguePin = snapshot.getString("leaguePin");
 
-                            ArrayList<String> list = null;
+                            ArrayList<CreatedLeague> list = null;
                             Map hMap = snapshot.getData();
                             if (hMap != null) {
-                                list = (ArrayList<String>) hMap.get("listOfUiid");
+                                list = (ArrayList<CreatedLeague>) hMap.get("leaguesCreated");
                             }
 
-                            League league = new League(leagueName, leaguePin, leagueStartDate, list);
+                            League league = new League(userId, list);
                             callback.onComplete(league, null);
                         }
                         else {
@@ -78,11 +78,11 @@ public class LeagueModelSingleton {
             @Override
             public void onComplete(League data, Exception exception) {
 
-                ArrayList<String> list = new ArrayList<>();
+                ArrayList<CreatedLeague> officialList = new ArrayList<>();
 
                 // if you have leagues created get them and make sure they are added to the new object
-                if(data != null){
-                    list = new ArrayList<>(data.listOfUiid);
+                if (data != null) {
+                    officialList.addAll(data.leaguesCreated);
                 }
 
                 String userId = FirebaseAuth.getInstance().getUid();
@@ -90,12 +90,13 @@ public class LeagueModelSingleton {
                 UUID uuid = UUID.randomUUID();
                 String leaguePin = uuid.toString().substring(0,8);
 
-                list.add(leaguePin);
+                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate, userId);
+                officialList.add(createdLeague);
 
-                League league = new League(leagueName, leaguePin, leagueStartDate, list);
+                League officialLeague = new League(userId, officialList);
 
                 if(userId != null){
-                    getDatabaseRef().document(userId).set(league).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
