@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class FragmentStrengthLeagueResults extends Fragment {
 
     private Button createLeague;
     private Button joinLeague;
+    private EditText leagueName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +72,6 @@ public class FragmentStrengthLeagueResults extends Fragment {
             }
         });
 
-        final EditText leagueName;
         leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
 
         Button createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
@@ -103,10 +104,12 @@ public class FragmentStrengthLeagueResults extends Fragment {
 
                         if(data){
                             Toast.makeText(getActivity(),"Data Saved",Toast.LENGTH_SHORT).show();
+                            dismissKeyboard();
                             alert.dismiss();
                         }
                         else {
                             Toast.makeText(getActivity(),"Data NOT Saved",Toast.LENGTH_SHORT).show();
+                            dismissKeyboard();
                             alert.dismiss();
                         }
 
@@ -123,7 +126,8 @@ public class FragmentStrengthLeagueResults extends Fragment {
 
     }
 
-    public void createLeagueDialog(){
-
+    public void dismissKeyboard(){
+        InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(leagueName.getWindowToken(), 0);
     }
 }
