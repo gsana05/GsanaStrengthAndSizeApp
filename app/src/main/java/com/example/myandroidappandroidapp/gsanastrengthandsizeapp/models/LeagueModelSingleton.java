@@ -226,7 +226,7 @@ public class LeagueModelSingleton {
     }
 
     private CollectionReference getDatabaseRef(){
-        return FirebaseFirestore.getInstance().collection("leagueTables");
+        return FirebaseFirestore.getInstance().collection("userLeagueTables");
     }
 
 }
