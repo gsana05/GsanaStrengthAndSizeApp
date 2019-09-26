@@ -6,9 +6,9 @@ import java.util.Date;
 public class League {
 
     String leagueMasterId;
-    ArrayList<CreatedLeague> leaguesCreated;
+    ArrayList<String> leaguesCreated;
 
-    public League(String leagueMasterId, ArrayList<CreatedLeague> leaguesCreated) {
+    public League(String leagueMasterId, ArrayList<String> leaguesCreated) {
         this.leagueMasterId = leagueMasterId;
         this.leaguesCreated = leaguesCreated;
     }
@@ -21,11 +21,11 @@ public class League {
         this.leagueMasterId = leagueMasterId;
     }
 
-    public ArrayList<CreatedLeague> getLeaguesCreated() {
+    public ArrayList<String> getLeaguesCreated() {
         return leaguesCreated;
     }
 
-    public void setLeaguesCreated(ArrayList<CreatedLeague> leaguesCreated) {
+    public void setLeaguesCreated(ArrayList<String> leaguesCreated) {
         this.leaguesCreated = leaguesCreated;
     }
 }

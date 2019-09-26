@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,9 +19,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueRecyclerViewAdapter;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 
@@ -28,6 +34,10 @@ public class FragmentStrengthLeagueResults extends Fragment {
     private Button createLeague;
     private Button joinLeague;
     private EditText leagueName;
+    private RecyclerView leagueRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private DataModelResult<ArrayList<String>> callback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -50,8 +60,41 @@ public class FragmentStrengthLeagueResults extends Fragment {
             }
         });
 
+        leagueRecyclerView = view.findViewById(R.id.fragment_strength_recycler_view);
+        layoutManager = new LinearLayoutManager(getActivity());
+        leagueRecyclerView.setLayoutManager(layoutManager);
+
+        callback = new DataModelResult<ArrayList<String>>() {
+            @Override
+            public void onComplete(ArrayList<String> data, Exception exception) {
+                if(data != null && data.size() > 0){
+                    mAdapter = new LeagueRecyclerViewAdapter(data);
+                    leagueRecyclerView.setAdapter(mAdapter);
+                }
+            }
+        };
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final String userId = FirebaseAuth.getInstance().getUid();
+        if(userId != null){
+            LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+            leagueModelSingleton.addLeagueListener(userId, callback);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        final String userId = FirebaseAuth.getInstance().getUid();
+        if(userId != null){
+            LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+            leagueModelSingleton.removeLeagueListener(userId, callback);
+        }
     }
 
     public void alertDialog(){
