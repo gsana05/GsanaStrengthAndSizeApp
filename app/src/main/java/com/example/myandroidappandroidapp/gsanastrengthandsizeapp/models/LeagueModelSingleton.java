@@ -102,23 +102,39 @@ public class LeagueModelSingleton {
                     officialList.addAll(data);
                 }
 
-                String userId = FirebaseAuth.getInstance().getUid();
+                final String userId = FirebaseAuth.getInstance().getUid();
                 Date leagueStartDate = new Date(System.currentTimeMillis());
                 UUID uuid = UUID.randomUUID();
                 String leaguePin = uuid.toString().substring(0,8);
-
-                //CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate, userId);
                 officialList.add(leaguePin);
+                //todo write leaguedata in a new collection
 
-                League officialLeague = new League(userId, officialList);
+                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate, userId);
+
+                final League officialLeague = new League(userId, officialList);
 
                 if(userId != null){
-                    getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    getDatabaseRefAllLeagues().document(leaguePin).set(createdLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
 
                             if(task.isSuccessful()){
-                                callback.onComplete(true, null);
+
+                                getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+
+                                        if(task.isSuccessful()){
+                                            callback.onComplete(true, null);
+                                        }
+                                        else {
+                                            callback.onComplete(false, task.getException());
+                                        }
+
+                                    }
+                                });
+
                             }
                             else {
                                 callback.onComplete(false, task.getException());
@@ -126,6 +142,8 @@ public class LeagueModelSingleton {
 
                         }
                     });
+
+
                 }
 
 
@@ -227,6 +245,10 @@ public class LeagueModelSingleton {
 
     private CollectionReference getDatabaseRef(){
         return FirebaseFirestore.getInstance().collection("userLeagueTables");
+    }
+
+    private CollectionReference getDatabaseRefAllLeagues(){
+        return FirebaseFirestore.getInstance().collection("allLeagueTables");
     }
 
 }
