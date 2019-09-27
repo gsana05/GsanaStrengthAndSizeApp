@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 
 
 import java.util.ArrayList;
@@ -16,10 +17,10 @@ import java.util.HashMap;
 
 public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecyclerViewAdapter.MyViewHolder> {
 
-    private ArrayList<String> createdLeagues;
+    private ArrayList<CreatedLeague> createdLeagues;
     private TextView leagueName;
 
-    public LeagueRecyclerViewAdapter(ArrayList<String> createdLeagues) {
+    public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues) {
         this.createdLeagues = createdLeagues;
     }
 
@@ -32,10 +33,9 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
     @Override
     public void onBindViewHolder(@NonNull LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
 
-        String leaguePin = createdLeagues.get(position);
+        CreatedLeague createdLeague = createdLeagues.get(position);
 
-
-      leagueName.setText(leaguePin);
+      leagueName.setText(createdLeague.getLeagueName());
     }
 
     @Override

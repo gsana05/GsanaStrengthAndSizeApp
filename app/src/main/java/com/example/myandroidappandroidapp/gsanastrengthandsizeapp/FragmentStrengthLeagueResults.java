@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueRecyclerViewAdapter;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,12 +64,24 @@ public class FragmentStrengthLeagueResults extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         leagueRecyclerView.setLayoutManager(layoutManager);
 
+
+        final DataModelResult<ArrayList<CreatedLeague>> callba = new DataModelResult<ArrayList<CreatedLeague>>() {
+            @Override
+            public void onComplete(ArrayList<CreatedLeague> data, Exception exception) {
+                if(data != null){
+                    mAdapter = new LeagueRecyclerViewAdapter(data);
+                    leagueRecyclerView.setAdapter(mAdapter);
+                }
+            }
+        };
+
         callback = new DataModelResult<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null && data.size() > 0){
-                    mAdapter = new LeagueRecyclerViewAdapter(data);
-                    leagueRecyclerView.setAdapter(mAdapter);
+                    LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                    leagueModelSingleton.addAllLeagueListener(data, callba);
+
                 }
             }
         };

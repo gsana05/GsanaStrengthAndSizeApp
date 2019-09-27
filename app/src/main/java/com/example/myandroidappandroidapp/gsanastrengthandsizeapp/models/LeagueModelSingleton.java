@@ -15,6 +15,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 
@@ -151,6 +153,41 @@ public class LeagueModelSingleton {
         };
 
         getLeagueTable(leagueFromDatabase);
+
+    }
+
+    public void addAllLeagueListener(final ArrayList<String> listLeaguePin, final DataModelResult<ArrayList<CreatedLeague>> callback){
+
+        final ArrayList<CreatedLeague> list = new ArrayList<>();
+
+        getDatabaseRefAllLeagues().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if(queryDocumentSnapshots != null){
+                    for(DocumentSnapshot i : queryDocumentSnapshots){
+                        HashMap<String, Object> map = (HashMap<String, Object>)i.getData();
+
+                        String leaguePin01 = (String) map.get("leaguePin");
+
+                        for(String pin : listLeaguePin){
+                            if(leaguePin01.equals(pin)){
+                                String op = (String) map.get("leagueName");
+                                CreatedLeague createdLeague = new CreatedLeague(op, null, null, null);
+                                list.add(createdLeague);
+                            }
+                        }
+                    }
+                    callback.onComplete(list, null);
+                }
+                else {
+                    callback.onComplete(null, null);
+                }
+            }
+        });
+
+    }
+
+    public void removeAllLeagueListener(){
 
     }
 
