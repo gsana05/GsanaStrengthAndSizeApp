@@ -13,11 +13,12 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.Created
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecyclerViewAdapter.MyViewHolder> {
 
     private ArrayList<CreatedLeague> createdLeagues;
+    private TextView leagueDate;
+    private TextView leaguePin;
     private TextView leagueName;
 
     public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues) {
@@ -32,10 +33,17 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
     @Override
     public void onBindViewHolder(@NonNull LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
-
         CreatedLeague createdLeague = createdLeagues.get(position);
 
-      leagueName.setText(createdLeague.getLeagueName());
+        if(createdLeague.getLeagueStartDate() != null){
+            //leagueDate.setText(createdLeague.getLeagueStartDate().toString());
+        }
+        else {
+            //leagueDate.setText("No Data");
+        }
+
+        leaguePin.setText(createdLeague.getLeaguePin());
+        leagueName.setText(createdLeague.getLeagueName());
     }
 
     @Override
@@ -47,6 +55,8 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            leagueDate = itemView.findViewById(R.id.league_list_item_date_name);
+            leaguePin = itemView.findViewById(R.id.league_list_item_pin_name);
             leagueName = itemView.findViewById(R.id.league_list_item_league_name);
 
         }

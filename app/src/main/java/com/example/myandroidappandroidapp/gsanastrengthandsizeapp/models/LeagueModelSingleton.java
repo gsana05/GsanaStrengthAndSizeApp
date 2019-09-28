@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -106,6 +107,9 @@ public class LeagueModelSingleton {
 
                 final String userId = FirebaseAuth.getInstance().getUid();
                 Date leagueStartDate = new Date(System.currentTimeMillis());
+
+                Long k = leagueStartDate.getTime();
+
                 UUID uuid = UUID.randomUUID();
                 String leaguePin = uuid.toString().substring(0,8);
                 officialList.add(leaguePin);
@@ -141,17 +145,11 @@ public class LeagueModelSingleton {
                             else {
                                 callback.onComplete(false, task.getException());
                             }
-
                         }
                     });
-
-
                 }
-
-
             }
         };
-
         getLeagueTable(leagueFromDatabase);
 
     }
@@ -167,12 +165,16 @@ public class LeagueModelSingleton {
                     for(DocumentSnapshot i : queryDocumentSnapshots){
                         HashMap<String, Object> map = (HashMap<String, Object>)i.getData();
 
-                        String leaguePin01 = (String) map.get("leaguePin");
+                        String leaguePinDatabase = (String) map.get("leaguePin");
 
                         for(String pin : listLeaguePin){
-                            if(leaguePin01.equals(pin)){
-                                String op = (String) map.get("leagueName");
-                                CreatedLeague createdLeague = new CreatedLeague(op, null, null, null);
+                            if(leaguePinDatabase.equals(pin)){
+                                String leagueNameDatabase = (String) map.get("leagueName");
+                                map.get("leagueStartDate");
+
+                                String userIdDatabase = (String) map.get("userId");
+
+                                CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, null, userIdDatabase);
                                 list.add(createdLeague);
                             }
                         }
