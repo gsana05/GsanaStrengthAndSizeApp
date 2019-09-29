@@ -108,14 +108,12 @@ public class LeagueModelSingleton {
                 final String userId = FirebaseAuth.getInstance().getUid();
                 Date leagueStartDate = new Date(System.currentTimeMillis());
 
-                Long k = leagueStartDate.getTime();
-
                 UUID uuid = UUID.randomUUID();
                 String leaguePin = uuid.toString().substring(0,8);
                 officialList.add(leaguePin);
                 //todo write leaguedata in a new collection
 
-                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate, userId);
+                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId);
 
                 final League officialLeague = new League(userId, officialList);
 
@@ -170,11 +168,10 @@ public class LeagueModelSingleton {
                         for(String pin : listLeaguePin){
                             if(leaguePinDatabase.equals(pin)){
                                 String leagueNameDatabase = (String) map.get("leagueName");
-                                map.get("leagueStartDate");
-
+                                Long leagueStartDate = (Long) map.get("leagueStartDate");
                                 String userIdDatabase = (String) map.get("userId");
 
-                                CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, null, userIdDatabase);
+                                CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase);
                                 list.add(createdLeague);
                             }
                         }

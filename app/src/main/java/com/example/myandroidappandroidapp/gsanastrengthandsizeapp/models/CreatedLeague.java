@@ -6,10 +6,10 @@ public class CreatedLeague {
 
     String leagueName;
     String leaguePin;
-    Date leagueStartDate;
+    Long leagueStartDate;
     String userId;
 
-    public CreatedLeague(String leagueName, String leaguePin, Date leagueStartDate, String userId) {
+    public CreatedLeague(String leagueName, String leaguePin, Long leagueStartDate, String userId) {
         this.leagueName = leagueName;
         this.leaguePin = leaguePin;
         this.leagueStartDate = leagueStartDate;
@@ -32,11 +32,11 @@ public class CreatedLeague {
         this.leaguePin = leaguePin;
     }
 
-    public Date getLeagueStartDate() {
+    public Long getLeagueStartDate() {
         return leagueStartDate;
     }
 
-    public void setLeagueStartDate(Date leagueStartDate) {
+    public void setLeagueStartDate(Long leagueStartDate) {
         this.leagueStartDate = leagueStartDate;
     }
 

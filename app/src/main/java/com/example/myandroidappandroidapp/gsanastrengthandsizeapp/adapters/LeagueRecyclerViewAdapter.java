@@ -12,7 +12,9 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecyclerViewAdapter.MyViewHolder> {
 
@@ -35,11 +37,15 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
     public void onBindViewHolder(@NonNull LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
         CreatedLeague createdLeague = createdLeagues.get(position);
 
+        Long i = createdLeague.getLeagueStartDate();
+        Date d = new Date(i);
+        String kok =  DateFormat.getDateInstance(DateFormat.MEDIUM).format(d);
+
         if(createdLeague.getLeagueStartDate() != null){
-            //leagueDate.setText(createdLeague.getLeagueStartDate().toString());
+            leagueDate.setText(kok);
         }
         else {
-            //leagueDate.setText("No Data");
+            leagueDate.setText("No Data");
         }
 
         leaguePin.setText(createdLeague.getLeaguePin());
