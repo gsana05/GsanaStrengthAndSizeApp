@@ -38,6 +38,7 @@ public class FragmentStrengthLeagueResults extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private DataModelResult<ArrayList<String>> callback;
+    private DataModelResult<ArrayList<CreatedLeague>> callbackCreatedLeagues;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -65,7 +66,7 @@ public class FragmentStrengthLeagueResults extends Fragment {
         leagueRecyclerView.setLayoutManager(layoutManager);
 
 
-        final DataModelResult<ArrayList<CreatedLeague>> callba = new DataModelResult<ArrayList<CreatedLeague>>() {
+        callbackCreatedLeagues = new DataModelResult<ArrayList<CreatedLeague>>() {
             @Override
             public void onComplete(ArrayList<CreatedLeague> data, Exception exception) {
                 if(data != null){
@@ -80,8 +81,7 @@ public class FragmentStrengthLeagueResults extends Fragment {
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null && data.size() > 0){
                     LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                    leagueModelSingleton.addAllLeagueListener(data, callba);
-
+                    leagueModelSingleton.addAllLeagueListener(data, callbackCreatedLeagues);
                 }
             }
         };
@@ -106,6 +106,7 @@ public class FragmentStrengthLeagueResults extends Fragment {
         if(userId != null){
             LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
             leagueModelSingleton.removeLeagueListener(userId, callback);
+            leagueModelSingleton.removeAllLeagueListener(userId, callbackCreatedLeagues);
         }
     }
 

@@ -152,14 +152,45 @@ public class LeagueModelSingleton {
 
     }
 
+    private HashMap<String, ListenerRegistration> mRefsAllLeagues = new HashMap<>();
+    private HashMap<String, ArrayList<DataModelResult<ArrayList<CreatedLeague>>>> mProfileCallbacksAllLeagues = new HashMap<>();
+    private HashMap<String, ArrayList<CreatedLeague>> mCachedProfileAllLeagues = new HashMap<>();
+
     public void addAllLeagueListener(final ArrayList<String> listLeaguePin, final DataModelResult<ArrayList<CreatedLeague>> callback){
 
-        final ArrayList<CreatedLeague> list = new ArrayList<>();
+        final String userId = FirebaseAuth.getInstance().getUid();
 
-        getDatabaseRefAllLeagues().addSnapshotListener(new EventListener<QuerySnapshot>() {
+        final ArrayList<CreatedLeague> list = new ArrayList<>();
+        ArrayList<DataModelResult<ArrayList<CreatedLeague>>> callbacks = null;
+
+        // get callbacks if they have some already
+        if(mProfileCallbacksAllLeagues.containsKey(userId)){
+            if(mProfileCallbacksAllLeagues.get(userId) != null){
+                callbacks = mProfileCallbacksAllLeagues.get(userId);
+            }
+        } // create a new list if they have no callbacks
+        else {
+            callbacks = new ArrayList<>();
+        }
+
+        // add the callback to the list
+        if(callbacks != null){
+            if(!callbacks.contains(callback)){ // if it does not contain this callback then add it
+                callbacks.add(callback);
+                mProfileCallbacksAllLeagues.put(userId, callbacks);
+            }
+        }
+
+        if(mCachedProfileAllLeagues.containsKey(userId)){ // if user data has been cached return the cached values do NOT go to database
+            ArrayList<CreatedLeague> cacheList = mCachedProfileAllLeagues.get(userId);
+            callback.onComplete(cacheList, null);
+        }
+
+        ListenerRegistration ref = getDatabaseRefAllLeagues().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(queryDocumentSnapshots != null){
+                    ArrayList<DataModelResult<ArrayList<CreatedLeague>>> callbackList = mProfileCallbacksAllLeagues.get(userId);
                     for(DocumentSnapshot i : queryDocumentSnapshots){
                         HashMap<String, Object> map = (HashMap<String, Object>)i.getData();
 
@@ -175,19 +206,48 @@ public class LeagueModelSingleton {
                                 list.add(createdLeague);
                             }
                         }
+
+                        if(list != null){
+                            mCachedProfileAllLeagues.put(userId, list); // cache data
+                        }
+
+                        // return the same user data the same amount of times as the length of callBackList
+                        if(callbackList != null){
+                            for(DataModelResult<ArrayList<CreatedLeague>> createdLeague : callbackList){
+                                callback.onComplete(list, null);
+                            }
+                        }
                     }
-                    callback.onComplete(list, null);
                 }
                 else {
                     callback.onComplete(null, null);
                 }
             }
         });
-
+        mRefsAllLeagues.put(userId,ref);
     }
 
-    public void removeAllLeagueListener(){
+    public void removeAllLeagueListener(final String userId, final DataModelResult<ArrayList<CreatedLeague>> callback){
+        // remove firebase listener
+        ArrayList<DataModelResult<ArrayList<CreatedLeague>>> callbackList =  mProfileCallbacksAllLeagues.get(userId);
 
+        if(callbackList != null && callbackList.contains(callback)){
+            callbackList.remove(callback); // remove all the callbacks one by one
+
+            if(callbackList.size() == 0){ // when they are no callbacks left, its time to remove the firebase listener
+                mProfileCallbacks.remove(userId); // remove the key from hashmap so there is no reference to it
+
+                // remove firebase listener
+                ListenerRegistration lRef = mRefs.get(userId);
+                if(lRef != null){
+                    lRef.remove();
+                    mRefs.remove(userId);
+                }
+            }
+            else {
+                mProfileCallbacksAllLeagues.put(userId, callbackList);  // put the callback list back into list without the one just removed
+            }
+        }
     }
 
     private HashMap<String, ListenerRegistration> mRefs = new HashMap<>();
