@@ -2,7 +2,6 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueRecyclerViewAdapter;
@@ -49,7 +49,7 @@ public class FragmentStrengthLeagues extends Fragment {
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog();
+                createLeague();
             }
         });
 
@@ -57,7 +57,7 @@ public class FragmentStrengthLeagues extends Fragment {
         joinLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                joinLeague();
             }
         });
 
@@ -131,10 +131,89 @@ public class FragmentStrengthLeagues extends Fragment {
         }
     }
 
-    public void alertDialog(){
+    public void joinLeague(){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
+        TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
+        header.setText("Please enter league pin");
+
+
+        builder.setView(inflatedLayout);
+        builder.setCancelable(false);
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        Button cancel;
+        cancel = inflatedLayout.findViewById(R.id.custom_dialog_create_league_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
+
+        leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
+
+        Button enterLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        enterLeague.setText("Join League");
+        enterLeague.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(leagueName.getText().toString().isEmpty()){
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+                    builder.setMessage("Please enter a league name")
+                            .setCancelable(false)
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.show();
+                    return;
+                }
+
+                Log.v("", "");
+
+                DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data, Exception exception) {
+
+                        if(data){
+                            Toast.makeText(getActivity(),"Found league",Toast.LENGTH_SHORT).show();
+                            dismissKeyboard();
+                            alert.dismiss();
+                        }
+                        else {
+                            Toast.makeText(getActivity(),"NOT a league",Toast.LENGTH_SHORT).show();
+                            dismissKeyboard();
+                            alert.dismiss();
+                        }
+
+                    }
+                };
+
+                LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                leagueModelSingleton.addToLeague(leagueName.getText().toString(), callback);
+            }
+        });
+    }
+
+
+
+    public void createLeague(){
+        final AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
+        View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
+
+        TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
+        header.setText("Please enter league name");
+
         builder.setView(inflatedLayout);
         builder.setCancelable(false);
         final AlertDialog alert = builder.create();
@@ -152,6 +231,7 @@ public class FragmentStrengthLeagues extends Fragment {
         leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
 
         Button createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        createLeague.setText("Create League");
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +239,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 if(leagueName.getText().toString().isEmpty()){
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-                    builder.setMessage("Please enter a league name")
+                    builder.setMessage("Please enter league pin")
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -195,12 +275,8 @@ public class FragmentStrengthLeagues extends Fragment {
 
                 LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
                 leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback);
-
-
             }
         });
-
-
     }
 
     public void dismissKeyboard(){

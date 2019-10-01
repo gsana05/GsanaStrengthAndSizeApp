@@ -91,6 +91,36 @@ public class LeagueModelSingleton {
         }
     }
 
+    public void addToLeague(final String leaguePin, final DataModelResult<Boolean> callback){
+        //loop through all the league tables and see if pin matches
+        getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot data = task.getResult();
+
+                    if(data != null){
+                        if(data.getData() != null){
+                            //success
+
+                            callback.onComplete(true, null);
+                        }
+                        else {
+                            callback.onComplete(false, null);
+                        }
+                    }
+                    else {
+                        callback.onComplete(false, null);
+                    }
+
+                }
+                else {
+                    callback.onComplete(false, task.getException());
+                }
+            }
+        });
+    }
+
     // each time a league is created it gets the old data updates the arraylist of league and creates new object
     public void setLeagueTable(final String leagueName, final DataModelResult<Boolean> callback){
 
