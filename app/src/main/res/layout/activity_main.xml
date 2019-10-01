@@ -24,7 +24,7 @@
         android:id="@+id/fragment6"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:name="com.example.myandroidappandroidapp.gsanastrengthandsizeapp.FragmentStrengthLeagueResults"
+        android:name="com.example.myandroidappandroidapp.gsanastrengthandsizeapp.FragmentStrengthLeagues"
         app:layout_constraintTop_toBottomOf="@id/fragment5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

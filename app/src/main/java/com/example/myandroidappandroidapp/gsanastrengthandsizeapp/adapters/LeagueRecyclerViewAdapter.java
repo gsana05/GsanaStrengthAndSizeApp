@@ -1,13 +1,20 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityLogIn;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.LeagueTableResults;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 
@@ -19,12 +26,14 @@ import java.util.Date;
 public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecyclerViewAdapter.MyViewHolder> {
 
     private ArrayList<CreatedLeague> createdLeagues;
+    private Context context;
     private TextView leagueDate;
     private TextView leaguePin;
     private TextView leagueName;
 
-    public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues) {
+    public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues, Context context) {
         this.createdLeagues = createdLeagues;
+        this.context = context;
     }
 
     @NonNull
@@ -34,8 +43,8 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
-        CreatedLeague createdLeague = createdLeagues.get(position);
+    public void onBindViewHolder(@NonNull final LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
+        final CreatedLeague createdLeague = createdLeagues.get(position);
 
         Long i = createdLeague.getLeagueStartDate();
         Date d = new Date(i);
@@ -50,6 +59,33 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
         leaguePin.setText(createdLeague.getLeaguePin());
         leagueName.setText(createdLeague.getLeagueName());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
+                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                v.getContext().startActivity(intent);
+
+              /*  AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(createdLeague.getLeaguePin())
+                        .setCancelable(false)
+                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(holder.itemView.getContext(), ActivityLogIn.class);
+                                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                                holder.itemView.getContext().startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();*/
+            }
+        });
     }
 
     @Override
@@ -66,5 +102,9 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             leagueName = itemView.findViewById(R.id.league_list_item_league_name);
 
         }
+    }
+
+    public void alertDialog(String response){
+
     }
 }
