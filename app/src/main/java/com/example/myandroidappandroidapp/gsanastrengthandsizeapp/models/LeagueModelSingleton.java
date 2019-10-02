@@ -1,5 +1,6 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -102,8 +103,18 @@ public class LeagueModelSingleton {
                     if(data != null){
                         if(data.getData() != null){
                             //success
-
-                            callback.onComplete(true, null);
+                            DataModelResult<Boolean> value = new DataModelResult<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean data, Exception exception) {
+                                    if(data){
+                                        callback.onComplete(true, null);
+                                    }
+                                    else {
+                                        callback.onComplete(false, null);
+                                    }
+                                }
+                            };
+                            addLeaguePinToUser(leaguePin, value);
                         }
                         else {
                             callback.onComplete(false, null);
@@ -119,6 +130,49 @@ public class LeagueModelSingleton {
                 }
             }
         });
+    }
+
+    public void addLeaguePinToUser(final String leaguePin, final DataModelResult<Boolean> callback){
+
+        final String userId = FirebaseAuth.getInstance().getUid();
+
+
+        DataModelResult<ArrayList<String>> data = new DataModelResult<ArrayList<String>>() {
+            @Override
+            public void onComplete(ArrayList<String> data, Exception exception) {
+
+                if(data != null){
+                    data.add(leaguePin);
+                    ArrayList<String> officialList = new ArrayList<>(data);
+
+                    if (userId != null) {
+
+                        final League officialLeague = new League(userId, officialList);
+
+                        getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if(task.isSuccessful()){
+                                    callback.onComplete(true, null);
+                                }
+                                else {
+                                    callback.onComplete(false, task.getException());
+                                }
+
+                            }
+                        });
+                    }
+
+                }
+                else {
+                    callback.onComplete(false, null);
+                }
+            }
+        };
+
+        getLeagueTable(data);
+
     }
 
     // each time a league is created it gets the old data updates the arraylist of league and creates new object
@@ -141,11 +195,11 @@ public class LeagueModelSingleton {
                 UUID uuid = UUID.randomUUID();
                 String leaguePin = uuid.toString().substring(0,8);
                 officialList.add(leaguePin);
-                //todo write leaguedata in a new collection
+                //todo write league data in a new collection
 
-                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId);
+                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId); // all leagues
 
-                final League officialLeague = new League(userId, officialList);
+                final League officialLeague = new League(userId, officialList); // user leagues
 
                 if(userId != null){
 
