@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
+
+import java.util.ArrayList;
+
 public class LeagueTableResults extends AppCompatActivity {
 
     private TextView pin;
@@ -20,5 +25,22 @@ public class LeagueTableResults extends AppCompatActivity {
         String leaguePin = intent.getStringExtra("LeaguePin");
         pin = this.findViewById(R.id.league_table_results_pin);
         pin.setText(leaguePin);
+
+        DataModelResult<ArrayList<String>> callback = new DataModelResult<ArrayList<String>>() {
+            @Override
+            public void onComplete(ArrayList<String> data, Exception exception) {
+                if(data != null){
+                    pin.setText(data.toString());
+                }
+                else {
+                    pin.setText("no data");
+                }
+            }
+        };
+
+        UserLeagueTableModelSingleton userLeagueTableModelSingleton = UserLeagueTableModelSingleton.getInstance();
+        userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback);
+
+
     }
 }
