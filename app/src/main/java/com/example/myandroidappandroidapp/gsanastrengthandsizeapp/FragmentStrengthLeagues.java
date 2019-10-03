@@ -185,12 +185,13 @@ public class FragmentStrengthLeagues extends Fragment {
                     public void onComplete(Boolean data, Exception exception) {
 
                         if(data){
-                            Toast.makeText(getActivity(),"Joined League",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"Joined League Successfully",Toast.LENGTH_SHORT).show();
                             dismissKeyboard();
                             alert.dismiss();
                         }
                         else {
-                            Toast.makeText(getActivity(),"Not Added",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(),"Not Added",Toast.LENGTH_SHORT).show();
+                            alertDialog("Already part of this league or invalid pin");
                             dismissKeyboard();
                             alert.dismiss();
                         }
@@ -277,6 +278,22 @@ public class FragmentStrengthLeagues extends Fragment {
                 leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback);
             }
         });
+    }
+
+    public void alertDialog(String response){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(response)
+                .setCancelable(false)
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
     }
 
     public void dismissKeyboard(){
