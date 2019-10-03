@@ -185,12 +185,12 @@ public class FragmentStrengthLeagues extends Fragment {
                     public void onComplete(Boolean data, Exception exception) {
 
                         if(data){
-                            Toast.makeText(getActivity(),"Found league",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"Joined League",Toast.LENGTH_SHORT).show();
                             dismissKeyboard();
                             alert.dismiss();
                         }
                         else {
-                            Toast.makeText(getActivity(),"NOT a league",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"Not Added",Toast.LENGTH_SHORT).show();
                             dismissKeyboard();
                             alert.dismiss();
                         }

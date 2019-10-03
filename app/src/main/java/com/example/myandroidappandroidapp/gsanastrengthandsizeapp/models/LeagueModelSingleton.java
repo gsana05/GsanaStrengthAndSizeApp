@@ -92,44 +92,75 @@ public class LeagueModelSingleton {
         }
     }
 
-    public void addToLeague(final String leaguePin, final DataModelResult<Boolean> callback){
-        //loop through all the league tables and see if pin matches
-        getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void checkForDuplicates(final String leaguePin, final DataModelResult<Boolean> callback){
+        DataModelResult<ArrayList<String>> userAlreadyLeagues = new DataModelResult<ArrayList<String>>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot data = task.getResult();
+            public void onComplete(ArrayList<String> data, Exception exception) {
+                if(data != null){
+                    if(data.contains(leaguePin)){
+                        callback.onComplete(false, null);
+                    }
+                    else {
+                        callback.onComplete(true, null);
+                    }
+                }
+            }
+        };
 
-                    if(data != null){
-                        if(data.getData() != null){
-                            //success
-                            DataModelResult<Boolean> value = new DataModelResult<Boolean>() {
-                                @Override
-                                public void onComplete(Boolean data, Exception exception) {
-                                    if(data){
-                                        callback.onComplete(true, null);
+        getLeagueTable(userAlreadyLeagues);
+    }
+
+    public void addToLeague(final String leaguePin, final DataModelResult<Boolean> callback){
+
+        DataModelResult<Boolean> kok = new DataModelResult<Boolean>() {
+            @Override
+            public void onComplete(Boolean data, Exception exception) {
+                if(data){
+                    //loop through all the league tables and see if pin matches
+                    getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot data = task.getResult();
+
+                                if(data != null){
+                                    if(data.getData() != null){
+                                        //success
+                                        DataModelResult<Boolean> value = new DataModelResult<Boolean>() {
+                                            @Override
+                                            public void onComplete(Boolean data, Exception exception) {
+                                                if(data){
+                                                    callback.onComplete(true, null);
+                                                }
+                                                else {
+                                                    callback.onComplete(false, null);
+                                                }
+                                            }
+                                        };
+                                        addLeaguePinToUser(leaguePin, value);
                                     }
                                     else {
                                         callback.onComplete(false, null);
                                     }
                                 }
-                            };
-                            addLeaguePinToUser(leaguePin, value);
-                        }
-                        else {
-                            callback.onComplete(false, null);
-                        }
-                    }
-                    else {
-                        callback.onComplete(false, null);
-                    }
+                                else {
+                                    callback.onComplete(false, null);
+                                }
 
+                            }
+                            else {
+                                callback.onComplete(false, task.getException());
+                            }
+                        }
+                    });
                 }
-                else {
-                    callback.onComplete(false, task.getException());
+                else{
+                    callback.onComplete(false, null);
                 }
             }
-        });
+        };
+
+      checkForDuplicates(leaguePin, kok);
     }
 
     public void addLeaguePinToUser(final String leaguePin, final DataModelResult<Boolean> callback){
