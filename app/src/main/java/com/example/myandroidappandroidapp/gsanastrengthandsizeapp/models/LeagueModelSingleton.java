@@ -92,6 +92,7 @@ public class LeagueModelSingleton {
         }
     }
 
+    // check if user already is part of this league
     public void checkForDuplicates(final String leaguePin, final DataModelResult<Boolean> callback){
         DataModelResult<ArrayList<String>> userAlreadyLeagues = new DataModelResult<ArrayList<String>>() {
             @Override
@@ -124,6 +125,7 @@ public class LeagueModelSingleton {
                                 DocumentSnapshot data = task.getResult();
 
                                 if(data != null){
+                                    // checking for duplicates - incase they are already part of the league
                                     if(data.getData() != null){
                                         //success
                                         DataModelResult<Boolean> value = new DataModelResult<Boolean>() {
