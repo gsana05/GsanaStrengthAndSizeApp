@@ -58,9 +58,9 @@ public class UserModelSingleton {
         if(id != null){
             Date date = new Date(System.currentTimeMillis());
             UUID uuid = UUID.randomUUID();
-            String pin = uuid.toString().substring(0,8);
+            //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, pin, userEmail);
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

@@ -35,7 +35,7 @@ public class UserLeagueTableModelSingleton {
     }
 
     // leagueMasterId and returns Users
-    public void getUsersForCurrentLeague(final String leaguePin, ArrayList<String> leagueMasterId,final DataModelResult<ArrayList<User>> callback){
+    public void getUsersForCurrentLeague(final String leaguePin, final ArrayList<String> leagueMasterId, final DataModelResult<ArrayList<User>> callback){
 
         final ArrayList<User> userList = new ArrayList<>();
 
@@ -46,18 +46,24 @@ public class UserLeagueTableModelSingleton {
                     QuerySnapshot data = task.getResult();
                     if(data != null){
                         for (QueryDocumentSnapshot snapshot : data) {
-                            String gymName = snapshot.getString("gymName");
-                            Double bench = snapshot.getDouble("benchPress");
-                            Double deadlift = snapshot.getDouble("deadlift");
-                            Double squat = snapshot.getDouble("squat");
-                            Double ohp = snapshot.getDouble("overHeadPress");
-                            String pin = snapshot.getString("pin");
-                            String email = snapshot.getString("email");
-                            Date date = snapshot.getDate("date");
 
-                            User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+                            for(String id : leagueMasterId){
+                                String pin = snapshot.getString("pin");
+                                if(id.equals(pin)){
+                                    String gymName = snapshot.getString("gymName");
+                                    Double bench = snapshot.getDouble("benchPress");
+                                    Double deadlift = snapshot.getDouble("deadlift");
+                                    Double squat = snapshot.getDouble("squat");
+                                    Double ohp = snapshot.getDouble("overHeadPress");
 
-                            userList.add(user);
+                                    String email = snapshot.getString("email");
+                                    Date date = snapshot.getDate("date");
+
+                                    User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+
+                                    userList.add(user);
+                                }
+                            }
                         }
                         callback.onComplete(userList, null);
                     }
