@@ -76,27 +76,6 @@ public class FragmentStrengthLeagues extends Fragment {
             }
         };
 
-     /*   // When item from the recycler view is touched
-        filter_save_set_recycler_view.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener{
-            override fun onTouchEvent(rv: RecyclerView, e: MotionEvent) {
-            }
-
-            // gets the item that has been selected on, which allows us to access all of values in that item
-            override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
-                val childView = rv.findChildViewUnder(e.x, e.y)
-                childView?.let {
-                    val i = rv.getChildAdapterPosition(it)
-                    val filteredLoad = (rv.adapter as FilterSavedSetAdapter).filterLoads[i]
-                    setCurrentFilter(filteredLoad)
-                    return true
-                }
-                return false
-            }
-
-            override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-            }
-        })*/
-
         callback = new DataModelResult<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {

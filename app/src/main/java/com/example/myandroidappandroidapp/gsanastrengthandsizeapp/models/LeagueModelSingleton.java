@@ -371,6 +371,7 @@ public class LeagueModelSingleton {
     private HashMap<String, ArrayList<DataModelResult<ArrayList<String>>>> mProfileCallbacks = new HashMap<>();
     private HashMap<String, ArrayList<String>> mCachedProfile = new HashMap<>();
 
+    // returns all the league pins(UUID) for that user
     public void addLeagueListener(final String userId, final DataModelResult<ArrayList<String>> callback){
 
         ArrayList<DataModelResult<ArrayList<String>>> callbacks = null;

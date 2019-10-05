@@ -59,7 +59,7 @@ public class LeagueTableResults extends AppCompatActivity {
         };
 
 
-        userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // gets the leagueMasterId
+        userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // passes in leaguePin and returns the leagueMasterId
 
 
     }

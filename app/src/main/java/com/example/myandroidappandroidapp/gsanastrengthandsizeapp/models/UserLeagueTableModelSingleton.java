@@ -45,7 +45,7 @@ public class UserLeagueTableModelSingleton {
                 if(task.isSuccessful()){
                     QuerySnapshot data = task.getResult();
                     if(data != null){
-                        for (QueryDocumentSnapshot snapshot : data) {
+                        for (QueryDocumentSnapshot snapshot : data) { // iterate through every document to see if pins aka leagueMasterId match
 
                             for(String id : leagueMasterId){
                                 String pin = snapshot.getString("pin");
