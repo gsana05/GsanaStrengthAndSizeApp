@@ -66,6 +66,7 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
                 Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
                 intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                intent.putExtra("LeagueName", createdLeague.getLeagueName());
                 v.getContext().startActivity(intent);
 
               /*  AlertDialog.Builder builder;

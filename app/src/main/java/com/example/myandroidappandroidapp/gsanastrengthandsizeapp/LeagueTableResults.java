@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class LeagueTableResults extends AppCompatActivity {
 
-    private TextView pin;
+    private TextView nameOfLeague;
     final UserLeagueTableModelSingleton userLeagueTableModelSingleton = UserLeagueTableModelSingleton.getInstance();
     DataModelResult<ArrayList<User>> usersCallback;
 
@@ -27,9 +27,10 @@ public class LeagueTableResults extends AppCompatActivity {
         setContentView(R.layout.activity_league_table_results);
 
         Intent intent = getIntent();
-        String leaguePin = intent.getStringExtra("LeaguePin");
-        pin = this.findViewById(R.id.league_table_results_pin);
-        pin.setText(leaguePin);
+        String leaguePin = intent.getStringExtra("LeaguePin"); // passed into function
+        String leagueName = intent.getStringExtra("LeagueName");
+        nameOfLeague = this.findViewById(R.id.league_table_results_heading_view_league_name);
+        nameOfLeague.setText(leagueName);
 
         usersCallback = new DataModelResult<ArrayList<User>>() {
             @Override
@@ -48,7 +49,7 @@ public class LeagueTableResults extends AppCompatActivity {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null){
-                    pin.setText(data.toString());
+                    //pin.setText(data.toString());
                     String id = FirebaseAuth.getInstance().getUid();
                     if(id != null){
                         // adding listener
@@ -58,7 +59,7 @@ public class LeagueTableResults extends AppCompatActivity {
                     //userLeagueTableModelSingleton.getUsersForCurrentLeague("", data, usersCallback);
                 }
                 else {
-                    pin.setText("no data");
+                    nameOfLeague.setText("no data");
                 }
             }
         };
