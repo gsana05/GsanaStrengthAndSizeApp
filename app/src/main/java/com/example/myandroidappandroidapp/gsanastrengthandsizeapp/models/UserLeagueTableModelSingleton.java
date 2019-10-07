@@ -3,17 +3,22 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -34,7 +39,98 @@ public class UserLeagueTableModelSingleton {
         return ourInstance;
     }
 
+
+    private HashMap<String, ArrayList<DataModelResult<ArrayList<User>>>> mProfileCallbacks = new HashMap<>();
+    private HashMap<String, ArrayList<User>> mCachedProfile = new HashMap<>();
+    private HashMap<String, ListenerRegistration> mRefs = new HashMap<>();
+
+    public void addLeagueTableUserProfileListener(final String userId, final ArrayList<String> leagueMasterId, final DataModelResult<ArrayList<User>> callback){
+
+        ArrayList<DataModelResult<ArrayList<User>>> callbacks = null;
+
+        if(mProfileCallbacks.containsKey(userId)){ // does the user already have callbacks
+            if(mProfileCallbacks.get(userId) != null ){ // check if user callbacks is not null
+                callbacks = mProfileCallbacks.get(userId); // gets the arrayList of callbacks and sets local variable
+            }
+        }
+        else {
+            callbacks = new ArrayList<>(); // first time getting user data aka has no callbacks
+        }
+
+        if(callbacks != null){
+            Log.v("T", "kd");
+            if(!callbacks.contains(callback)){ // if it does not contain this callback then add it
+                callbacks.add(callback);
+                mProfileCallbacks.put(userId, callbacks);
+            }
+        }
+
+
+        if(mCachedProfile.containsKey(userId)){ // if user data has been cached return the cached values do NOT go to database
+            ArrayList<User> user = mCachedProfile.get(userId);
+            callback.onComplete(user, null);
+        }
+
+        if(!mRefs.containsKey(userId)){// listener gets data and real time updates if anything changes
+
+            ListenerRegistration ref = getDatabaseRefWorkoutProfiles().addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    ArrayList<DataModelResult<ArrayList<User>>> callbackList = mProfileCallbacks.get(userId);
+                    ArrayList<User> listOfUser = new ArrayList<>();
+
+                    if(queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) { // iterate through every document to see if pins aka leagueMasterId match
+
+                            for (String id : leagueMasterId) {
+                                Map<String, Object> lp = snapshot.getData();
+                                String p = (String) lp.get("pin");
+                                String pin = snapshot.getString("pin");
+                                if (pin != null) {
+                                    if (id.equals(pin)) {
+                                        String gymName = snapshot.getString("gymName");
+                                        Double bench = snapshot.getDouble("benchPress");
+                                        Double deadlift = snapshot.getDouble("deadlift");
+                                        Double squat = snapshot.getDouble("squat");
+                                        Double ohp = snapshot.getDouble("overHeadPress");
+
+                                        String email = snapshot.getString("email");
+                                        Date date = snapshot.getDate("date");
+
+                                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+
+                                        listOfUser.add(user);
+                                    }
+                                }
+                                else {
+                                    callback.onComplete(null, null);
+                                }
+                            }
+                        }
+                        if (listOfUser != null && !listOfUser.isEmpty()) {
+                            mCachedProfile.put(userId, listOfUser); // cache data
+                        }
+
+                        // return the same user data the same amount of times as the length of callBackList
+                        if (callbackList != null) {
+                            for (DataModelResult<ArrayList<User>> i : callbackList) {
+                                callback.onComplete(listOfUser, null);
+                            }
+                        }
+                    }
+                    else{
+                        callback.onComplete(null, null);
+                    }
+
+                }
+            });
+            mRefs.put(userId, ref); // add firebase listener
+        }
+    }
+
+
     // leagueMasterId and returns Users
+    // iterates through workoutProfiles collection pins and iterates through passed in pins and finds matches if they match create user object and add to list
     public void getUsersForCurrentLeague(final String leaguePin, final ArrayList<String> leagueMasterId, final DataModelResult<ArrayList<User>> callback){
 
         final ArrayList<User> userList = new ArrayList<>();

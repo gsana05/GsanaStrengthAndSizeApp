@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -49,8 +50,12 @@ public class LeagueTableResults extends AppCompatActivity {
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null){
                     pin.setText(data.toString());
+                    String id = FirebaseAuth.getInstance().getUid();
+                    if(id != null){
+                        userLeagueTableModelSingleton.addLeagueTableUserProfileListener(id, data, usersCallback);
+                    }
 
-                    userLeagueTableModelSingleton.getUsersForCurrentLeague("", data, usersCallback);
+                    //userLeagueTableModelSingleton.getUsersForCurrentLeague("", data, usersCallback);
                 }
                 else {
                     pin.setText("no data");
