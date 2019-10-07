@@ -128,6 +128,29 @@ public class UserLeagueTableModelSingleton {
         }
     }
 
+    public void removeLeagueTableUserProfileListener(final String userId, final DataModelResult<ArrayList<User>> callback){
+
+        ArrayList<DataModelResult<ArrayList<User>>> callbackList =  mProfileCallbacks.get(userId);
+        if(callbackList != null && callbackList.contains(callback)){
+            callbackList.remove(callback); // remove all the callbacks one by one
+
+            if(callbackList.size() == 0){ // when they are no callbacks left, its time to remove the firebase listener
+                mProfileCallbacks.remove(userId); // remove the key from hashmap so there is no reference to it
+
+                // remove firebase listener
+                ListenerRegistration lRef = mRefs.get(userId);
+                if(lRef != null){
+                    lRef.remove();
+                    mRefs.remove(userId);
+                }
+            }
+            else {
+                mProfileCallbacks.put(userId, callbackList);  // put the callback list back into list without the one just removed
+            }
+        }
+
+    }
+
 
     // leagueMasterId and returns Users
     // iterates through workoutProfiles collection pins and iterates through passed in pins and finds matches if they match create user object and add to list

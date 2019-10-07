@@ -18,6 +18,8 @@ import java.util.ArrayList;
 public class LeagueTableResults extends AppCompatActivity {
 
     private TextView pin;
+    final UserLeagueTableModelSingleton userLeagueTableModelSingleton = UserLeagueTableModelSingleton.getInstance();
+    DataModelResult<ArrayList<User>> usersCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +31,7 @@ public class LeagueTableResults extends AppCompatActivity {
         pin = this.findViewById(R.id.league_table_results_pin);
         pin.setText(leaguePin);
 
-        final UserLeagueTableModelSingleton userLeagueTableModelSingleton = UserLeagueTableModelSingleton.getInstance();
-
-
-        final DataModelResult<ArrayList<User>> usersCallback = new DataModelResult<ArrayList<User>>() {
+        usersCallback = new DataModelResult<ArrayList<User>>() {
             @Override
             public void onComplete(ArrayList<User> data, Exception exception) {
                 if(data != null){
@@ -52,6 +51,7 @@ public class LeagueTableResults extends AppCompatActivity {
                     pin.setText(data.toString());
                     String id = FirebaseAuth.getInstance().getUid();
                     if(id != null){
+                        // adding listener
                         userLeagueTableModelSingleton.addLeagueTableUserProfileListener(id, data, usersCallback);
                     }
 
@@ -67,5 +67,15 @@ public class LeagueTableResults extends AppCompatActivity {
         userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // passes in leaguePin and returns the leagueMasterId
 
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id != null){
+            //remove listener
+            userLeagueTableModelSingleton.removeLeagueTableUserProfileListener(id, usersCallback);
+        }
     }
 }
