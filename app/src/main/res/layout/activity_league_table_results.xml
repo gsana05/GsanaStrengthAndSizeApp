@@ -30,14 +30,23 @@
 
     <ImageView
         android:id="@+id/league_table_results_heading_view_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_results_heading_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/league_table_results_heading_view_league_name"
         app:layout_constraintStart_toStartOf="@+id/league_table_results_heading_view"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_results_heading_view"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_results_heading_view_league_name"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_results_heading_view_league_name"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_1"
         android:src="@drawable/ic_keyboard_backspace_24px"
         android:tint="@color/ssWhite"
+        app:layout_constraintHorizontal_bias="1"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15"
         />
 
     <TextView
@@ -46,21 +55,29 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/league_table_results_heading_view"
         app:layout_constraintBottom_toBottomOf="@+id/league_table_results_heading_view"
-        app:layout_constraintStart_toEndOf="@+id/league_table_results_heading_view_back"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_results_heading_view_filter"
+        app:layout_constraintStart_toEndOf="@+id/guideline_1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_2"
         android:text="League Name"
         android:textColor="@color/ssWhite"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85"
         />
 
     <ImageView
         android:id="@+id/league_table_results_heading_view_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_results_heading_view"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_results_heading_view"
-        app:layout_constraintStart_toEndOf="@+id/league_table_results_heading_view_league_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@+id/league_table_results_heading_view_league_name"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_results_heading_view_league_name"
+        app:layout_constraintStart_toEndOf="@+id/guideline_2"
         app:layout_constraintEnd_toEndOf="@+id/league_table_results_heading_view"
         android:src="@drawable/ic_filter_list_24px"
         android:tint="@color/ssWhite"
