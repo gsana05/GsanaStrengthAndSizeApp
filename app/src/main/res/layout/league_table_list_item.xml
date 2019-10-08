@@ -8,13 +8,21 @@
     android:paddingBottom="10dp"
     >
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50"
+        />
+
     <TextView
         android:id="@+id/league_table_list_item_gym_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_league_pos"
+        app:layout_constraintEnd_toStartOf="@id/guideline_1"
         android:text="Gym name"
         android:textSize="18sp"
         android:textColor="@color/ssBlack"
@@ -26,7 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name"
         app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintStart_toEndOf="@+id/guideline_1"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="1st"
         android:textSize="18sp"
