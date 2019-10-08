@@ -95,4 +95,46 @@
         app:layout_constraintVertical_weight="0.9"
         />
 
+    <TextView
+        android:id="@+id/league_table_results_main_view_sort_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_results_main_view"
+        app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/ssWhite"
+        android:textSize="18sp"
+        android:text="League is sorted by: "
+        />
+
+    <TextView
+        android:id="@+id/league_table_results_main_view_sort_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_results_main_view_sort_label"
+        app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
+        android:text="All lifts"
+        android:textColor="@color/ssWhite"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/league_table_results_main_view_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_results_main_view_sort_result"
+        app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_results_main_view"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

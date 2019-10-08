@@ -104,8 +104,4 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
         }
     }
-
-    public void alertDialog(String response){
-
-    }
 }
