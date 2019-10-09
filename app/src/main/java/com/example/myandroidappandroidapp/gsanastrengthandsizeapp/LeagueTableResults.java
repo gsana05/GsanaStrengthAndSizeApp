@@ -49,6 +49,7 @@ public class LeagueTableResults extends AppCompatActivity {
             @Override
             public void onComplete(ArrayList<User> data, Exception exception) {
                 if(data != null){
+                    // sort data by total
                     mAdapter = new LeagueTableRecyclerViewAdapter(data);
                     leagueTableRecyclerView.setAdapter(mAdapter);
                     Log.v("", "");

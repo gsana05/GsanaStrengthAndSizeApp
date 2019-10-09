@@ -13,6 +13,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -202,7 +203,7 @@ public class UserLeagueTableModelSingleton {
 
 
 
-    //League pins and returns leagueMasterId
+    //League pins and returns leagueMasterId // turn that into a listener if you live update to the leagues for new players
     public void getUsersWithTheSamePin(final String leaguePin, final DataModelResult<ArrayList<String>> callback){
 
         final ArrayList<String> leaguePinList = new ArrayList<>();
@@ -220,6 +221,9 @@ public class UserLeagueTableModelSingleton {
                                 ArrayList<String> list = null;
                                 Map hMap = document.getData();
                                 list = (ArrayList<String>) hMap.get("leaguesCreated");
+
+                                // look at every user list and see if the pin passed in matches any in the list
+                                // if yes then that users is in the league
 
                                 if(list != null){
                                     for(String pin : list){

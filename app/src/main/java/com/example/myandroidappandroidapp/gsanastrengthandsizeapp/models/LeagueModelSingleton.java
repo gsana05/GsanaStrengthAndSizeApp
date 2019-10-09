@@ -24,6 +24,7 @@ import com.google.protobuf.ByteString;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,7 @@ public class LeagueModelSingleton {
                             callback.onComplete(list, null);
                         }
                         else {
-                            callback.onComplete(null, task.getException());
+                            callback.onComplete(new ArrayList(), task.getException());
                         }
                     }
                     else {
@@ -104,6 +105,10 @@ public class LeagueModelSingleton {
                     else {
                         callback.onComplete(true, null);
                     }
+                }
+                else {
+                    // user does not have a league list - not part of any leagues
+
                 }
             }
         };
@@ -303,6 +308,7 @@ public class LeagueModelSingleton {
             callback.onComplete(cacheList, null);
         }
 
+        // gets all leagues
         ListenerRegistration ref = getDatabaseRefAllLeagues().addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -312,27 +318,31 @@ public class LeagueModelSingleton {
                         HashMap<String, Object> map = (HashMap<String, Object>)i.getData();
 
                         String leaguePinDatabase = (String) map.get("leaguePin");
+                        if(leaguePinDatabase != null){
+                            for(String pin : listLeaguePin){
+                                if(leaguePinDatabase.equals(pin)){
+                                    String leagueNameDatabase = (String) map.get("leagueName");
+                                    Long leagueStartDate = (Long) map.get("leagueStartDate");
+                                    String userIdDatabase = (String) map.get("userId");
 
-                        for(String pin : listLeaguePin){
-                            if(leaguePinDatabase.equals(pin)){
-                                String leagueNameDatabase = (String) map.get("leagueName");
-                                Long leagueStartDate = (Long) map.get("leagueStartDate");
-                                String userIdDatabase = (String) map.get("userId");
+                                    CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase);
+                                    list.add(createdLeague);
+                                }
+                            }
 
-                                CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase);
-                                list.add(createdLeague);
+                            if(list != null){
+                                mCachedProfileAllLeagues.put(userId, list); // cache data
+                            }
+
+                            // return the same user data the same amount of times as the length of callBackList
+                            if(callbackList != null){
+                                for(DataModelResult<ArrayList<CreatedLeague>> createdLeague : callbackList){
+                                    callback.onComplete(list, null);
+                                }
                             }
                         }
-
-                        if(list != null){
-                            mCachedProfileAllLeagues.put(userId, list); // cache data
-                        }
-
-                        // return the same user data the same amount of times as the length of callBackList
-                        if(callbackList != null){
-                            for(DataModelResult<ArrayList<CreatedLeague>> createdLeague : callbackList){
-                                callback.onComplete(list, null);
-                            }
+                        else {
+                            callback.onComplete(null, null);
                         }
                     }
                 }
@@ -365,6 +375,17 @@ public class LeagueModelSingleton {
                 mProfileCallbacksAllLeagues.put(userId, callbackList);  // put the callback list back into list without the one just removed
             }
         }
+    }
+
+    public void clearAllLeaguesCreated(final DataModelResult<Boolean> callback){
+        mCachedProfileAllLeagues.clear();
+        if(mCachedProfileAllLeagues.isEmpty()){
+            callback.onComplete(true, null);
+        }
+        else {
+            callback.onComplete(false, null);
+        }
+
     }
 
     private HashMap<String, ListenerRegistration> mRefs = new HashMap<>();
@@ -456,6 +477,17 @@ public class LeagueModelSingleton {
             }
         }
     }
+
+    public void clearLeaguePinsFromCache(final DataModelResult<Boolean> callback){
+        mCachedProfile.clear();
+        if(mCachedProfile.isEmpty()){
+            callback.onComplete(true, null);
+        }
+        else{
+            callback.onComplete(false, null);
+        }
+    }
+
 
     private CollectionReference getDatabaseRef(){
         return FirebaseFirestore.getInstance().collection("userLeagueTables");

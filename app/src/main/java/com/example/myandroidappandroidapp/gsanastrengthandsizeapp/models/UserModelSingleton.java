@@ -92,13 +92,41 @@ public class UserModelSingleton {
 
     }
 
-    public void logout(DataModelResult<Boolean> callback){
-
+    public void logout(final DataModelResult<Boolean> callback){
+        final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
         String id = FirebaseAuth.getInstance().getUid();
 
         if(id != null){
-            FirebaseAuth.getInstance().signOut();
-            callback.onComplete(true, null);
+
+            final DataModelResult<Boolean> callbackLeaguesCreated = new DataModelResult<Boolean>() {
+                @Override
+                public void onComplete(Boolean data, Exception exception) {
+                    if(data){
+                        FirebaseAuth.getInstance().signOut();
+                        callback.onComplete(true, null);
+                    }
+                    else {
+                        callback.onComplete(false, null);
+                    }
+                }
+            };
+
+            DataModelResult<Boolean> callbackLeaguePins = new DataModelResult<Boolean>() {
+                @Override
+                public void onComplete(Boolean data, Exception exception) {
+                    if(data){
+
+                        leagueModelSingleton.clearAllLeaguesCreated(callbackLeaguesCreated);
+
+                    }
+                    else{
+                        callback.onComplete(false, null);
+                    }
+                }
+            };
+
+
+            leagueModelSingleton.clearLeaguePinsFromCache(callbackLeaguePins);
         }
         else {
             callback.onComplete(false, null);

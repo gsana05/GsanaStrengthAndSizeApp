@@ -79,7 +79,7 @@ public class FragmentStrengthLeagues extends Fragment {
         callback = new DataModelResult<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {
-                if(data != null && data.size() > 0){
+                if(data != null && data.size() > 0){ // data is all league pins for that user
                     LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
                     leagueModelSingleton.addAllLeagueListener(data, callbackCreatedLeagues);
                 }
