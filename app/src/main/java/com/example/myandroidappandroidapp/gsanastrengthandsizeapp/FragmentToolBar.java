@@ -75,8 +75,10 @@ public class FragmentToolBar extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
-                userModelSingleton.logout(callbackLogout);
+                Intent intent = new Intent(getActivity(), ActivityProfile.class);
+                startActivity(intent);
+                //UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+                //userModelSingleton.logout(callbackLogout);
             }
         });
 

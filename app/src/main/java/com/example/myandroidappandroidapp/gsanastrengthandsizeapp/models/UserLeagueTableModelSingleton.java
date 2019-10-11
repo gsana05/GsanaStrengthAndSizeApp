@@ -201,6 +201,106 @@ public class UserLeagueTableModelSingleton {
 
 
 
+    private HashMap<String, ListenerRegistration> mRefsPin = new HashMap<>();
+    private HashMap<String, ArrayList<DataModelResult<ArrayList<String>>>> mProfileCallbacksPin = new HashMap<>();
+    private HashMap<String, ArrayList<String>> mCachedProfilePin = new HashMap<>();
+
+    // returns all the league pins(UUID) for that user
+    public void addListenerUsersWithTheSamePin(final String userId, final String leaguePin, final DataModelResult<ArrayList<String>> callback){
+
+        ArrayList<DataModelResult<ArrayList<String>>> callbacks = null;
+        final ArrayList<String> leaguePinList = new ArrayList<>();
+
+        if(mProfileCallbacksPin.containsKey(userId)){ // does the user already have callbacks
+            if(mProfileCallbacksPin.get(userId) != null ){ // check if user callbacks is not null
+                callbacks = mProfileCallbacksPin.get(userId); // gets the arrayList of callbacks and sets local variable
+            }
+        }
+        else {
+            callbacks = new ArrayList<>(); // first time getting user data aka has no callbacks
+        }
+
+        if(callbacks != null){
+            if(!callbacks.contains(callback)){ // if it does not contain this callback then add it
+                callbacks.add(callback);
+                mProfileCallbacksPin.put(userId, callbacks);
+            }
+        }
+
+
+        if(mCachedProfile.containsKey(userId)){ // if user data has been cached return the cached values do NOT go to database
+            ArrayList<String> cacheList = mCachedProfilePin.get(userId);
+            callback.onComplete(cacheList, null);
+        }
+
+        if(!mRefs.containsKey(userId)){
+
+            ListenerRegistration ref = getDatabaseRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                    if(queryDocumentSnapshots != null){
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String leagueMasterId = document.getString("leagueMasterId");
+
+                            ArrayList<String> list = null;
+                            Map hMap = document.getData();
+                            list = (ArrayList<String>) hMap.get("leaguesCreated");
+
+                            // look at every user list and see if the pin passed in matches any in the list
+                            // if yes then that users is in the league
+
+                            if(list != null){
+                                for(String pin : list){
+                                    if(pin.equals(leaguePin)){
+                                        leaguePinList.add(leagueMasterId);
+                                    }
+                                }
+                            }
+                            Log.d(TAG, document.getId() + " => " + list);
+                        }
+                        callback.onComplete(leaguePinList, null);
+
+                    }else {
+                        callback.onComplete(null, null);
+                    }
+                }
+            });
+            mRefsPin.put(userId, ref);
+
+            /*ListenerRegistration ref = getDatabaseRef().document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+
+                    ArrayList<DataModelResult<ArrayList<String>>> callbackList = mProfileCallbacksPin.get(userId);
+
+                    if(snapshot != null && snapshot.exists()){
+
+                        ArrayList<String> list = null;
+                        Map hMap = snapshot.getData();
+                        if (hMap != null) {
+                            list = (ArrayList<String>) hMap.get("leaguesCreated");
+                        }
+
+                        if(list != null){
+                            mCachedProfilePin.put(userId, list); // cache data
+                        }
+
+                        // return the same user data the same amount of times as the length of callBackList
+                        if(callbackList != null){
+                            for(DataModelResult<ArrayList<String>> i : callbackList){
+                                callback.onComplete(list, null);
+                            }
+                        }
+                    }
+                    else {
+                        callback.onComplete(null, null);
+                    }
+                }
+            });
+            mRefsPin.put(userId, ref);*/
+        }
+    }
+
 
 
     //League pins and returns leagueMasterId // turn that into a listener if you live update to the leagues for new players
