@@ -1,14 +1,17 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
@@ -21,15 +24,17 @@ import java.util.Locale;
 
 public class ActivityProfile extends AppCompatActivity {
 
-    private TextView logout;
     private DataModelResult<User> callbackUserData;
     private EditText gymName;
     private EditText benchPress;
     private EditText deadlift;
     private EditText squat;
     private EditText ohp;
+    private ImageView backBtn;
     private Button saveChangesBtn;
     private Button logoutUser;
+    private ProgressBar logoutUserSpinner;
+    private Boolean isLoggedIn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,22 @@ public class ActivityProfile extends AppCompatActivity {
             }
         };
 
+        backBtn = this.findViewById(R.id.profile_back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+        saveChangesBtn = this.findViewById(R.id.profile_save_btn);
+        saveChangesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog("Save Button Pressed");
+            }
+        });
 
         final DataModelResult<Boolean> callbackLogout = new DataModelResult<Boolean>(){
 
@@ -74,17 +95,51 @@ public class ActivityProfile extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ActivityLogIn.class);
                     startActivity(intent);
                 }
+                isLoggedIn = true;
+                updateUI();
             }
         };
 
-        logout = this.findViewById(R.id.profile_save_btn);
-        logout.setOnClickListener(new View.OnClickListener() {
+        logoutUser = this.findViewById(R.id.profile_sign_out_btn);
+        logoutUserSpinner = this.findViewById(R.id.profile_sign_out_progress);
+        logoutUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isLoggedIn = false;
+                updateUI();
                 UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
                 userModelSingleton.logout(callbackLogout);
             }
         });
+
+        updateUI();
+    }
+
+    public void updateUI(){
+        if(isLoggedIn){
+            logoutUser.setVisibility(View.VISIBLE);
+            logoutUserSpinner.setVisibility(View.GONE);
+        }
+        else {
+            logoutUser.setVisibility(View.INVISIBLE);
+            logoutUserSpinner.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void alertDialog(String response){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(response)
+                .setCancelable(false)
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
     }
 
     @Override
