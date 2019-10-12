@@ -92,8 +92,7 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
-                    Intent intent = new Intent(getApplicationContext(), ActivityLogIn.class);
-                    startActivity(intent);
+                    finish(); // go back to main activity - in onResume check userId is logged in
                 }
                 isLoggedIn = true;
                 updateUI();
