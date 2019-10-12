@@ -79,9 +79,12 @@ public class FragmentStrengthLeagues extends Fragment {
         callback = new DataModelResult<ArrayList<String>>() {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {
-                if(data != null && data.size() > 0){ // data is all league pins for that user
+                if(data != null){ // data is all league pins for that user
                     LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
                     leagueModelSingleton.addAllLeagueListener(data, callbackCreatedLeagues);
+                }
+                else {
+                    alertDialog("data == null");
                 }
             }
         };
@@ -107,6 +110,9 @@ public class FragmentStrengthLeagues extends Fragment {
             LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
             leagueModelSingleton.removeLeagueListener(userId, callback);
             leagueModelSingleton.removeAllLeagueListener(userId, callbackCreatedLeagues);
+        }
+        else {
+            leagueRecyclerView.setAdapter(null);
         }
     }
 

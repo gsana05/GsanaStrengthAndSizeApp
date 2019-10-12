@@ -447,7 +447,7 @@ public class LeagueModelSingleton {
 
                     }
                     else {
-                        callback.onComplete(null, null);
+                        callback.onComplete(new ArrayList<String>(), null);
                     }
                 }
             });
