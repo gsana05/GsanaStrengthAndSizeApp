@@ -31,7 +31,7 @@ public class ActivityProfile extends AppCompatActivity {
             }
         };
 
-        logout = this.findViewById(R.id.hey);
+        logout = this.findViewById(R.id.profile_save_btn);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
