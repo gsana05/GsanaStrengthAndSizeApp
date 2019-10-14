@@ -2,14 +2,19 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -117,6 +122,95 @@ public class UserProfileModelSingleton {
             else {
                 mProfileCallbacks.put(userId, callbackList);  // put the callback list back into list without the one just removed
             }
+        }
+    }
+
+    public void getCurrentUser(final String userId, final DataModelResult<User> callback){
+        getDatabaseRef().document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if(documentSnapshot != null)
+                    documentSnapshot.get("GymName");
+                    documentSnapshot.get("bench");
+                    documentSnapshot.get("squat");
+                    documentSnapshot.get("deadlift");
+                    documentSnapshot.get("overHeadPress");
+                    documentSnapshot.get("email");
+                    documentSnapshot.get("date");
+                    documentSnapshot.get("pin");
+
+
+                    String gymName = documentSnapshot.getString("gymName");
+                    Double bench = documentSnapshot.getDouble("benchPress");
+                    Double deadlift = documentSnapshot.getDouble("deadlift");
+                    Double squat = documentSnapshot.getDouble("squat");
+                    Double ohp = documentSnapshot.getDouble("overHeadPress");
+                    String pin = documentSnapshot.getString("pin");
+                    String email = documentSnapshot.getString("email");
+                    Date date = documentSnapshot.getDate("date");
+
+                    User user = new User(
+                            gymName,
+                            bench.floatValue(),
+                            squat.floatValue(),
+                            deadlift.floatValue(),
+                            ohp.floatValue(),
+                            date,
+                            pin,
+                            email
+                            );
+
+                    if(user != null){
+                        callback.onComplete(user, null);
+                    }
+                    else {
+                        callback.onComplete(null, null);
+                    }
+
+                }
+            }
+        });
+    }
+
+    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final DataModelResult<Boolean> callback){
+
+        final String userId = FirebaseAuth.getInstance().getUid();
+
+        if(userId != null){
+            DataModelResult<User> userCallback = new DataModelResult<User>() {
+                @Override
+                public void onComplete(User data, Exception exception) {
+                    if(data != null){
+                        String email = data.getEmail();
+                        String pin = data.getPin();
+                        Date date = data.getDate();
+
+                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email);
+
+                        // setOptions - only changes the field that now has a different value
+                        getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    callback.onComplete(true, null);
+                                }
+                                else {
+                                    callback.onComplete(false, null);
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        Log.v("User", "NULL");
+                    }
+                }
+            };
+            getCurrentUser(userId, userCallback);
+        }
+        else {
+            callback.onComplete(false, null);
         }
     }
 

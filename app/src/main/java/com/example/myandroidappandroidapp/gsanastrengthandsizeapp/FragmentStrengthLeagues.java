@@ -112,7 +112,7 @@ public class FragmentStrengthLeagues extends Fragment {
             leagueModelSingleton.removeAllLeagueListener(userId, callbackCreatedLeagues);
         }
         else {
-            leagueRecyclerView.setAdapter(null);
+            leagueRecyclerView.setAdapter(null); // clears recycler view so next user doe snot see previous users data
         }
     }
 

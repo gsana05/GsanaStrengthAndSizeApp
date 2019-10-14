@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,11 +36,16 @@ public class ActivityProfile extends AppCompatActivity {
     private Button logoutUser;
     private ProgressBar logoutUserSpinner;
     private Boolean isLoggedIn = true;
+    private UserProfileModelSingleton userProfileModelSingleton;
+    private UserModelSingleton userModelSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        userModelSingleton = UserModelSingleton.getInstance();
+        userProfileModelSingleton = UserProfileModelSingleton.getInstance();
 
         gymName = this.findViewById(R.id.profile_sub_heading_gym_name_input);
         benchPress = this.findViewById(R.id.profile_sub_heading_bench_input);
@@ -83,7 +89,55 @@ public class ActivityProfile extends AppCompatActivity {
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog("Save Button Pressed");
+
+
+                if(gymName.getText().toString().isEmpty()){
+                    alertDialog("Please enter gymName");
+                    return;
+                }
+
+                if(benchPress.getText().toString().isEmpty()){
+                    alertDialog("Please enter bench press");
+                    return;
+                }
+
+                if(squat.getText().toString().isEmpty()){
+                    alertDialog("Please enter squat");
+                    return;
+                }
+
+                if(deadlift.getText().toString().isEmpty()){
+                    alertDialog("Please enter deadlift");
+                    return;
+                }
+
+                if(ohp.getText().toString().isEmpty()){
+                    alertDialog("Please enter over head press");
+                    return;
+                }
+
+                DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean data, Exception exception) {
+                        if(data){
+                            alertDialog("Data saved");
+                            finish();
+                        }
+                        else {
+                            alertDialog("Data has not been saved");
+                        }
+
+                    }
+                };
+
+                userProfileModelSingleton.updateUser(
+                        gymName.getText().toString(),
+                        Float.valueOf(benchPress.getText().toString()),
+                        Float.valueOf(squat.getText().toString()),
+                        Float.valueOf(deadlift.getText().toString()),
+                        Float.valueOf(ohp.getText().toString()),
+                        callback
+                );
             }
         });
 
@@ -106,7 +160,7 @@ public class ActivityProfile extends AppCompatActivity {
             public void onClick(View v) {
                 isLoggedIn = false;
                 updateUI();
-                UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+
                 userModelSingleton.logout(callbackLogout);
             }
         });
@@ -146,7 +200,6 @@ public class ActivityProfile extends AppCompatActivity {
         super.onPause();
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
             userProfileModelSingleton.removeUserProfileListener(id, callbackUserData);
         }
     }
@@ -157,7 +210,6 @@ public class ActivityProfile extends AppCompatActivity {
 
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
-            UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
             userProfileModelSingleton.addUserProfileListener(id, callbackUserData);
         }
     }
