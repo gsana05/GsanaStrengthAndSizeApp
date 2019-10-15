@@ -1,10 +1,12 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueTableRecyclerViewAdapter;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeague;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.security.AccessController.getContext;
 
@@ -52,6 +56,8 @@ public class LeagueTableResults extends AppCompatActivity {
             public void onComplete(ArrayList<User> data, Exception exception) {
                 if(data != null){
                     // sort data by total
+                    Collections.sort(data, new SortUserLeague().reversed());
+
                     mAdapter = new LeagueTableRecyclerViewAdapter(data);
                     leagueTableRecyclerView.setAdapter(mAdapter);
                     Log.v("", "");
