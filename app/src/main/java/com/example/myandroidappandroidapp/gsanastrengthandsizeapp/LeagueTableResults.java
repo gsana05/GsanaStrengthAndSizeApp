@@ -1,10 +1,13 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -99,6 +102,57 @@ public class LeagueTableResults extends AppCompatActivity {
             }
         });
 
+        ImageView filterBtn = this.findViewById(R.id.league_table_results_heading_view_filter);
+        filterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), FilterActivity.class);
+                startActivityForResult(intent, 999);
+                //alertDialog("filter");
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 999) {
+            if(resultCode == Activity.RESULT_OK){
+                String result=data.getStringExtra("result");
+                String resulet=data.getStringExtra("name");
+
+                Log.v("", "");
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Log.v("", "");
+                //Write your code if there's no result
+            }
+        }
+    }//onActivityResult
+
+    public void alertDialog(String response){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(response)
+                .setCancelable(false)
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String id = FirebaseAuth.getInstance().getUid();
+        if(id != null){
+
+        }
     }
 
     @Override
