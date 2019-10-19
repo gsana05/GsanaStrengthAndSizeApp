@@ -157,21 +157,3 @@ class CustomDropDownAdapter extends ArrayAdapter<Filter>{
         }
     }
 }
-
-/*// custom spinner that takes null values
-class CustomDropDownAdapter<T>(context: Context,listItemsTxt: List<T?>,  var bindView: (position: Int, item: T?, view: View) -> Unit) : ArrayAdapter<T>(context, -1, listItemsTxt) {
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return getViewLayout(position, convertView , R.layout.custom_spinner_view)
-        }
-
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return getViewLayout(position, convertView , R.layout.custom_spinner_view_selected)
-        }
-
-private fun getViewLayout(position: Int, convertView: View?, @LayoutRes layout : Int) : View{
-        val view = convertView ?: LayoutInflater.from(context).inflate(layout, null)
-        bindView(position, getItem(position), view)
-        return view
-        }
-        }*/

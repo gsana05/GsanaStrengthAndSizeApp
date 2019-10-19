@@ -95,7 +95,7 @@
         app:layout_constraintStart_toStartOf="@+id/filter_main_view_drop_down"
         app:layout_constraintHorizontal_bias="0.9"
         android:src="@drawable/ic_arrow_drop_down_24px"
-        android:tint="@color/ssWhite"
+        android:tint="@color/ssBlack"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

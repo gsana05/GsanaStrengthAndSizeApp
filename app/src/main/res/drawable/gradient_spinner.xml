@@ -7,8 +7,11 @@
             <item>
                 <shape>
                     <corners android:radius="10dp"/>
-                    <stroke android:width="2dp" android:color="@color/ssWhite" />
+                    <stroke android:width="2dp" android:color="@color/ssBlack" />
                     <padding android:bottom="3dp" android:left="3dp" android:right="3dp" android:top="3dp" />
+                    <solid
+                        android:color="#ffffff" >
+                    </solid>
                 </shape>
             </item>
         </layer-list>
