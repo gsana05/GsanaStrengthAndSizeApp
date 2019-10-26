@@ -33,9 +33,22 @@ public class FilterActivity extends AppCompatActivity {
 
     private Spinner spinner;
     private SpinnerAdapter mAdapter;
+
     private Spinner customerSpinnerbench;
     private SpinnerAdapter customSpinnerAdapterBench;
     private ImageView spinnerDropDownBenchIcon;
+
+    private ImageView spinnerDropDownSquatIcon;
+    private Spinner customSpinnerSquat;
+    private SpinnerAdapter customSpinnerAdapterSquat;
+
+    private ImageView spinnerDropDownDeadliftIcon;
+    private Spinner customSpinnerDeadlift;
+    private SpinnerAdapter customSpinnerAdapterDeadlift;
+
+    private ImageView spinnerDropDownOhpIcon;
+    private Spinner customSpinnerOhp;
+    private SpinnerAdapter customSpinnerAdapterOhp;
 
     private Button customiseBtn;
     private Boolean isCustom = false;
@@ -118,6 +131,67 @@ public class FilterActivity extends AppCompatActivity {
         });
 
 
+        ArrayList<Filter> squatList = new ArrayList<>();
+        squatList.add(null);
+        squatList.add(new Filter(1, "Squat"));
+        spinnerDropDownSquatIcon = this.findViewById(R.id.filter_main_view_drop_down_custom_squat_arrow);
+        customSpinnerSquat = this.findViewById(R.id.filter_main_view_drop_down_custom_squat);
+        customSpinnerAdapterSquat = new CustomDropDownAdapter(this, squatList);
+        customSpinnerSquat.setAdapter(customSpinnerAdapterSquat);
+        customSpinnerSquat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayList<Filter> deadliftList = new ArrayList<>();
+        deadliftList.add(null);
+        deadliftList.add(new Filter(1, "Deadlift"));
+        spinnerDropDownDeadliftIcon = this.findViewById(R.id.filter_main_view_drop_down_custom_deadlift_arrow);
+        customSpinnerDeadlift = this.findViewById(R.id.filter_main_view_drop_down_custom_deadlift);
+        customSpinnerAdapterDeadlift = new CustomDropDownAdapter(this, deadliftList);
+        customSpinnerDeadlift.setAdapter(customSpinnerAdapterDeadlift);
+        customSpinnerDeadlift.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        ArrayList<Filter> ohpList = new ArrayList<>();
+        ohpList.add(null);
+        ohpList.add(new Filter(1, "Over Head Press"));
+        spinnerDropDownOhpIcon = this.findViewById(R.id.filter_main_view_drop_down_custom_ohp_arrow);
+        customSpinnerOhp = this.findViewById(R.id.filter_main_view_drop_down_custom_ohp);
+        customSpinnerAdapterOhp = new CustomDropDownAdapter(this, ohpList);
+        customSpinnerOhp.setAdapter(customSpinnerAdapterOhp);
+        customSpinnerOhp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
        /* spinner = this.findViewById(R.id.filter_main_view_drop_down);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sort_string_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -187,8 +261,18 @@ public class FilterActivity extends AppCompatActivity {
             tvCustom.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.GONE);
             spinnerDropDownIcon.setVisibility(View.GONE);
+
+            customSpinnerSquat.setVisibility(View.VISIBLE);
+            spinnerDropDownSquatIcon.setVisibility(View.VISIBLE);
+
             customerSpinnerbench.setVisibility(View.VISIBLE);
             spinnerDropDownBenchIcon.setVisibility(View.VISIBLE);
+
+            customSpinnerDeadlift.setVisibility(View.VISIBLE);
+            spinnerDropDownDeadliftIcon.setVisibility(View.VISIBLE);
+
+            customSpinnerOhp.setVisibility(View.VISIBLE);
+            spinnerDropDownOhpIcon.setVisibility(View.VISIBLE);
         }
         else {
             tvStandard.setVisibility(View.VISIBLE);
@@ -198,6 +282,15 @@ public class FilterActivity extends AppCompatActivity {
 
             customerSpinnerbench.setVisibility(View.GONE);
             spinnerDropDownBenchIcon.setVisibility(View.GONE);
+
+            customSpinnerSquat.setVisibility(View.GONE);
+            spinnerDropDownSquatIcon.setVisibility(View.GONE);
+
+            customSpinnerDeadlift.setVisibility(View.GONE);
+            spinnerDropDownDeadliftIcon.setVisibility(View.GONE);
+
+            customSpinnerOhp.setVisibility(View.GONE);
+            spinnerDropDownOhpIcon.setVisibility(View.GONE);
         }
     }
 }

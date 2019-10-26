@@ -169,5 +169,103 @@
         android:tint="@color/ssBlack"
         />
 
+    <Spinner
+        android:id="@+id/filter_main_view_drop_down_custom_squat"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/filter_main_view_drop_down_custom_bench"
+        app:layout_constraintStart_toStartOf="@id/filter_main_view"
+        app:layout_constraintEnd_toEndOf="@id/filter_main_view"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        style="@style/spinner_style"
+        android:overlapAnchor="false"
+        />
+
+    <ImageView
+        android:id="@+id/filter_main_view_drop_down_custom_squat_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/filter_main_view_drop_down_custom_squat"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_main_view_drop_down_custom_squat"
+        app:layout_constraintEnd_toEndOf="@+id/filter_main_view_drop_down_custom_squat"
+        app:layout_constraintStart_toStartOf="@+id/filter_main_view_drop_down_custom_squat"
+        app:layout_constraintHorizontal_bias="0.9"
+        android:src="@drawable/ic_arrow_drop_down_24px"
+        android:tint="@color/ssBlack"
+        />
+
+    <Spinner
+        android:id="@+id/filter_main_view_drop_down_custom_deadlift"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/filter_main_view_drop_down_custom_squat"
+        app:layout_constraintStart_toStartOf="@id/filter_main_view"
+        app:layout_constraintEnd_toEndOf="@id/filter_main_view"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        style="@style/spinner_style"
+        android:overlapAnchor="false"
+        />
+
+    <ImageView
+        android:id="@+id/filter_main_view_drop_down_custom_deadlift_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/filter_main_view_drop_down_custom_deadlift"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_main_view_drop_down_custom_deadlift"
+        app:layout_constraintEnd_toEndOf="@+id/filter_main_view_drop_down_custom_deadlift"
+        app:layout_constraintStart_toStartOf="@+id/filter_main_view_drop_down_custom_deadlift"
+        app:layout_constraintHorizontal_bias="0.9"
+        android:src="@drawable/ic_arrow_drop_down_24px"
+        android:tint="@color/ssBlack"
+        />
+
+    <Spinner
+        android:id="@+id/filter_main_view_drop_down_custom_ohp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toBottomOf="@+id/filter_main_view_drop_down_custom_deadlift"
+        app:layout_constraintStart_toStartOf="@id/filter_main_view"
+        app:layout_constraintEnd_toEndOf="@id/filter_main_view"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        style="@style/spinner_style"
+        android:overlapAnchor="false"
+        />
+
+    <ImageView
+        android:id="@+id/filter_main_view_drop_down_custom_ohp_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/filter_main_view_drop_down_custom_ohp"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_main_view_drop_down_custom_ohp"
+        app:layout_constraintEnd_toEndOf="@+id/filter_main_view_drop_down_custom_ohp"
+        app:layout_constraintStart_toStartOf="@+id/filter_main_view_drop_down_custom_ohp"
+        app:layout_constraintHorizontal_bias="0.9"
+        android:src="@drawable/ic_arrow_drop_down_24px"
+        android:tint="@color/ssBlack"
+        />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/filter_main_view_drop_down_custom_ohp"
+        app:layout_constraintStart_toStartOf="@id/filter_main_view"
+        app:layout_constraintEnd_toEndOf="@id/filter_main_view"
+        app:layout_constraintBottom_toBottomOf="@id/filter_main_view"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssGreen"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/ssWhite"
+        android:textSize="18sp"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
