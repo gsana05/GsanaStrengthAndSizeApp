@@ -251,6 +251,7 @@
         />
 
     <Button
+        android:id="@+id/filter_main_view_submit_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/filter_main_view_drop_down_custom_ohp"

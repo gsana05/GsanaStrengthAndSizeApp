@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.Filter;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 
 import java.util.ArrayList;
 
@@ -250,6 +251,22 @@ public class FilterActivity extends AppCompatActivity {
 
         tvStandard = this.findViewById(R.id.dashboard_map_toggle_switch_map);
         tvCustom = this.findViewById(R.id.dashboard_map_toggle_switch_list);
+
+        Button submitBtn = this.findViewById(R.id.filter_main_view_submit_btn);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Filter filter = (Filter) spinner.getSelectedItem();
+                if(filter != null){
+                    int id = filter.getId();
+                    String name = filter.getName();
+                    Object ip = spinner.getSelectedItem();
+                }
+                else{
+                    Log.v("", "");
+                }
+            }
+        });
 
         updateUI();
     }
