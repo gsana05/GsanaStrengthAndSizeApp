@@ -20,4 +20,8 @@
         <item name="android:layout_marginTop">2dp</item>
     </style>
 
+    <style name="SwitchTextAppearance" parent="@android:style/TextAppearance.Holo.Small">
+        <item name="android:textColor">@color/ssWhite</item>
+    </style>
+
 </resources>
