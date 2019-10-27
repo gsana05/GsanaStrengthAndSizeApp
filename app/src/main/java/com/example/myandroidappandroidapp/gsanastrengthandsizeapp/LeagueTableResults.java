@@ -88,7 +88,8 @@ public class LeagueTableResults extends AppCompatActivity {
                 String result=data.getStringExtra("result");
                 mSortValue = data.getIntExtra("result", -1);
                 String resulet=data.getStringExtra("name");
-
+                TextView tv = this.findViewById(R.id.league_table_results_main_view_sort_result);
+                tv.setText(resulet);
                 Log.v("", "");
             }
             if (resultCode == Activity.RESULT_CANCELED) {
