@@ -8,7 +8,9 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -256,14 +258,29 @@ public class FilterActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Filter filter = (Filter) spinner.getSelectedItem();
-                if(filter != null){
-                    int id = filter.getId();
-                    String name = filter.getName();
-                    Object ip = spinner.getSelectedItem();
-                }
-                else{
+
+                int id;
+                String name;
+
+                // is switch checked
+                if(switchCompat.isChecked()){ // custom
                     Log.v("", "");
+                }
+                else { // standard
+                    Filter filter = (Filter) spinner.getSelectedItem();
+                    if(filter != null){
+                        id = filter.getId();
+                        name = filter.getName();
+                    }
+                    else{
+                        id = 0;
+                        name = "All";
+                    }
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result",id);
+                    returnIntent.putExtra("name", name);
+                    setResult(Activity.RESULT_OK,returnIntent);
+                    finish();
                 }
             }
         });

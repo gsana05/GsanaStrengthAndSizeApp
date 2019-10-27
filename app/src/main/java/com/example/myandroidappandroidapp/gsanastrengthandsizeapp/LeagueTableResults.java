@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueTableRecyclerViewAdapter;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeague;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeagueByBench;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeagueByDeadlift;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeagueByOverHeadPress;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.comparator.SortUserLeagueBySquat;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
@@ -38,61 +42,24 @@ public class LeagueTableResults extends AppCompatActivity {
     private RecyclerView leagueTableRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private int filterId;
+    private String leaguePin;
+    private int mSortValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_league_table_results);
 
+        if(filterId > 0){
+            Log.v("", "");
+        }
+
         Intent intent = getIntent();
-        String leaguePin = intent.getStringExtra("LeaguePin"); // passed into function
+        leaguePin = intent.getStringExtra("LeaguePin"); // passed into function
         String leagueName = intent.getStringExtra("LeagueName");
         nameOfLeague = this.findViewById(R.id.league_table_results_heading_view_league_name);
         nameOfLeague.setText(leagueName);
-
-        leagueTableRecyclerView = this.findViewById(R.id.league_table_results_main_view_recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        leagueTableRecyclerView.setLayoutManager(layoutManager);
-
-        usersCallback = new DataModelResult<ArrayList<User>>() {
-            @Override
-            public void onComplete(ArrayList<User> data, Exception exception) {
-                if(data != null){
-                    // sort data by total
-                    Collections.sort(data, new SortUserLeague().reversed());
-
-                    mAdapter = new LeagueTableRecyclerViewAdapter(data);
-                    leagueTableRecyclerView.setAdapter(mAdapter);
-                    Log.v("", "");
-                }
-                else {
-                    Log.v("", "");
-                }
-            }
-        };
-
-        // gets the leagueMasterId
-        DataModelResult<ArrayList<String>> callback = new DataModelResult<ArrayList<String>>() {
-            @Override
-            public void onComplete(ArrayList<String> data, Exception exception) {
-                if(data != null){
-                    //pin.setText(data.toString());
-                    String id = FirebaseAuth.getInstance().getUid();
-                    if(id != null){
-                        // adding listener
-                        userLeagueTableModelSingleton.addLeagueTableUserProfileListener(id, data, usersCallback);
-                    }
-
-                    //userLeagueTableModelSingleton.getUsersForCurrentLeague("", data, usersCallback);
-                }
-                else {
-                    nameOfLeague.setText("no data");
-                }
-            }
-        };
-
-        userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // passes in leaguePin and returns the leagueMasterId
-
 
         ImageView backBtn = this.findViewById(R.id.league_table_results_heading_view_back);
         backBtn.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +86,7 @@ public class LeagueTableResults extends AppCompatActivity {
         if (requestCode == 999) {
             if(resultCode == Activity.RESULT_OK){
                 String result=data.getStringExtra("result");
+                mSortValue = data.getIntExtra("result", -1);
                 String resulet=data.getStringExtra("name");
 
                 Log.v("", "");
@@ -151,7 +119,68 @@ public class LeagueTableResults extends AppCompatActivity {
         super.onResume();
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
+            leagueTableRecyclerView = this.findViewById(R.id.league_table_results_main_view_recycler_view);
+            layoutManager = new LinearLayoutManager(this);
+            leagueTableRecyclerView.setLayoutManager(layoutManager);
+            usersCallback = new DataModelResult<ArrayList<User>>() {
+                @Override
+                public void onComplete(ArrayList<User> data, Exception exception) {
+                    if(data != null){
+                        // sort data by total
 
+                        switch(mSortValue){
+                            case 1:
+                                Log.v("", "");
+                                Collections.sort(data, new SortUserLeagueByBench().reversed());
+                                break;
+                            case 2:
+                                Log.v("", "");
+                                Collections.sort(data, new SortUserLeagueBySquat().reversed());
+                                break;
+                            case 3:
+                                Log.v("", "");
+                                Collections.sort(data, new SortUserLeagueByDeadlift().reversed());
+                                break;
+                            case 4:
+                                Log.v("", "");
+                                Collections.sort(data, new SortUserLeagueByOverHeadPress().reversed());
+                                break;
+                            default:
+                                //Log.v("", "");
+                                Collections.sort(data, new SortUserLeague().reversed());
+                                break;
+                        }
+
+                        mAdapter = new LeagueTableRecyclerViewAdapter(data);
+                        leagueTableRecyclerView.setAdapter(mAdapter);
+                        Log.v("", "");
+                    }
+                    else {
+                        Log.v("", "");
+                    }
+                }
+            };
+
+            // gets the leagueMasterId
+            DataModelResult<ArrayList<String>> callback = new DataModelResult<ArrayList<String>>() {
+                @Override
+                public void onComplete(ArrayList<String> data, Exception exception) {
+                    if(data != null){
+                        //pin.setText(data.toString());
+                        String id = FirebaseAuth.getInstance().getUid();
+                        if(id != null){
+                            // adding listener
+                            userLeagueTableModelSingleton.addLeagueTableUserProfileListener(id, data, usersCallback);
+                        }
+
+                        //userLeagueTableModelSingleton.getUsersForCurrentLeague("", data, usersCallback);
+                    }
+                    else {
+                        nameOfLeague.setText("no data");
+                    }
+                }
+            };
+            userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // passes in leaguePin and returns the leagueMasterId
         }
     }
 
