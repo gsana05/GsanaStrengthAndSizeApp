@@ -265,6 +265,7 @@ public class FilterActivity extends AppCompatActivity {
                 // is switch checked
                 if(switchCompat.isChecked()){ // custom
                     Log.v("", "");
+
                 }
                 else { // standard
                     Filter filter = (Filter) spinner.getSelectedItem();

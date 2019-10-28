@@ -128,23 +128,27 @@ public class LeagueTableResults extends AppCompatActivity {
                 public void onComplete(ArrayList<User> data, Exception exception) {
                     if(data != null){
                         // sort data by total
-
+                        int type = -1;
                         switch(mSortValue){
-                            case 1:
+                            case UserLeagueTableModelSingleton.benchPress:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByBench().reversed());
+                                type = UserLeagueTableModelSingleton.benchPress;
                                 break;
-                            case 2:
+                            case UserLeagueTableModelSingleton.deadlift:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueBySquat().reversed());
+                                type = UserLeagueTableModelSingleton.squat;
                                 break;
-                            case 3:
+                            case UserLeagueTableModelSingleton.squat:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByDeadlift().reversed());
+                                type = UserLeagueTableModelSingleton.deadlift;
                                 break;
-                            case 4:
+                            case UserLeagueTableModelSingleton.ohp:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByOverHeadPress().reversed());
+                                type = UserLeagueTableModelSingleton.ohp;
                                 break;
                             default:
                                 //Log.v("", "");
@@ -152,7 +156,7 @@ public class LeagueTableResults extends AppCompatActivity {
                                 break;
                         }
 
-                        mAdapter = new LeagueTableRecyclerViewAdapter(data);
+                        mAdapter = new LeagueTableRecyclerViewAdapter(data, type);
                         leagueTableRecyclerView.setAdapter(mAdapter);
                         Log.v("", "");
                     }
