@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.Filter;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
 
 import java.util.ArrayList;
 
@@ -67,10 +68,10 @@ public class FilterActivity extends AppCompatActivity {
 
         ArrayList<Filter> list = new ArrayList<>();
         list.add(null);
-        list.add(new Filter(1, "Bench Press"));
-        list.add(new Filter(2, "Squat"));
-        list.add(new Filter(3, "Deadlift"));
-        list.add(new Filter(4, "Over Head Press"));
+        list.add(new Filter(UserLeagueTableModelSingleton.benchPress, "Bench Press"));
+        list.add(new Filter(UserLeagueTableModelSingleton.deadlift, "Deadlift"));
+        list.add(new Filter(UserLeagueTableModelSingleton.squat, "Squat"));
+        list.add(new Filter(UserLeagueTableModelSingleton.ohp, "Over Head Press"));
 
         spinnerDropDownIcon = this.findViewById(R.id.filter_main_view_drop_down_arrow);
         spinner = this.findViewById(R.id.filter_main_view_drop_down);

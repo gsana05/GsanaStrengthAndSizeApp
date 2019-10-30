@@ -138,12 +138,12 @@ public class LeagueTableResults extends AppCompatActivity {
                             case UserLeagueTableModelSingleton.deadlift:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueBySquat().reversed());
-                                type = UserLeagueTableModelSingleton.squat;
+                                type = UserLeagueTableModelSingleton.deadlift;
                                 break;
                             case UserLeagueTableModelSingleton.squat:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByDeadlift().reversed());
-                                type = UserLeagueTableModelSingleton.deadlift;
+                                type = UserLeagueTableModelSingleton.squat;
                                 break;
                             case UserLeagueTableModelSingleton.ohp:
                                 Log.v("", "");
