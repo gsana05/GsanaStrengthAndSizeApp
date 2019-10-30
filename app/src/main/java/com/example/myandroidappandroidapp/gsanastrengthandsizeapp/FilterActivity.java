@@ -251,6 +251,7 @@ public class FilterActivity extends AppCompatActivity {
                 updateUI();
             }
         });
+        switchCompat.setVisibility(View.GONE);
 
         tvStandard = this.findViewById(R.id.dashboard_map_toggle_switch_map);
         tvCustom = this.findViewById(R.id.dashboard_map_toggle_switch_list);
@@ -294,7 +295,7 @@ public class FilterActivity extends AppCompatActivity {
 
         if(switchCompat.isChecked()){
             tvStandard.setVisibility(View.INVISIBLE);
-            tvCustom.setVisibility(View.VISIBLE);
+            tvCustom.setVisibility(View.INVISIBLE);
             spinner.setVisibility(View.GONE);
             spinnerDropDownIcon.setVisibility(View.GONE);
 
@@ -311,7 +312,7 @@ public class FilterActivity extends AppCompatActivity {
             spinnerDropDownOhpIcon.setVisibility(View.VISIBLE);
         }
         else {
-            tvStandard.setVisibility(View.VISIBLE);
+            tvStandard.setVisibility(View.INVISIBLE);
             tvCustom.setVisibility(View.INVISIBLE);
             spinner.setVisibility(View.VISIBLE);
             spinnerDropDownIcon.setVisibility(View.VISIBLE);
