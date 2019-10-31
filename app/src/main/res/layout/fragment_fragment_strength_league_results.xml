@@ -45,7 +45,7 @@
         android:textSize="18sp"
         />
 
-    <Button
+    <TextView
         android:id="@+id/fragment_strength_personal_growth"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -53,13 +53,31 @@
         app:layout_constraintStart_toStartOf="@id/fragment_strength_league_results_create_league_btn"
         app:layout_constraintEnd_toEndOf="@id/fragment_strength_league_results_join_league_btn"
         android:layout_marginTop="10dp"
-        android:text="Your Personal Growth"
+        android:text="Leagues you play in:"
         android:textAllCaps="false"
         android:backgroundTint="@color/ssWhite"
-        android:textColor="@color/ssBackgroundBlack"
+        android:textColor="@color/ssWhite"
+        android:textAlignment="center"
         android:textStyle="bold"
         android:textSize="18sp"
         android:padding="6dp"
+        android:enabled="false"
+        />
+
+    <TextView
+        android:id="@+id/fragment_strength_recycler_view_no_league"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fragment_strength_personal_growth"
+        app:layout_constraintStart_toStartOf="@+id/fragment_strength_league_results_create_league_btn"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_strength_league_results_join_league_btn"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="You are not part of any leagues yet! Create or join one"
+        android:backgroundTint="@color/ssWhite"
+        android:textColor="@color/ssWhite"
+        android:textAlignment="center"
+        android:textStyle="bold"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -67,8 +85,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/fragment_strength_personal_growth"
-        app:layout_constraintStart_toStartOf="@id/fragment_strength_personal_growth"
-        app:layout_constraintEnd_toEndOf="@id/fragment_strength_personal_growth"
+        app:layout_constraintStart_toStartOf="@+id/fragment_strength_league_results_create_league_btn"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_strength_league_results_join_league_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"

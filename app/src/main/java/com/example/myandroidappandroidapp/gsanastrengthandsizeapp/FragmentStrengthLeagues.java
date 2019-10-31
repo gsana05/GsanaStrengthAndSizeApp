@@ -65,13 +65,21 @@ public class FragmentStrengthLeagues extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         leagueRecyclerView.setLayoutManager(layoutManager);
 
+        final TextView tv = view.findViewById(R.id.fragment_strength_recycler_view_no_league);
 
         callbackCreatedLeagues = new DataModelResult<ArrayList<CreatedLeague>>() {
             @Override
             public void onComplete(ArrayList<CreatedLeague> data, Exception exception) {
                 if(data != null){
-                    mAdapter = new LeagueRecyclerViewAdapter(data, getContext());
-                    leagueRecyclerView.setAdapter(mAdapter);
+                    if(data.size() >= 1){
+                        tv.setVisibility(View.GONE);
+                        mAdapter = new LeagueRecyclerViewAdapter(data, getContext());
+                        leagueRecyclerView.setAdapter(mAdapter);
+                    }
+                    else{
+
+                        tv.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         };
@@ -85,6 +93,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 }
                 else {
                     alertDialog("data == null");
+                    // clear recycler incase user has a league and then deletes it
                 }
             }
         };
