@@ -288,6 +288,14 @@ public class FilterActivity extends AppCompatActivity {
             }
         });
 
+        ImageView backButton = this.findViewById(R.id.filter_heading_view_back);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         updateUI();
     }
 
