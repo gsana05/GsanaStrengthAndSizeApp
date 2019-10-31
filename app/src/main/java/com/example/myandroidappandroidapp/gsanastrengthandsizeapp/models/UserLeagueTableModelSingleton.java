@@ -240,7 +240,7 @@ public class UserLeagueTableModelSingleton {
 
         if(!mRefs.containsKey(userId)){
 
-            ListenerRegistration ref = getDatabaseRef().addSnapshotListener(new EventListener<QuerySnapshot>() {
+            ListenerRegistration ref = getDatabaseRef().whereEqualTo("leaguesCreated", leaguePin).addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if(queryDocumentSnapshots != null){
@@ -255,10 +255,8 @@ public class UserLeagueTableModelSingleton {
                             // if yes then that users is in the league
 
                             if(list != null){
-                                for(String pin : list){
-                                    if(pin.equals(leaguePin)){
-                                        leaguePinList.add(leagueMasterId);
-                                    }
+                                if(list.contains(leaguePin)){
+                                    leaguePinList.add(leagueMasterId);
                                 }
                             }
                             Log.d(TAG, document.getId() + " => " + list);
@@ -331,10 +329,8 @@ public class UserLeagueTableModelSingleton {
                                 // if yes then that users is in the league
 
                                 if(list != null){
-                                    for(String pin : list){
-                                        if(pin.equals(leaguePin)){
-                                            leaguePinList.add(leagueMasterId);
-                                        }
+                                    if(list.contains(leaguePin)){
+                                        leaguePinList.add(leagueMasterId);
                                     }
                                 }
                                 Log.d(TAG, document.getId() + " => " + list);
