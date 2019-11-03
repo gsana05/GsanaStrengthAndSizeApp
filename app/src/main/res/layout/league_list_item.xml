@@ -28,9 +28,13 @@
         app:layout_constraintStart_toEndOf="@+id/league_list_item_league_label"
         app:layout_constraintTop_toTopOf="@+id/league_list_item_league_label"
         app:layout_constraintTop_toBottomOf="@+id/league_list_item_league_label"
-        android:text="hsdjdhs"
+        android:text="hsdjdhsjasjjdjkjf"
         android:textSize="18sp"
         android:textColor="@color/ssBackgroundBlack"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:ems="10"
+        android:maxLines="1"
         />
 
     <TextView
@@ -69,6 +73,18 @@
         android:layout_height="wrap_content"
         app:layout_constraintGuide_percent="0.50"
         android:orientation="vertical"
+        />
+
+    <ImageView
+        android:id="@+id/league_list_item_leave_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/league_list_item_pin_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/league_list_item_pin_name"
+        android:src="@drawable/ic_delete_24px"
+        android:tint="@color/ssRed"
         />
 
     <TextView
