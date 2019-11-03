@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 public class LeagueModelSingleton {
@@ -92,6 +94,36 @@ public class LeagueModelSingleton {
             });
         }
     }
+
+
+    public void leaveLeague(final String userId, final String leaveLeaguePin, final DataModelResult<Boolean> callback){
+
+        DataModelResult<ArrayList<String>> callbackLeagues = new DataModelResult<ArrayList<String>>() {
+            @Override
+            public void onComplete(ArrayList<String> data, Exception exception) {
+                if(data != null){
+                    data.remove(leaveLeaguePin);
+
+                    // write data into database
+                    getDatabaseRef().document(userId).update("leaguesCreated",data ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                        }
+                    })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                }
+            }
+        };
+
+        getLeagueTable(callbackLeagues);
+    }
+
 
     // check if user already is part of this league
     public void checkForDuplicates(final String leaguePin, final DataModelResult<Boolean> callback){

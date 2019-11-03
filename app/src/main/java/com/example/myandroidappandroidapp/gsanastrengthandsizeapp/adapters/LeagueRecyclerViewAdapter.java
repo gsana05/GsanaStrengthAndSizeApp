@@ -19,6 +19,9 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityLogIn;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.LeagueTableResults;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 import java.text.DateFormat;
@@ -72,9 +75,25 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             leaveLeague.setVisibility(View.GONE);
         }
 
+        final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
+            @Override
+            public void onComplete(Boolean data, Exception exception) {
+
+            }
+        };
+
         leaveLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String currentSelectedLeague = createdLeague.getLeaguePin();
+                LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                String userId = FirebaseAuth.getInstance().getUid();
+                if(userId != null){
+                    leagueModelSingleton.leaveLeague(userId, currentSelectedLeague, callbackLeaveLeague);
+                }
+
+
                 AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage("Clicked")
