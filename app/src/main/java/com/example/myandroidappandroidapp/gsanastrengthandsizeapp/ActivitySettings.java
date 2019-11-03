@@ -30,6 +30,7 @@ public class ActivitySettings extends AppCompatActivity {
     private LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
     private DataModelResult<ArrayList<CreatedLeague>> callbackCreatedLeagues;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +61,6 @@ public class ActivitySettings extends AppCompatActivity {
             @Override
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null){ // data is all league pins for that user
-                    LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
                     leagueModelSingleton.addAllLeagueListener(data, callbackCreatedLeagues);
                 }
                 else {
@@ -86,6 +86,7 @@ public class ActivitySettings extends AppCompatActivity {
         String userId = FirebaseAuth.getInstance().getUid();
         if(userId != null){
             leagueModelSingleton.removeLeagueListener(userId, callback);
+            leagueModelSingleton.removeAllLeagueListener(userId, callbackCreatedLeagues);
         }
     }
 
