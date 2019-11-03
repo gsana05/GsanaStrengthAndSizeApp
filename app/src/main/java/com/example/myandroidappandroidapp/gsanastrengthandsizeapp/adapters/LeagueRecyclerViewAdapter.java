@@ -76,34 +76,79 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             leaveLeague.setVisibility(View.GONE);
         }
 
-        final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
-            @Override
-            public void onComplete(Boolean data, Exception exception) {
-
-                if(exception != null){
-                    Log.v("", "");
-                }
-
-                if(data){
-                    Log.v("", "");
-                }
-                else{
-                    Log.v("", "");
-
-                }
-
-            }
-        };
 
         leaveLeague.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
-                String currentSelectedLeague = createdLeague.getLeaguePin();
-                LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                String userId = FirebaseAuth.getInstance().getUid();
+                final String currentSelectedLeague = createdLeague.getLeaguePin();
+                final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                final String userId = FirebaseAuth.getInstance().getUid();
                 if(userId != null){
-                    leagueModelSingleton.leaveLeague(userId, currentSelectedLeague, callbackLeaveLeague);
+                    final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data, Exception exception) {
+
+                            if(exception != null){
+                                Log.v("", "");
+                            }
+
+                            if(data){
+                                Log.v("", "");
+                                AlertDialog.Builder builder;
+                                builder = new AlertDialog.Builder(v.getContext());
+                                builder.setMessage("Success")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                //Creating dialog box
+                                AlertDialog alert = builder.create();
+                                //Setting the title manually
+                                alert.show();
+                            }
+                            else{
+                                Log.v("", "");
+                                AlertDialog.Builder builder;
+                                builder = new AlertDialog.Builder(v.getContext());
+                                builder.setMessage("You can not delete a league you created")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                //Creating dialog box
+                                AlertDialog alert = builder.create();
+                                //Setting the title manually
+                                alert.show();
+                            }
+
+                        }
+                    };
+
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("Are you sure you want to leave this league")
+                            .setCancelable(false)
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    return;
+                                }
+                            })
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    leagueModelSingleton.leaveLeague(userId, currentSelectedLeague, callbackLeaveLeague);
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.show();
                 }
             }
         });
