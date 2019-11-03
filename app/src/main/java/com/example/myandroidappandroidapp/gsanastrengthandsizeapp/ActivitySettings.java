@@ -46,7 +46,7 @@ public class ActivitySettings extends AppCompatActivity {
                 if(data != null){
                     if(data.size() >= 1){
                         //tv.setVisibility(View.GONE);
-                        mAdapter = new LeagueRecyclerViewAdapter(data, getApplicationContext());
+                        mAdapter = new LeagueRecyclerViewAdapter(data, getApplicationContext(), true);
                         leagueTableSettingsRecyclerView.setAdapter(mAdapter);
                     }
                     else{

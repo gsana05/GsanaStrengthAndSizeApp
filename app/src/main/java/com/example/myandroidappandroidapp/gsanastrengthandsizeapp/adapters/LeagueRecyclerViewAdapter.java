@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityLogIn;
@@ -30,10 +32,13 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
     private TextView leagueDate;
     private TextView leaguePin;
     private TextView leagueName;
+    private ImageView leaveLeague;
+    private Boolean isSettings;
 
-    public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues, Context context) {
+    public LeagueRecyclerViewAdapter(ArrayList<CreatedLeague> createdLeagues, Context context, Boolean isSettings) {
         this.createdLeagues = createdLeagues;
         this.context = context;
+        this.isSettings = isSettings;
     }
 
     @NonNull
@@ -59,6 +64,32 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
         leaguePin.setText(createdLeague.getLeaguePin());
         leagueName.setText(createdLeague.getLeagueName());
+
+        if(isSettings){
+            leaveLeague.setVisibility(View.VISIBLE);
+        }
+        else {
+            leaveLeague.setVisibility(View.GONE);
+        }
+
+        leaveLeague.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("Clicked")
+                        .setCancelable(false)
+                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
+            }
+        });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +132,7 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             leagueDate = itemView.findViewById(R.id.league_list_item_date_name);
             leaguePin = itemView.findViewById(R.id.league_list_item_pin_name);
             leagueName = itemView.findViewById(R.id.league_list_item_league_name);
+            leaveLeague = itemView.findViewById(R.id.league_list_item_leave_btn);
 
         }
     }
