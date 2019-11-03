@@ -100,23 +100,41 @@ public class LeagueModelSingleton {
 
         DataModelResult<ArrayList<String>> callbackLeagues = new DataModelResult<ArrayList<String>>() {
             @Override
-            public void onComplete(ArrayList<String> data, Exception exception) {
+            public void onComplete(final ArrayList<String> data, Exception exception) {
                 if(data != null){
-                    data.remove(leaveLeaguePin);
 
-                    // write data into database
-                    getDatabaseRef().document(userId).update("leaguesCreated",data ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    // check if the league being deleted is by the creator - if so not allowed to delete
+                    getDatabaseRefAllLeagues().document(leaveLeaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, "DocumentSnapshot successfully updated!");
-                        }
-                    })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error updating document", e);
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot result = task.getResult();
+                                String userIdFromDatabase = result.getString("userId");
+                                if(userIdFromDatabase.equals(userId)){ // you can not leave a league you created
+                                    callback.onComplete(false, null);
                                 }
-                            });
+                                else{
+                                    data.remove(leaveLeaguePin); // you can leave a league that you joined
+
+                                    // write data into database
+                                    getDatabaseRef().document(userId).update("leaguesCreated",data ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                            callback.onComplete(true, null);
+                                        }
+                                    })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error updating document", e);
+                                                    callback.onComplete(false, e);
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    });
                 }
             }
         };

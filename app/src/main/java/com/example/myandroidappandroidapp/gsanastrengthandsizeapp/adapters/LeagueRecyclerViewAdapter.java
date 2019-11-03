@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,18 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             @Override
             public void onComplete(Boolean data, Exception exception) {
 
+                if(exception != null){
+                    Log.v("", "");
+                }
+
+                if(data){
+                    Log.v("", "");
+                }
+                else{
+                    Log.v("", "");
+
+                }
+
             }
         };
 
@@ -92,21 +105,6 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
                 if(userId != null){
                     leagueModelSingleton.leaveLeague(userId, currentSelectedLeague, callbackLeaveLeague);
                 }
-
-
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Clicked")
-                        .setCancelable(false)
-                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();
             }
         });
 
