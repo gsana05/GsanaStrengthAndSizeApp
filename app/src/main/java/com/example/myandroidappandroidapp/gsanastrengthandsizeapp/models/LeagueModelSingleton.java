@@ -213,6 +213,7 @@ public class LeagueModelSingleton {
 
     }
 
+    // CREATE LEAGUE
     // each time a league is created it gets the old data updates the arraylist of league and creates new object
     public void setLeagueTable(final String leagueName, final DataModelResult<Boolean> callback){
 

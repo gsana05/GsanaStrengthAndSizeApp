@@ -93,7 +93,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 }
                 else {
                     alertDialog("data == null");
-                    // clear recycler incase user has a league and then deletes it
+                    // clear recycler in case user has a league and then deletes it
                 }
             }
         };

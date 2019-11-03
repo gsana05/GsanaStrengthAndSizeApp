@@ -165,6 +165,16 @@ public class ActivityProfile extends AppCompatActivity {
             }
         });
 
+
+        ImageView settingsBtn = this.findViewById(R.id.profile_image_settings);
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ActivitySettings.class);
+                startActivity(intent);
+            }
+        });
+
         updateUI();
     }
 
