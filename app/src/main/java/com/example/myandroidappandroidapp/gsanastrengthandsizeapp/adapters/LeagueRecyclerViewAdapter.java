@@ -69,11 +69,39 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
         leaguePin.setText(createdLeague.getLeaguePin());
         leagueName.setText(createdLeague.getLeagueName());
 
-        if(isSettings){
+        if(isSettings){ //leave a league
             leaveLeague.setVisibility(View.VISIBLE);
         }
-        else {
+        else { // when in the main activity do this
             leaveLeague.setVisibility(View.GONE);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
+                    intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                    intent.putExtra("LeagueName", createdLeague.getLeagueName());
+                    v.getContext().startActivity(intent);
+
+              /*  AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(createdLeague.getLeaguePin())
+                        .setCancelable(false)
+                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(holder.itemView.getContext(), ActivityLogIn.class);
+                                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                                holder.itemView.getContext().startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();*/
+                }
+            });
         }
 
 
@@ -150,34 +178,6 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
                     //Setting the title manually
                     alert.show();
                 }
-            }
-        });
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
-                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
-                intent.putExtra("LeagueName", createdLeague.getLeagueName());
-                v.getContext().startActivity(intent);
-
-              /*  AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(createdLeague.getLeaguePin())
-                        .setCancelable(false)
-                        .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(holder.itemView.getContext(), ActivityLogIn.class);
-                                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
-                                holder.itemView.getContext().startActivity(intent);
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();*/
             }
         });
     }
