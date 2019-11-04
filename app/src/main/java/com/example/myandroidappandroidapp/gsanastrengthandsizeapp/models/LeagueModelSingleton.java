@@ -109,28 +109,25 @@ public class LeagueModelSingleton {
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                             if(task.isSuccessful()){
                                 DocumentSnapshot result = task.getResult();
-                                String userIdFromDatabase = result.getString("userId");
-                                if(userIdFromDatabase.equals(userId)){ // you can not leave a league you created
-                                    callback.onComplete(false, null);
+                                String userIdFromDatabase = null;
+                                if (result != null) {
+                                    userIdFromDatabase = result.getString("userId");
                                 }
-                                else{
-                                    data.remove(leaveLeaguePin); // you can leave a league that you joined
-
-                                    // write data into database
-                                    getDatabaseRef().document(userId).update("leaguesCreated",data ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                            callback.onComplete(true, null);
+                                // allow the league creator to leave the league if only they are in it
+                                if(data.size() > 2){
+                                    if (userIdFromDatabase != null) {
+                                        if(userIdFromDatabase.equals(userId)){ // you can not leave a league you created
+                                            callback.onComplete(false, null);
                                         }
-                                    })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.w(TAG, "Error updating document", e);
-                                                    callback.onComplete(false, e);
-                                                }
-                                            });
+                                        else{
+                                            data.remove(leaveLeaguePin); // you can leave a league that you joined
+                                            updateLeagueMembers(userId, data, false, callback);
+                                        }
+                                    }
+                                }
+                                else { // only one user left in league and that is the league creator
+                                    //data.remove(leaveLeaguePin); // you can leave a league that you joined
+                                    updateLeagueMembers(userId, data, true, callback);
                                 }
                             }
                         }
@@ -141,6 +138,41 @@ public class LeagueModelSingleton {
 
         getLeagueTable(callbackLeagues);
     }
+
+    public void updateLeagueMembers(String userId, ArrayList<String> data, Boolean lastMember, final DataModelResult<Boolean> callback){
+        // write data into database
+        if(!lastMember){
+            getDatabaseRef().document(userId).update("leaguesCreated",data )
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                            callback.onComplete(true, null);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error updating document", e);
+                    callback.onComplete(false, e);
+                }
+            });
+        }
+        else { // if the last user in league delete document
+            getDatabaseRef().document(userId).delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            callback.onComplete(true, null);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callback.onComplete(false, e);
+                }
+            });
+        }
+    }
+
 
 
     // check if user already is part of this league

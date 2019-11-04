@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -52,6 +53,8 @@ public class ActivitySettings extends AppCompatActivity {
                     }
                     else{
                         //tv.setVisibility(View.VISIBLE);
+                        leagueTableSettingsRecyclerView.setAdapter(null);
+                        Log.v("", "");
                     }
                 }
             }

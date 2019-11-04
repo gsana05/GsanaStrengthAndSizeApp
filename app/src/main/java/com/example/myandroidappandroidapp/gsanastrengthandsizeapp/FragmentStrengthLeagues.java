@@ -77,8 +77,8 @@ public class FragmentStrengthLeagues extends Fragment {
                         leagueRecyclerView.setAdapter(mAdapter);
                     }
                     else{
-
                         tv.setVisibility(View.VISIBLE);
+                        leagueRecyclerView.setAdapter(null);
                     }
                 }
             }
