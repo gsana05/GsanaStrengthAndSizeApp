@@ -114,13 +114,13 @@ public class LeagueModelSingleton {
                                     userIdFromDatabase = result.getString("userId");
                                 }
                                 // allow the league creator to leave the league if only they are in it
-                                if(data.size() > 2){
+                                if(data.size() > 2){ // id there are more than you the creator in the league, you can not leave
                                     if (userIdFromDatabase != null) {
                                         if(userIdFromDatabase.equals(userId)){ // you can not leave a league you created
                                             callback.onComplete(false, null);
                                         }
                                         else{
-                                            data.remove(leaveLeaguePin); // you can leave a league that you joined
+                                            data.remove(leaveLeaguePin); // you can leave a league that you JOINED but you can not if you created league
                                             updateLeagueMembers(userId, data, false, callback);
                                         }
                                     }
@@ -139,7 +139,7 @@ public class LeagueModelSingleton {
         getLeagueTable(callbackLeagues);
     }
 
-    public void updateLeagueMembers(String userId, ArrayList<String> data, Boolean lastMember, final DataModelResult<Boolean> callback){
+    public void updateLeagueMembers(String userId, final ArrayList<String> data, Boolean lastMember, final DataModelResult<Boolean> callback){
         // write data into database
         if(!lastMember){
             getDatabaseRef().document(userId).update("leaguesCreated",data )
@@ -162,7 +162,14 @@ public class LeagueModelSingleton {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            callback.onComplete(true, null);
+
+                            // delete the league
+                            if(data.size() < 2){
+                                deleteLeague(data.get(0), callback);
+                            }
+                            else {
+                                callback.onComplete(false, null);
+                            }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -172,6 +179,23 @@ public class LeagueModelSingleton {
             });
         }
     }
+
+    private void deleteLeague(String leaguePin, final DataModelResult<Boolean> callback){
+        getDatabaseRefAllLeagues().document(leaguePin).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        callback.onComplete(true, null);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false, null);
+                    }
+                });
+    }
+
 
 
 
