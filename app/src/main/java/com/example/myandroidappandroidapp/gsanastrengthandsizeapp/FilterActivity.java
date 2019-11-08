@@ -350,7 +350,6 @@ class CustomDropDownAdapter extends ArrayAdapter<Filter>{
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        int i = R.layout.activity_dashboard;
         ViewGroup h = parent;
         return getViewLayout(position, convertView , R.layout.custom_spinner_item);
     }
