@@ -25,27 +25,26 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataMod
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 
 public class FragmentStrengthLeagues extends Fragment {
 
-    private Button createLeague;
-    private Button joinLeague;
     private EditText leagueName;
     private RecyclerView leagueRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private DataModelResult<ArrayList<String>> callback;
     private DataModelResult<ArrayList<CreatedLeague>> callbackCreatedLeagues;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_fragment_strength_league_results, container, false);
 
-        createLeague = view.findViewById(R.id.fragment_strength_league_results_create_league_btn);
+        Button createLeague = view.findViewById(R.id.fragment_strength_league_results_create_league_btn);
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,7 +52,7 @@ public class FragmentStrengthLeagues extends Fragment {
             }
         });
 
-        joinLeague = view.findViewById(R.id.fragment_strength_league_results_join_league_btn);
+        Button joinLeague = view.findViewById(R.id.fragment_strength_league_results_join_league_btn);
         joinLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +61,7 @@ public class FragmentStrengthLeagues extends Fragment {
         });
 
         leagueRecyclerView = view.findViewById(R.id.fragment_strength_recycler_view);
-        layoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         leagueRecyclerView.setLayoutManager(layoutManager);
 
         final TextView tv = view.findViewById(R.id.fragment_strength_recycler_view_no_league);
@@ -125,7 +124,7 @@ public class FragmentStrengthLeagues extends Fragment {
         }
     }
 
-    public void joinLeague(){
+    private void joinLeague(){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
@@ -201,7 +200,7 @@ public class FragmentStrengthLeagues extends Fragment {
 
 
 
-    public void createLeague(){
+    private void createLeague(){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
@@ -274,7 +273,7 @@ public class FragmentStrengthLeagues extends Fragment {
         });
     }
 
-    public void alertDialog(String response){
+    private void alertDialog(String response){
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(response)
@@ -290,7 +289,7 @@ public class FragmentStrengthLeagues extends Fragment {
         alert.show();
     }
 
-    public void dismissKeyboard(){
+    private void dismissKeyboard(){
         InputMethodManager imm = (InputMethodManager) Objects.requireNonNull(getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(leagueName.getWindowToken(), 0);
     }

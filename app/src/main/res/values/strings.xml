@@ -16,6 +16,17 @@
     <string name="settings">Settings</string>
     <string name="leagues_you_are_currently_in">Leagues you are currently in:</string>
     <string name="you_are_not_part_of_any_leagues_yet_create_or_join_one">You are not part of any leagues yet! Create or join one</string>
+    <string name="profile">Profile</string>
+    <string name="gym_name">Gym name</string>
+    <string name="bench_press_kg">Bench press (kg)</string>
+    <string name="bench_press">Bench press</string>
+    <string name="squat_kg">Squat (kg)</string>
+    <string name="squat">Squat</string>
+    <string name="deadlift_kg">Deadlift (kg)</string>
+    <string name="deadlift">Deadlift</string>
+    <string name="over_head_press_kg">Over Head Press (kg)</string>
+    <string name="submit">Submit</string>
+    <string name="log_out">Log out</string>
 
     <string-array name="sort_string_array">
         <item>One</item>

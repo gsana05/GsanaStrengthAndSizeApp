@@ -7,21 +7,17 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserProfileModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Locale;
 
 public class ActivityProfile extends AppCompatActivity {
 
@@ -31,8 +27,6 @@ public class ActivityProfile extends AppCompatActivity {
     private EditText deadlift;
     private EditText squat;
     private EditText ohp;
-    private ImageView backBtn;
-    private Button saveChangesBtn;
     private Button logoutUser;
     private ProgressBar logoutUserSpinner;
     private Boolean isLoggedIn = true;
@@ -76,7 +70,7 @@ public class ActivityProfile extends AppCompatActivity {
             }
         };
 
-        backBtn = this.findViewById(R.id.profile_back_btn);
+        ImageView backBtn = this.findViewById(R.id.profile_back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +79,7 @@ public class ActivityProfile extends AppCompatActivity {
         });
 
 
-        saveChangesBtn = this.findViewById(R.id.profile_save_btn);
+        Button saveChangesBtn = this.findViewById(R.id.profile_save_btn);
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
