@@ -63,9 +63,9 @@ public class LeagueModelSingleton {
                     if(task.isSuccessful()){
                         DocumentSnapshot snapshot = task.getResult();
                         if(snapshot != null && snapshot.exists()){
-                            Date leagueStartDate = snapshot.getDate("leagueCreatedDate");
+                            /*Date leagueStartDate = snapshot.getDate("leagueCreatedDate");
                             String leagueName = snapshot.getString("leagueName");
-                            String leaguePin = snapshot.getString("leaguePin");
+                            String leaguePin = snapshot.getString("leaguePin");*/
 
                             ArrayList<String> list = null;
                             Map hMap = snapshot.getData();
@@ -195,9 +195,6 @@ public class LeagueModelSingleton {
                     }
                 });
     }
-
-
-
 
     // check if user already is part of this league
     public void checkForDuplicates(final String leaguePin, final DataModelResult<Boolean> callback){

@@ -4,16 +4,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-
+import android.widget.TextView;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueRecyclerViewAdapter;
-import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueTableRecyclerViewAdapter;
-import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.SettingsLeagueRecyclerView;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.CreatedLeague;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
@@ -25,7 +22,6 @@ public class ActivitySettings extends AppCompatActivity {
 
     private RecyclerView leagueTableSettingsRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager layoutManager;
 
     private DataModelResult<ArrayList<String>> callback;
 
@@ -39,20 +35,23 @@ public class ActivitySettings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         leagueTableSettingsRecyclerView = this.findViewById(R.id.settings_recycler_view);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         leagueTableSettingsRecyclerView.setLayoutManager(layoutManager);
+
+
+        final TextView tv = this.findViewById(R.id.settings_no_league_label);
 
         callbackCreatedLeagues = new DataModelResult<ArrayList<CreatedLeague>>() {
             @Override
             public void onComplete(ArrayList<CreatedLeague> data, Exception exception) {
                 if(data != null){
                     if(data.size() >= 1){
-                        //tv.setVisibility(View.GONE);
+                        tv.setVisibility(View.GONE);
                         mAdapter = new LeagueRecyclerViewAdapter(data, getApplicationContext(), true);
                         leagueTableSettingsRecyclerView.setAdapter(mAdapter);
                     }
                     else{
-                        //tv.setVisibility(View.VISIBLE);
+                        tv.setVisibility(View.VISIBLE);
                         leagueTableSettingsRecyclerView.setAdapter(null);
                         Log.v("", "");
                     }

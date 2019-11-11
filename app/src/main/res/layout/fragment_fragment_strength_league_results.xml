@@ -73,7 +73,7 @@
         app:layout_constraintEnd_toEndOf="@+id/fragment_strength_league_results_join_league_btn"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:text="You are not part of any leagues yet! Create or join one"
+        android:text="@string/you_are_not_part_of_any_leagues_yet_create_or_join_one"
         android:backgroundTint="@color/ssWhite"
         android:textColor="@color/ssWhite"
         android:textAlignment="center"

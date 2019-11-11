@@ -62,6 +62,18 @@
         android:textColor="@color/ssWhite"
         />
 
+    <TextView
+        android:id="@+id/settings_no_league_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/settings_sub_heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/ssWhite"
+        android:text="@string/you_are_not_part_of_any_leagues_yet_create_or_join_one"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/settings_recycler_view"
         android:layout_width="0dp"
