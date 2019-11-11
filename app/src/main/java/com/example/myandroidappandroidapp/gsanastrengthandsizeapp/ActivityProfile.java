@@ -131,7 +131,7 @@ public class ActivityProfile extends AppCompatActivity {
                     alertDialogProof("You need proof");
                 }
                 else {
-                    alertDialog("You have entered no improvments");
+                    alertDialog("You have entered no improvements");
                 }
                 /*claim = true;
                 updateUI();*/

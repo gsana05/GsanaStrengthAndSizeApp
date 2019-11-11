@@ -5,7 +5,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityProveLift">
+    tools:context=".ActivityProveLift"
+    android:background="@color/ssBackgroundBlack"
+    >
+
+    <TextView
+        android:id="@+id/prove_lift_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:text="Proof of lift for:"
+        android:textColor="@color/ssWhite"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:id="@+id/prove_lift_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/prove_lift_heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="LIFT"
+        android:textColor="@color/ssWhite"
+        android:textSize="24sp"
+        />
+
+    <TextView
+        android:id="@+id/prove_lift_link_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/prove_lift_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:text="Please enter a link to your proof"
+        android:textColor="@color/ssWhite"
+        android:textSize="24sp"
+        />
+
+    <EditText
+        android:id="@+id/prove_lift_link_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/prove_lift_link_heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/ssWhite"
+        android:textColor="@color/ssBackgroundBlack"
+        />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/prove_lift_link_input"
+        app:layout_constraintStart_toStartOf="@id/prove_lift_link_input"
+        app:layout_constraintEnd_toEndOf="@id/prove_lift_link_input"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssGreen"
+        android:text="Submit"
+        android:textAllCaps="false"
+        />
+
 
 
 
