@@ -1,13 +1,18 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +48,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
     @Override
     public void onBindViewHolder(@NonNull LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
-        User user = leagueList.get(position);
+        final User user = leagueList.get(position);
 
         int pos = position + 1;
 
@@ -58,6 +63,48 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             bench.setTextColor(col);
         }
         bench.setText(user.getBenchPress().toString());
+        bench.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final TextView message = new TextView(v.getContext());
+
+                final SpannableString s =
+                        new SpannableString("https://www.youtube.com/watch?v=dxnC3Ik3q0U");
+                Linkify.addLinks(s, Linkify.WEB_URLS);
+                message.setText(s);
+                message.setMovementMethod(LinkMovementMethod.getInstance());
+
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage("test")
+                        .setCancelable(false)
+                        .setView(message)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
+
+               /* AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                builder.setMessage(user.getProofBenchLink())
+                        .setCancelable(false)
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();*/
+            }
+        });
 
 
         if(type == UserLeagueTableModelSingleton.deadlift){
