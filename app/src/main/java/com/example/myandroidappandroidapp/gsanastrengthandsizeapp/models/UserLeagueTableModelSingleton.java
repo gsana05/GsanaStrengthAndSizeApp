@@ -103,7 +103,12 @@ public class UserLeagueTableModelSingleton {
                                         String email = snapshot.getString("email");
                                         Date date = snapshot.getDate("date");
 
-                                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+                                        String benchLink = snapshot.getString("proofBenchLink");
+                                        String squatLink = snapshot.getString("proofSquatLink");
+                                        String deadliftLink = snapshot.getString("proofDeadliftLink");
+                                        String ohpLink = snapshot.getString("proofOhpLink");
+
+                                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, benchLink, squatLink, deadliftLink, ohpLink);
 
                                         listOfUser.add(user);
                                     }
@@ -184,9 +189,9 @@ public class UserLeagueTableModelSingleton {
                                     String email = snapshot.getString("email");
                                     Date date = snapshot.getDate("date");
 
-                                    User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+                                    //User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
 
-                                    userList.add(user);
+                                    //userList.add(user);
                                 }
                             }
                         }

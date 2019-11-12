@@ -15,7 +15,12 @@ public class User {
     private String pin;
     private String email;
 
-    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email) {
+    private String proofBenchLink;
+    private String proofSquatLink;
+    private String proofDeadliftLink;
+    private String proofOhpLink;
+
+    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email, String proofBenchLink, String proofSquatLink, String proofDeadliftLink, String proofOhpLink) {
         this.gymName = gymName;
         this.benchPress = benchPress;
         this.squat = squat;
@@ -24,6 +29,42 @@ public class User {
         this.date = date;
         this.pin = pin;
         this.email = email;
+        this.proofBenchLink = proofBenchLink;
+        this.proofSquatLink = proofSquatLink;
+        this.proofDeadliftLink = proofDeadliftLink;
+        this.proofOhpLink = proofOhpLink;
+    }
+
+    public String getProofBenchLink() {
+        return proofBenchLink;
+    }
+
+    public void setProofBenchLink(String proofBenchLink) {
+        this.proofBenchLink = proofBenchLink;
+    }
+
+    public String getProofSquatLink() {
+        return proofSquatLink;
+    }
+
+    public void setProofSquatLink(String proofSquatLink) {
+        this.proofSquatLink = proofSquatLink;
+    }
+
+    public String getProofDeadliftLink() {
+        return proofDeadliftLink;
+    }
+
+    public void setProofDeadliftLink(String proofDeadliftLink) {
+        this.proofDeadliftLink = proofDeadliftLink;
+    }
+
+    public String getProofOhpLink() {
+        return proofOhpLink;
+    }
+
+    public void setProofOhpLink(String proofOhpLink) {
+        this.proofOhpLink = proofOhpLink;
     }
 
     public String getEmail() {

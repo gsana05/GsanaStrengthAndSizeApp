@@ -84,7 +84,7 @@ public class UserProfileModelSingleton {
                         String email = snapshot.getString("email");
                         Date date = snapshot.getDate("date");
 
-                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email);
+                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, null, null,null, null);
 
                         if(user != null){
                             mCachedProfile.put(userId, user); // cache data
@@ -150,6 +150,10 @@ public class UserProfileModelSingleton {
                     String pin = documentSnapshot.getString("pin");
                     String email = documentSnapshot.getString("email");
                     Date date = documentSnapshot.getDate("date");
+                    String benchLink = documentSnapshot.getString("proofBenchLink");
+                    String deadliftLink = documentSnapshot.getString("proofDeadliftLink");
+                    String proofSquatLink = documentSnapshot.getString("proofSquatLink");
+                    String proofOhpLink = documentSnapshot.getString("proofOhpLink");
 
                     User user = new User(
                             gymName,
@@ -159,7 +163,11 @@ public class UserProfileModelSingleton {
                             ohp.floatValue(),
                             date,
                             pin,
-                            email
+                            email,
+                            benchLink,
+                            proofSquatLink,
+                            proofOhpLink,
+                            deadliftLink
                             );
 
                     if(user != null){
@@ -174,7 +182,7 @@ public class UserProfileModelSingleton {
         });
     }
 
-    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final DataModelResult<Boolean> callback){
+    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final String benchLink, final String squatLink, final String deadliftLink, final String ohpLink, final DataModelResult<Boolean> callback){
 
         final String userId = FirebaseAuth.getInstance().getUid();
 
@@ -187,7 +195,7 @@ public class UserProfileModelSingleton {
                         String pin = data.getPin();
                         Date date = data.getDate();
 
-                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email);
+                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, benchLink, squatLink,deadliftLink, ohpLink);
 
                         // setOptions - only changes the field that now has a different value
                         getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {

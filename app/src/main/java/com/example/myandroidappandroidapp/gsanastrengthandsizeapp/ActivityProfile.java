@@ -48,12 +48,20 @@ public class ActivityProfile extends AppCompatActivity {
     private Button claimBtn;
     private int liftType;
 
+    private String benchProofLink;
+    private String squatProofLink;
+    private String deadliftLink;
+    private String ohpLink;
+
+    private float bench1;
+    private float squat1;
+    private float deadlift1;
+    private float ohp1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
-
 
         userModelSingleton = UserModelSingleton.getInstance();
         userProfileModelSingleton = UserProfileModelSingleton.getInstance();
@@ -70,6 +78,7 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onComplete(User data, Exception exception) {
                 if(data != null){
+
                     gymName.setText(data.getGymName());
 
                     benchPress.setText(data.getBenchPress().toString());
@@ -83,6 +92,11 @@ public class ActivityProfile extends AppCompatActivity {
 
                     ohp.setText(data.getOverHeadPress().toString());
                     ohpValue = data.getOverHeadPress();
+
+                    benchProofLink = data.getProofBenchLink();
+                    squatProofLink = data.getProofSquatLink();
+                    ohpLink = data.getProofOhpLink();
+                    deadliftLink = data.getProofDeadliftLink();
                 }
                 else {
                     gymName.setText("no data");
@@ -108,10 +122,10 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                float bench1 = Float.valueOf(benchPress.getText().toString());
-                float squat1 = Float.valueOf(squat.getText().toString());
-                float deadlift1 = Float.valueOf(deadlift.getText().toString());
-                float ohp1 = Float.valueOf(ohp.getText().toString());
+                bench1 = Float.valueOf(benchPress.getText().toString());
+                squat1 = Float.valueOf(squat.getText().toString());
+                deadlift1 = Float.valueOf(deadlift.getText().toString());
+                ohp1 = Float.valueOf(ohp.getText().toString());
 
                 if(bench1 > benchPressValue){
                     // you need proof for the improvement
@@ -189,6 +203,10 @@ public class ActivityProfile extends AppCompatActivity {
                         Float.valueOf(squat.getText().toString()),
                         Float.valueOf(deadlift.getText().toString()),
                         Float.valueOf(ohp.getText().toString()),
+                        benchProofLink,
+                        squatProofLink,
+                        deadliftLink,
+                        ohpLink,
                         callback
                 );
             }
@@ -279,7 +297,28 @@ public class ActivityProfile extends AppCompatActivity {
 
         if (requestCode == 999) {
             if(resultCode == Activity.RESULT_OK){
-                String result=data.getStringExtra("result");
+                String bench=data.getStringExtra("Bench");
+                String squat = data.getStringExtra("squat");
+                String deadlift = data.getStringExtra("deadlift");
+                String ohp = data.getStringExtra("ohp");
+                if(bench != null){
+                    benchProofLink = bench;
+                }
+
+                if(squat != null){
+                    squatProofLink = squat;
+                }
+
+                if(deadlift != null){
+                    deadliftLink = deadlift;
+                }
+
+                if(ohp != null){
+                    ohpLink = ohp;
+                }
+
+                claim = true;
+                updateUI();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
