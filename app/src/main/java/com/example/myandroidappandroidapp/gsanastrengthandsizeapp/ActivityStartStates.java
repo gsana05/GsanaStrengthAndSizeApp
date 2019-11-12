@@ -25,6 +25,11 @@ public class ActivityStartStates extends AppCompatActivity {
     private ProgressBar progress;
     private boolean mSaveData = false;
 
+    private EditText benchProofLink;
+    private EditText squatProofLink;
+    private EditText deadliftProofLink;
+    private EditText ohpProofLink;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +43,11 @@ public class ActivityStartStates extends AppCompatActivity {
         deadlift =  this.findViewById(R.id.start_states_deadlift_input);
         overHeadPress =  this.findViewById(R.id.start_states_ohp_input);
         gymName = this.findViewById(R.id.start_states_user_name_input);
+
+        benchProofLink = this.findViewById(R.id.start_states_bench_proof_input);
+        squatProofLink = this.findViewById(R.id.start_states_squat_proof_input);
+        deadliftProofLink = this.findViewById(R.id.start_states_deadlift_proof_input);
+        ohpProofLink = this.findViewById(R.id.start_states_ohp_proof_input);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -54,8 +64,19 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
+                if(isEmpty(benchProofLink)){
+                    alert("Bench press proof link");
+                    return;
+                }
+
+
                 if(isEmpty(squat)){
                     alert("Squat");
+                    return;
+                }
+
+                if(isEmpty(squatProofLink)){
+                    alert("Squat proof link");
                     return;
                 }
 
@@ -64,8 +85,18 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
+                if(isEmpty(deadliftProofLink)){
+                    alert("Deadlift proof link");
+                    return;
+                }
+
                 if(isEmpty(overHeadPress)){
                     alert("over head press");
+                    return;
+                }
+
+                if(isEmpty(ohpProofLink)){
+                    alert("Over Head Press proof link");
                     return;
                 }
 
@@ -123,6 +154,10 @@ public class ActivityStartStates extends AppCompatActivity {
                 Float.valueOf(squat.getText().toString()),
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
+                benchProofLink.getText().toString(),
+                squatProofLink.getText().toString(),
+                deadliftProofLink.getText().toString(),
+                ohpProofLink.getText().toString(),
                 callback);
     }
 

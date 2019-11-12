@@ -52,7 +52,7 @@ public class UserModelSingleton {
         });
     }
 
-    public void saveUserStats(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, final DataModelResult<Boolean> callback){
+    public void saveUserStats(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, String benchProof, String squatProof, String deadliftProof, String ohpProof, final DataModelResult<Boolean> callback){
         String id = FirebaseAuth.getInstance().getUid();
 
         if(id != null){
@@ -60,7 +60,7 @@ public class UserModelSingleton {
             UUID uuid = UUID.randomUUID();
             //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, null, null, null, null);
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof, squatProof, deadliftProof, ohpProof);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
