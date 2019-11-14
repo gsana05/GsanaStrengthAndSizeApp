@@ -118,45 +118,45 @@
                 android:inputType="numberDecimal"
                 />
 
-            <TextView
-                android:id="@+id/start_states_bench_proof_label"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/start_states_bench_proof_input"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/start_states_bench_press_input"
                 app:layout_constraintStart_toStartOf="@+id/start_states_heading"
                 app:layout_constraintEnd_toEndOf="@+id/start_states_heading"
-                android:layout_marginTop="20dp"
-                android:text="Bench Proof Link"
-                android:textColor="@color/ssBrown"
-                android:textSize="20sp"
-                app:layout_constraintHorizontal_bias="0"
-                android:inputType="textWebEditText"
-                />
-
-            <EditText
-                android:id="@+id/start_states_bench_proof_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/start_states_bench_proof_label"
-                app:layout_constraintStart_toStartOf="@+id/start_states_heading"
-                app:layout_constraintEnd_toEndOf="@+id/start_states_heading"
                 android:shadowColor="@color/ssBlack"
-                android:textColor="@color/ssBlack"
-                android:textAlignment="textStart"
+                android:textColor="@color/ssWhite"
+                android:layout_marginTop="20dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
                 android:background="@drawable/white_border"
+                android:backgroundTint="@color/ssBrown"
+                android:text="Get Bench Proof"
+                android:textAllCaps="false"
+                />
+
+            <VideoView
+                android:id="@+id/start_states_bench_video"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintTop_toBottomOf="@+id/start_states_bench_proof_input"
+                app:layout_constraintStart_toStartOf="@+id/start_states_heading"
+                app:layout_constraintEnd_toEndOf="@+id/start_states_heading"
+                app:layout_constraintBottom_toTopOf="@+id/start_states_squat_label"
+                android:layout_marginTop="20dp"
                 />
 
             <TextView
                 android:id="@+id/start_states_squat_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/start_states_bench_proof_input"
+                app:layout_constraintTop_toBottomOf="@+id/start_states_bench_video"
                 app:layout_constraintStart_toStartOf="@id/start_states_heading"
                 app:layout_constraintEnd_toEndOf="@id/start_states_heading"
+
                 app:layout_constraintHorizontal_bias="0"
                 android:layout_marginTop="20dp"
                 android:text="Squat (kg)"

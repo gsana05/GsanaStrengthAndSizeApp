@@ -1,15 +1,20 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
@@ -25,10 +30,12 @@ public class ActivityStartStates extends AppCompatActivity {
     private ProgressBar progress;
     private boolean mSaveData = false;
 
-    private EditText benchProofLink;
+    private Button benchProofLink;
     private EditText squatProofLink;
     private EditText deadliftProofLink;
     private EditText ohpProofLink;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,15 @@ public class ActivityStartStates extends AppCompatActivity {
         gymName = this.findViewById(R.id.start_states_user_name_input);
 
         benchProofLink = this.findViewById(R.id.start_states_bench_proof_input);
+        benchProofLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+
+
+
         squatProofLink = this.findViewById(R.id.start_states_squat_proof_input);
         deadliftProofLink = this.findViewById(R.id.start_states_deadlift_proof_input);
         ohpProofLink = this.findViewById(R.id.start_states_ohp_proof_input);
@@ -64,10 +80,10 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
-                if(isEmpty(benchProofLink)){
+                /*if(isEmpty(benchProofLink)){
                     alert("Bench press proof link");
                     return;
-                }
+                }*/
 
 
                 if(isEmpty(squat)){
@@ -105,6 +121,28 @@ public class ActivityStartStates extends AppCompatActivity {
                 saveUserStats();
             }
         });
+    }
+
+    private void openFileChooser(){
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
+            Uri uri = data.getData();
+
+            VideoView video = this.findViewById(R.id.start_states_bench_video);
+            MediaController mediaController = new MediaController(this);
+            video.setVideoURI(uri);
+            video.setMediaController(mediaController);
+            mediaController.setAnchorView(video);
+            video.start();
+        }
     }
 
     private boolean isEmpty(EditText etText) {
