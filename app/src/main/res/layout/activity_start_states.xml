@@ -371,7 +371,7 @@
                 android:paddingTop="6dp"
                 android:paddingBottom="6dp"
                 android:background="@drawable/white_border"
-                android:backgroundTint="@color/ssBrown"
+                android:backgroundTint="@color/ssWhite"
                 android:textColor="@color/ssBrown"
                 android:textAllCaps="false"
                 app:layout_constraintHorizontal_bias="0"
