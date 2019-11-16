@@ -8,11 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -30,12 +33,26 @@ public class ActivityStartStates extends AppCompatActivity {
     private ProgressBar progress;
     private boolean mSaveData = false;
 
-    private Button benchProofLink;
-    private EditText squatProofLink;
-    private EditText deadliftProofLink;
-    private EditText ohpProofLink;
+    private Uri mBenchPressUri;
+    private TextView benchPressLink;
+    private ImageView benchPressRemoveLink;
 
-    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri mSquatUri;
+    private TextView squatLink;
+    private ImageView squatRemoveLink;
+
+    private Uri mDeadliftUri;
+    private TextView deadliftLink;
+    private ImageView deadliftRemoveLink;
+
+    private Uri mOhpUri;
+    private TextView ohpLink;
+    private ImageView ohpRemoveLink;
+
+    private static final int BENCH_REQUEST = 1;
+    private static final int SQUAT_REQUEST = 2;
+    private static final int DEADLIFT_REQUEST = 3;
+    private static final int OHP_REQUEST = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +68,86 @@ public class ActivityStartStates extends AppCompatActivity {
         overHeadPress =  this.findViewById(R.id.start_states_ohp_input);
         gymName = this.findViewById(R.id.start_states_user_name_input);
 
-        benchProofLink = this.findViewById(R.id.start_states_bench_proof_input);
-        benchProofLink.setOnClickListener(new View.OnClickListener() {
+        //BENCH
+        benchPressLink = this.findViewById(R.id.start_states_bench_proof_link);
+        benchPressRemoveLink = this.findViewById(R.id.start_states_bench_proof_link_remove);
+        benchPressRemoveLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                mBenchPressUri = null;
+                updateUI();
+            }
+        });
+
+        Button benchProofSearchLink = this.findViewById(R.id.start_states_bench_proof_input);
+        benchProofSearchLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(BENCH_REQUEST);
+            }
+        });
+
+
+        //SQUAT
+        squatLink = this.findViewById(R.id.start_states_squat_proof_link);
+        squatRemoveLink = this.findViewById(R.id.start_states_squat_proof_link_remove);
+        squatRemoveLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSquatUri = null;
+                updateUI();
+            }
+        });
+
+        Button squatSearchLink = this.findViewById(R.id.start_states_squat_proof_label);
+        squatSearchLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(SQUAT_REQUEST);
+            }
+        });
+
+
+        // DEADLIFT
+        deadliftLink = this.findViewById(R.id.start_states_deadlift_proof_link);
+        deadliftRemoveLink = this.findViewById(R.id.start_states_deadlift_proof_link_remove);
+        deadliftRemoveLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDeadliftUri = null;
+                updateUI();
+            }
+        });
+
+        Button deadliftSearchLink = this.findViewById(R.id.start_states_deadlift_proof_label);
+        deadliftSearchLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(DEADLIFT_REQUEST);
+            }
+        });
+
+        //OVER HEAD PRESS
+        ohpLink = this.findViewById(R.id.start_states_ohp_proof_link);
+        ohpRemoveLink = this.findViewById(R.id.start_states_ohp_proof_link_remove);
+        ohpRemoveLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOhpUri = null;
+                updateUI();
+            }
+        });
+
+        Button ohpSearchLink = this.findViewById(R.id.start_states_ohp_proof_label);
+        ohpSearchLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(OHP_REQUEST);
             }
         });
 
 
 
-        squatProofLink = this.findViewById(R.id.start_states_squat_proof_input);
-        deadliftProofLink = this.findViewById(R.id.start_states_deadlift_proof_input);
-        ohpProofLink = this.findViewById(R.id.start_states_ohp_proof_input);
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -80,10 +164,10 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
-                /*if(isEmpty(benchProofLink)){
+                if(mBenchPressUri == null){
                     alert("Bench press proof link");
                     return;
-                }*/
+                }
 
 
                 if(isEmpty(squat)){
@@ -91,7 +175,7 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
-                if(isEmpty(squatProofLink)){
+                if(mSquatUri == null){
                     alert("Squat proof link");
                     return;
                 }
@@ -101,7 +185,7 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
-                if(isEmpty(deadliftProofLink)){
+                if(mDeadliftUri == null){
                     alert("Deadlift proof link");
                     return;
                 }
@@ -111,7 +195,7 @@ public class ActivityStartStates extends AppCompatActivity {
                     return;
                 }
 
-                if(isEmpty(ohpProofLink)){
+                if(mOhpUri == null){
                     alert("Over Head Press proof link");
                     return;
                 }
@@ -121,27 +205,48 @@ public class ActivityStartStates extends AppCompatActivity {
                 saveUserStats();
             }
         });
+
+        updateUI();
     }
 
-    private void openFileChooser(){
+    private void openFileChooser(int exercise){
         Intent intent = new Intent();
         intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, exercise);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null){
-            Uri uri = data.getData();
+        if(resultCode == RESULT_OK && data != null && data.getData() != null){
 
-            VideoView video = this.findViewById(R.id.start_states_bench_video);
+            if(requestCode == BENCH_REQUEST){
+                mBenchPressUri = data.getData();
+            }
+            else if(requestCode == SQUAT_REQUEST){
+                mSquatUri = data.getData();
+            }
+            else if (requestCode == DEADLIFT_REQUEST){
+                mDeadliftUri = data.getData();
+            }
+            else if(requestCode == OHP_REQUEST){
+                mOhpUri = data.getData();
+            }
+            else  {
+                Log.v("", "");
+            }
+
+            updateUI();
+
+
+
+            /*VideoView video = this.findViewById(R.id.start_states_bench_video_link);
             MediaController mediaController = new MediaController(this);
             video.setVideoURI(uri);
             video.setMediaController(mediaController);
             mediaController.setAnchorView(video);
-            video.start();
+            video.start();*/
         }
     }
 
@@ -192,10 +297,10 @@ public class ActivityStartStates extends AppCompatActivity {
                 Float.valueOf(squat.getText().toString()),
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
-                benchProofLink.getText().toString(),
-                squatProofLink.getText().toString(),
-                deadliftProofLink.getText().toString(),
-                ohpProofLink.getText().toString(),
+                mBenchPressUri.toString(),
+                mSquatUri.toString(),
+                mDeadliftUri.toString(),
+                mSquatUri.toString(),
                 callback);
     }
 
@@ -208,6 +313,46 @@ public class ActivityStartStates extends AppCompatActivity {
         else {
             progress.setVisibility(View.INVISIBLE);
             button.setVisibility(View.VISIBLE);
+        }
+
+        if(mBenchPressUri != null){
+            benchPressLink.setVisibility(View.VISIBLE);
+            benchPressRemoveLink.setVisibility(View.VISIBLE);
+            benchPressLink.setText(mBenchPressUri.toString());
+        }
+        else {
+            benchPressLink.setVisibility(View.GONE);
+            benchPressRemoveLink.setVisibility(View.GONE);
+        }
+
+        if(mSquatUri != null){
+            squatLink.setVisibility(View.VISIBLE);
+            squatRemoveLink.setVisibility(View.VISIBLE);
+            squatLink.setText(mSquatUri.toString());
+        }
+        else {
+            squatLink.setVisibility(View.GONE);
+            squatRemoveLink.setVisibility(View.GONE);
+        }
+
+        if(mDeadliftUri != null){
+            deadliftLink.setVisibility(View.VISIBLE);
+            deadliftRemoveLink.setVisibility(View.VISIBLE);
+            deadliftLink.setText(mDeadliftUri.toString());
+        }
+        else {
+            deadliftLink.setVisibility(View.GONE);
+            deadliftRemoveLink.setVisibility(View.GONE);
+        }
+
+        if(mOhpUri != null){
+            ohpLink.setVisibility(View.VISIBLE);
+            ohpRemoveLink.setVisibility(View.VISIBLE);
+            ohpLink.setText(mOhpUri.toString());
+        }
+        else{
+            ohpLink.setVisibility(View.GONE);
+            ohpRemoveLink.setVisibility(View.GONE);
         }
     }
 
