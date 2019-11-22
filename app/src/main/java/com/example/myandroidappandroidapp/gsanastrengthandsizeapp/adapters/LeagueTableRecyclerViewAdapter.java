@@ -81,28 +81,59 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                 LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
                 View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
-                VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
+                final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
                 MediaController mediaController = new MediaController(v.getContext());
                 Uri myUri = Uri.parse(user.getProofBenchLink());
 
                 video.setVideoURI(myUri);
                 video.setMediaController(mediaController);
                 mediaController.setAnchorView(video);
-                video.start();
+                //video.start();
+
+
 
                 builder.setView(inflatedLayout);
                 builder.setCancelable(false);
                 final AlertDialog alert = builder.create();
                 alert.show();
 
-                /*Button cancel;
+                Button restart;
+                restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+                restart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        video.seekTo(0);
+                        video.start();
+                    }
+                });
+
+                Button pause;
+                pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+                pause.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        video.pause();
+                    }
+                });
+
+
+                Button play;
+                play = inflatedLayout.findViewById(R.id.custom_bench_video_play);
+                play.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        video.start();
+                    }
+                });
+
+                Button cancel;
                 cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         alert.dismiss();
                     }
-                });*/
+                });
 
 
 
