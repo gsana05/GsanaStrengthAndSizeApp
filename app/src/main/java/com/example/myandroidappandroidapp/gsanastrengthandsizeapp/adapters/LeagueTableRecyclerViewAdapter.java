@@ -3,13 +3,19 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -17,10 +23,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueTableRecyclerViewAdapter.MyLeagueViewHolder> {
 
@@ -67,7 +76,37 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             @Override
             public void onClick(View v) {
 
-                final TextView message = new TextView(v.getContext());
+                final AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(v.getContext());
+                LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
+                VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
+                MediaController mediaController = new MediaController(v.getContext());
+                Uri myUri = Uri.parse(user.getProofBenchLink());
+
+                video.setVideoURI(myUri);
+                video.setMediaController(mediaController);
+                mediaController.setAnchorView(video);
+                video.start();
+
+                builder.setView(inflatedLayout);
+                builder.setCancelable(false);
+                final AlertDialog alert = builder.create();
+                alert.show();
+
+                /*Button cancel;
+                cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alert.dismiss();
+                    }
+                });*/
+
+
+
+                /*final TextView message = new TextView(v.getContext());
 
                 final SpannableString s =
                         new SpannableString("https://www.youtube.com/watch?v=dxnC3Ik3q0U");
@@ -88,9 +127,9 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                 //Creating dialog box
                 AlertDialog alert = builder.create();
                 //Setting the title manually
-                alert.show();
+                alert.show();*/
 
-               /* AlertDialog.Builder builder;
+                /*AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(v.getContext());
                 builder.setMessage(user.getProofBenchLink())
                         .setCancelable(false)

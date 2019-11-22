@@ -1,11 +1,15 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -14,6 +18,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Date;
 import java.util.UUID;
@@ -52,15 +60,50 @@ public class UserModelSingleton {
         });
     }
 
-    public void saveUserStats(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, String benchProof, String squatProof, String deadliftProof, String ohpProof, final DataModelResult<Boolean> callback){
-        String id = FirebaseAuth.getInstance().getUid();
+    public void saveUserStats(final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final String squatProof, final String deadliftProof, final String ohpProof, final DataModelResult<Boolean> callback){
+        final String id = FirebaseAuth.getInstance().getUid();
 
         if(id != null){
+
+            StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymBenchVideos").child(id);
+            fb.putFile(benchProof).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    StorageMetadata sm = taskSnapshot.getMetadata();
+                    if(sm != null){
+                        StorageReference storage = taskSnapshot.getStorage();
+                        if(storage != null){
+
+                            Task<Uri> benchUri = storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, uri, squatProof, deadliftProof, ohpProof, callback);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        }
+    }
+
+    public void uploadUserProfile(final String id, final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final String squatProof, final String deadliftProof, final String ohpProof, final DataModelResult<Boolean> callback){
+        if(benchProof != null){
             Date date = new Date(System.currentTimeMillis());
             UUID uuid = UUID.randomUUID();
             //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof, squatProof, deadliftProof, ohpProof);
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof, deadliftProof, ohpProof);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

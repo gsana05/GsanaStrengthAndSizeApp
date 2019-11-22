@@ -3,13 +3,16 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -297,7 +300,7 @@ public class ActivityStartStates extends AppCompatActivity {
                 Float.valueOf(squat.getText().toString()),
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
-                mBenchPressUri.toString(),
+                mBenchPressUri,
                 mSquatUri.toString(),
                 mDeadliftUri.toString(),
                 mSquatUri.toString(),
