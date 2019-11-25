@@ -76,7 +76,9 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             @Override
             public void onClick(View v) {
 
-                final AlertDialog.Builder builder;
+                alertVideoDialog(user.getProofBenchLink(), v);
+
+          /*      final AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(v.getContext());
                 LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -133,7 +135,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     public void onClick(View v) {
                         alert.dismiss();
                     }
-                });
+                });*/
 
 
 
@@ -183,6 +185,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             deadlift.setTextColor(col);
         }
         deadlift.setText(user.getDeadlift().toString());
+        deadlift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertVideoDialog(user.getProofDeadliftLink(), v);
+            }
+        });
 
 
         if(type == UserLeagueTableModelSingleton.squat){
@@ -191,6 +199,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             squat.setTextColor(col);
         }
         squat.setText(user.getSquat().toString());
+        squat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertVideoDialog(user.getProofSquatLink(), v);
+            }
+        });
 
 
         if(type == UserLeagueTableModelSingleton.ohp){
@@ -199,6 +213,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             ohp.setTextColor(col);
         }
         ohp.setText(user.getOverHeadPress().toString());
+        ohp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertVideoDialog(user.getProofOhpLink(), v);
+            }
+        });
 
         if(type == -1){
             TextView tv = holder.itemView.findViewById(R.id.league_table_list_item_total_label);
@@ -227,5 +247,64 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             total = itemView.findViewById(R.id.league_table_list_item_total_result);
 
         }
+    }
+
+    public void alertVideoDialog(String link, View v){
+        final AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(v.getContext());
+        LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
+        final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
+        MediaController mediaController = new MediaController(v.getContext());
+        Uri myUri = Uri.parse(link);
+
+        video.setVideoURI(myUri);
+        video.setMediaController(mediaController);
+        mediaController.setAnchorView(video);
+        //video.start();
+
+        builder.setView(inflatedLayout);
+        builder.setCancelable(false);
+        final AlertDialog alert = builder.create();
+        alert.show();
+
+        Button restart;
+        restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+        restart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                video.seekTo(0);
+                video.start();
+            }
+        });
+
+        Button pause;
+        pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                video.pause();
+            }
+        });
+
+
+        Button play;
+        play = inflatedLayout.findViewById(R.id.custom_bench_video_play);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                video.start();
+            }
+        });
+
+        Button cancel;
+        cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alert.dismiss();
+            }
+        });
     }
 }
