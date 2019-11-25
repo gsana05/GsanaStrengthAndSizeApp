@@ -60,7 +60,7 @@ public class UserModelSingleton {
         });
     }
 
-    public void saveUserStats(final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final String squatProof, final String deadliftProof, final String ohpProof, final DataModelResult<Boolean> callback){
+    public void saveUserStats(final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, final DataModelResult<Boolean> callback){
         final String id = FirebaseAuth.getInstance().getUid();
 
         if(id != null){
@@ -77,7 +77,110 @@ public class UserModelSingleton {
                             Task<Uri> benchUri = storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, uri, squatProof, deadliftProof, ohpProof, callback);
+
+                                    final Uri benchProofUri = uri;
+
+                                    StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymSquatVideos").child(id);
+                                    fb.putFile(squatProof).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            StorageMetadata sm = taskSnapshot.getMetadata();
+                                            if(sm != null){
+                                                StorageReference storage = taskSnapshot.getStorage();
+                                                if(storage != null){
+
+                                                    Task<Uri> squatUri = storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+
+                                                            final Uri squatProofUri = uri;
+
+                                                            StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymDeadliftVideos").child(id);
+                                                            fb.putFile(deadliftProof).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                                @Override
+                                                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                    StorageMetadata sm = taskSnapshot.getMetadata();
+                                                                    if(sm != null){
+                                                                        StorageReference storage = taskSnapshot.getStorage();
+                                                                        if(storage != null){
+
+                                                                            Task<Uri> deadliftUri = storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                @Override
+                                                                                public void onSuccess(Uri uri) {
+
+                                                                                    final Uri deadliftProofUri = uri;
+
+                                                                                    StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymOhpVideos").child(id);
+                                                                                    fb.putFile(ohpProof).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                                                                        @Override
+                                                                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                                                                            StorageMetadata sm = taskSnapshot.getMetadata();
+                                                                                            if(sm != null){
+                                                                                                StorageReference storage = taskSnapshot.getStorage();
+                                                                                                if(storage != null){
+
+                                                                                                    Task<Uri> ohpUri = storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                                                                        @Override
+                                                                                                        public void onSuccess(Uri uri) {
+
+                                                                                                            Uri ohpProofUri = uri;
+
+
+                                                                                                            uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, benchProofUri, squatProofUri, deadliftProofUri, ohpProofUri, callback);
+                                                                                                        }
+                                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                                        @Override
+                                                                                                        public void onFailure(@NonNull Exception e) {
+
+                                                                                                        }
+                                                                                                    });
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                                                        @Override
+                                                                                        public void onFailure(@NonNull Exception e) {
+
+                                                                                        }
+                                                                                    });
+
+                                                                                    //uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, uri, squatProof, deadliftProof, ohpProof, callback);
+                                                                                }
+                                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                                @Override
+                                                                                public void onFailure(@NonNull Exception e) {
+
+                                                                                }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+
+                                                                }
+                                                            });
+
+                                                            //uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, uri, squatProof, deadliftProof, ohpProof, callback);
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+
+                                    //uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, uri, squatProof, deadliftProof, ohpProof, callback);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -97,13 +200,13 @@ public class UserModelSingleton {
         }
     }
 
-    public void uploadUserProfile(final String id, final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final String squatProof, final String deadliftProof, final String ohpProof, final DataModelResult<Boolean> callback){
+    public void uploadUserProfile(final String id, final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, final DataModelResult<Boolean> callback){
         if(benchProof != null){
             Date date = new Date(System.currentTimeMillis());
             UUID uuid = UUID.randomUUID();
             //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof, deadliftProof, ohpProof);
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof.toString(), deadliftProof.toString(), ohpProof.toString());
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override

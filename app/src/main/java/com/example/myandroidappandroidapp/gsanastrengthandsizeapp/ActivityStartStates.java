@@ -301,9 +301,9 @@ public class ActivityStartStates extends AppCompatActivity {
                 Float.valueOf(deadlift.getText().toString()),
                 Float.valueOf(overHeadPress.getText().toString()),
                 mBenchPressUri,
-                mSquatUri.toString(),
-                mDeadliftUri.toString(),
-                mSquatUri.toString(),
+                mSquatUri,
+                mDeadliftUri,
+                mSquatUri,
                 callback);
     }
 
