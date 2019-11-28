@@ -145,11 +145,57 @@
                 android:inputType="numberDecimal"
                 />
 
+            <Button
+                android:id="@+id/profile_bench_proof_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_bench_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                android:shadowColor="@color/ssBlack"
+                android:textColor="@color/ssWhite"
+                android:layout_marginTop="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:background="@drawable/white_border"
+                android:backgroundTint="@color/ssBrown"
+                android:text="Get Bench Proof"
+                android:textAllCaps="false"
+                />
+
+            <TextView
+                android:id="@+id/profile_bench_proof_link"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/profile_bench_proof_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toStartOf="@+id/profile_bench_proof_link_remove"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/ssWhite"
+                android:textAlignment="center"
+                android:text="text"
+                />
+
+            <ImageView
+                android:id="@+id/profile_bench_proof_link_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/profile_bench_proof_link"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                app:layout_constraintStart_toEndOf="@+id/profile_bench_proof_link"
+                android:src="@drawable/ic_clear_24px"
+                android:background="@color/ssWhite"
+                android:backgroundTint="@color/ssBackgroundBlack"
+                android:tint="@color/ssRed"
+                />
+
             <TextView
                 android:id="@+id/profile_sub_heading_squat_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_bench_input"
+                app:layout_constraintTop_toBottomOf="@+id/profile_bench_proof_link"
                 app:layout_constraintStart_toStartOf="@id/profile_heading"
                 app:layout_constraintEnd_toEndOf="@id/profile_heading"
                 app:layout_constraintHorizontal_bias="0"
@@ -180,11 +226,57 @@
                 android:inputType="numberDecimal"
                 />
 
+            <Button
+                android:id="@+id/profile_squat_proof_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_squat_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                android:shadowColor="@color/ssBlack"
+                android:textColor="@color/ssWhite"
+                android:layout_marginTop="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:background="@drawable/white_border"
+                android:backgroundTint="@color/ssBrown"
+                android:text="Get Bench Proof"
+                android:textAllCaps="false"
+                />
+
+            <TextView
+                android:id="@+id/profile_squat_proof_link"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/profile_squat_proof_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toStartOf="@+id/profile_squat_proof_link_remove"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/ssWhite"
+                android:textAlignment="center"
+                android:text="text"
+                />
+
+            <ImageView
+                android:id="@+id/profile_squat_proof_link_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/profile_squat_proof_link"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                app:layout_constraintStart_toEndOf="@+id/profile_squat_proof_link"
+                android:src="@drawable/ic_clear_24px"
+                android:background="@color/ssWhite"
+                android:backgroundTint="@color/ssBackgroundBlack"
+                android:tint="@color/ssRed"
+                />
+
             <TextView
                 android:id="@+id/profile_sub_heading_deadlift_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_squat_input"
+                app:layout_constraintTop_toBottomOf="@+id/profile_squat_proof_link"
                 app:layout_constraintStart_toStartOf="@id/profile_heading"
                 app:layout_constraintEnd_toEndOf="@id/profile_heading"
                 app:layout_constraintHorizontal_bias="0"
@@ -215,11 +307,57 @@
                 android:inputType="numberDecimal"
                 />
 
+            <Button
+                android:id="@+id/profile_deadlift_proof_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_deadlift_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                android:shadowColor="@color/ssBlack"
+                android:textColor="@color/ssWhite"
+                android:layout_marginTop="20dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
+                android:background="@drawable/white_border"
+                android:backgroundTint="@color/ssBrown"
+                android:text="Get Bench Proof"
+                android:textAllCaps="false"
+                />
+
+            <TextView
+                android:id="@+id/profile_deadlift_proof_link"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/profile_deadlift_proof_input"
+                app:layout_constraintStart_toStartOf="@+id/profile_heading"
+                app:layout_constraintEnd_toStartOf="@+id/profile_deadlift_proof_link_remove"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/ssWhite"
+                android:textAlignment="center"
+                android:text="text"
+                />
+
+            <ImageView
+                android:id="@+id/profile_deadlift_proof_link_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/profile_deadlift_proof_link"
+                app:layout_constraintEnd_toEndOf="@+id/profile_heading"
+                app:layout_constraintStart_toEndOf="@+id/profile_deadlift_proof_link"
+                android:src="@drawable/ic_clear_24px"
+                android:background="@color/ssWhite"
+                android:backgroundTint="@color/ssBackgroundBlack"
+                android:tint="@color/ssRed"
+                />
+
             <TextView
                 android:id="@+id/profile_sub_heading_ohp_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/profile_sub_heading_deadlift_input"
+                app:layout_constraintTop_toBottomOf="@+id/profile_deadlift_proof_link"
                 app:layout_constraintStart_toStartOf="@id/profile_heading"
                 app:layout_constraintEnd_toEndOf="@id/profile_heading"
                 app:layout_constraintHorizontal_bias="0"
@@ -249,6 +387,8 @@
                 android:paddingBottom="6dp"
                 android:inputType="numberDecimal"
                 android:autofillHints="@string/over_head_press_kg" />
+
+
 
             <Button
                 android:id="@+id/profile_claim_btn"

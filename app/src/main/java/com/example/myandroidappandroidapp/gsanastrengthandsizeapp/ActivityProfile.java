@@ -58,6 +58,11 @@ public class ActivityProfile extends AppCompatActivity {
     private float deadlift1;
     private float ohp1;
 
+    private static final int BENCH_REQUEST = 1;
+    private static final int SQUAT_REQUEST = 2;
+    private static final int DEADLIFT_REQUEST = 3;
+    private static final int OHP_REQUEST = 4;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -247,6 +252,13 @@ public class ActivityProfile extends AppCompatActivity {
         });
 
         updateUI();
+    }
+
+    private void openFileChooser(int exercise){
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, exercise);
     }
 
     public void updateUI(){
