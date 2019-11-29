@@ -261,7 +261,7 @@ public class ActivityProfile extends AppCompatActivity {
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+// todo kdmddsdslkldkfldkdlfkdlfdkldsfklsdfkfldskdlskdslfkdsfldskdkldfkfddksl
 
                 if(gymName.getText().toString().isEmpty()){
                     alertDialog("Please enter gymName");
@@ -341,7 +341,7 @@ public class ActivityProfile extends AppCompatActivity {
                 mOhpUri = null;
                 updateUI();
 
-                //userModelSingleton.logout(callbackLogout);
+                userModelSingleton.logout(callbackLogout);
             }
         });
 

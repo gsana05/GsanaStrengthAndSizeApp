@@ -257,54 +257,71 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
         final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
         MediaController mediaController = new MediaController(v.getContext());
-        Uri myUri = Uri.parse(link);
 
-        video.setVideoURI(myUri);
-        video.setMediaController(mediaController);
-        mediaController.setAnchorView(video);
-        //video.start();
+        if(link != null){
+            Uri myUri = Uri.parse(link);
 
-        builder.setView(inflatedLayout);
-        builder.setCancelable(false);
-        final AlertDialog alert = builder.create();
-        alert.show();
+            video.setVideoURI(myUri);
+            video.setMediaController(mediaController);
+            mediaController.setAnchorView(video);
+            //video.start();
 
-        Button restart;
-        restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
-        restart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                video.seekTo(0);
-                video.start();
-            }
-        });
+            builder.setView(inflatedLayout);
+            builder.setCancelable(false);
+            final AlertDialog alert = builder.create();
+            alert.show();
 
-        Button pause;
-        pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
-        pause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                video.pause();
-            }
-        });
+            Button restart;
+            restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+            restart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    video.seekTo(0);
+                    video.start();
+                }
+            });
+
+            Button pause;
+            pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
+            pause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    video.pause();
+                }
+            });
 
 
-        Button play;
-        play = inflatedLayout.findViewById(R.id.custom_bench_video_play);
-        play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                video.start();
-            }
-        });
+            Button play;
+            play = inflatedLayout.findViewById(R.id.custom_bench_video_play);
+            play.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    video.start();
+                }
+            });
 
-        Button cancel;
-        cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.dismiss();
-            }
-        });
+            Button cancel;
+            cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
+            cancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    alert.dismiss();
+                }
+            });
+        }
+        else{
+            builder.setMessage("No video found")
+                    .setCancelable(false)
+                    .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+            //Creating dialog box
+            AlertDialog alert = builder.create();
+            //Setting the title manually
+            alert.show();
+        }
+
     }
 }
