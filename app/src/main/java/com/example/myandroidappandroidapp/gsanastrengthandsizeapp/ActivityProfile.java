@@ -1,5 +1,6 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class ActivityProfile extends AppCompatActivity {
     private EditText deadlift;
     private EditText squat;
     private EditText ohp;
-    private Button logoutUser;
+    private Button cancelClaim;
     private ProgressBar logoutUserSpinner;
     private Boolean isLoggedIn = true;
     private UserProfileModelSingleton userProfileModelSingleton;
@@ -63,6 +65,30 @@ public class ActivityProfile extends AppCompatActivity {
     private static final int DEADLIFT_REQUEST = 3;
     private static final int OHP_REQUEST = 4;
 
+
+    private Boolean mClaim = false;
+
+    private Button benchProofBtn;
+    private TextView benchTextView;
+    private ImageView benchImageView;
+    private Uri mBenchPressUri;
+
+    private Button squatProofBtn;
+    private TextView squatTextView;
+    private ImageView squatImageView;
+    private Uri mSquatUri;
+
+    private Button deadliftProofBtn;
+    private TextView deadliftTextView;
+    private ImageView deadliftImageView;
+    private Uri mDeadliftUri;
+
+    private Button ohpProofBtn;
+    private TextView ohpTextView;
+    private ImageView ohpImageView;
+    private Uri mOhpUri;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +102,77 @@ public class ActivityProfile extends AppCompatActivity {
         deadlift = this.findViewById(R.id.profile_sub_heading_deadlift_input);
         squat = this.findViewById(R.id.profile_sub_heading_squat_input);
         ohp = this.findViewById(R.id.profile_sub_heading_ohp_input);
+
+        benchProofBtn = this.findViewById(R.id.profile_bench_proof_input);
+        benchProofBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(BENCH_REQUEST);
+            }
+        });
+        benchTextView = this.findViewById(R.id.profile_bench_proof_link);
+        benchImageView = this.findViewById(R.id.profile_bench_proof_link_remove);
+        benchImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mBenchPressUri = null;
+                updateUI();
+            }
+        });
+
+
+
+        squatProofBtn = this.findViewById(R.id.profile_squat_proof_input);
+        squatProofBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(SQUAT_REQUEST);
+            }
+        });
+        squatTextView = this.findViewById(R.id.profile_squat_proof_link);
+        squatImageView = this.findViewById(R.id.profile_squat_proof_link_remove);
+        squatImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSquatUri = null;
+                updateUI();
+            }
+        });
+
+        deadliftProofBtn = this.findViewById(R.id.profile_deadlift_proof_input);
+        deadliftProofBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(DEADLIFT_REQUEST);
+            }
+        });
+        deadliftTextView = this.findViewById(R.id.profile_deadlift_proof_link);
+        deadliftImageView = this.findViewById(R.id.profile_deadlift_proof_link_remove);
+        deadliftImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDeadliftUri = null;
+                updateUI();
+            }
+        });
+
+        ohpProofBtn = this.findViewById(R.id.profile_ohp_proof_input);
+        ohpProofBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser(OHP_REQUEST);
+            }
+        });
+        ohpTextView = this.findViewById(R.id.profile_ohp_proof_link);
+        ohpImageView = this.findViewById(R.id.profile_ohp_proof_link_remove);
+        ohpImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOhpUri = null;
+                updateUI();
+            }
+        });
+
 
         callbackUserData = new DataModelResult<User>() {
 
@@ -127,7 +224,10 @@ public class ActivityProfile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                bench1 = Float.valueOf(benchPress.getText().toString());
+                mClaim = true;
+                updateUI();
+
+                /*bench1 = Float.valueOf(benchPress.getText().toString());
                 squat1 = Float.valueOf(squat.getText().toString());
                 deadlift1 = Float.valueOf(deadlift.getText().toString());
                 ohp1 = Float.valueOf(ohp.getText().toString());
@@ -151,7 +251,7 @@ public class ActivityProfile extends AppCompatActivity {
                 }
                 else {
                     alertDialog("You have entered no improvements");
-                }
+                }*/
                 /*claim = true;
                 updateUI();*/
             }
@@ -229,15 +329,19 @@ public class ActivityProfile extends AppCompatActivity {
             }
         };
 
-        logoutUser = this.findViewById(R.id.profile_sign_out_btn);
+        cancelClaim = this.findViewById(R.id.profile_sign_out_btn);
         logoutUserSpinner = this.findViewById(R.id.profile_sign_out_progress);
-        logoutUser.setOnClickListener(new View.OnClickListener() {
+        cancelClaim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isLoggedIn = false;
+                mClaim = false;
+                mBenchPressUri = null;
+                mSquatUri = null;
+                mDeadliftUri = null;
+                mOhpUri = null;
                 updateUI();
 
-                userModelSingleton.logout(callbackLogout);
+                //userModelSingleton.logout(callbackLogout);
             }
         });
 
@@ -263,20 +367,100 @@ public class ActivityProfile extends AppCompatActivity {
 
     public void updateUI(){
         if(isLoggedIn){
-            logoutUser.setVisibility(View.VISIBLE);
-            logoutUserSpinner.setVisibility(View.GONE);
+            //logoutUser.setVisibility(View.VISIBLE);
+            //logoutUserSpinner.setVisibility(View.GONE);
         }
         else {
-            logoutUser.setVisibility(View.INVISIBLE);
-            logoutUserSpinner.setVisibility(View.VISIBLE);
+            //logoutUser.setVisibility(View.INVISIBLE);
+            //logoutUserSpinner.setVisibility(View.VISIBLE);
         }
 
-        if(claim){
+        if(mClaim){
+
+            gymName.setEnabled(false);
+            benchPress.setEnabled(true);
+            squat.setEnabled(true);
+            deadlift.setEnabled(true);
+            ohp.setEnabled(true);
+
+            benchProofBtn.setVisibility(View.VISIBLE);
+            if(mBenchPressUri != null){
+                benchTextView.setVisibility(View.VISIBLE);
+                benchTextView.setText(mBenchPressUri.toString());
+                benchImageView.setVisibility(View.VISIBLE);
+            }
+            else{
+                benchTextView.setVisibility(View.GONE);
+                benchImageView.setVisibility(View.GONE);
+            }
+
+            squatProofBtn.setVisibility(View.VISIBLE);
+            if(mSquatUri != null){
+                squatTextView.setVisibility(View.VISIBLE);
+                squatTextView.setText(mSquatUri.toString());
+                squatImageView.setVisibility(View.VISIBLE);
+            }
+            else {
+                squatTextView.setVisibility(View.GONE);
+                squatImageView.setVisibility(View.GONE);
+            }
+
+
+            deadliftProofBtn.setVisibility(View.VISIBLE);
+            if(mDeadliftUri != null){
+                deadliftTextView.setVisibility(View.VISIBLE);
+                deadliftTextView.setText(mDeadliftUri.toString());
+                deadliftImageView.setVisibility(View.VISIBLE);
+            }
+            else {
+                deadliftTextView.setVisibility(View.GONE);
+                deadliftImageView.setVisibility(View.GONE);
+            }
+
+
+            ohpProofBtn.setVisibility(View.VISIBLE);
+            if(mOhpUri != null){
+                ohpTextView.setVisibility(View.VISIBLE);
+                ohpTextView.setText(mOhpUri.toString());
+                ohpImageView.setVisibility(View.VISIBLE);
+            }
+            else {
+                ohpTextView.setVisibility(View.GONE);
+                ohpImageView.setVisibility(View.GONE);
+            }
+
+
             saveChangesBtn.setVisibility(View.VISIBLE);
+            cancelClaim.setVisibility(View.VISIBLE);
             claimBtn.setVisibility(View.INVISIBLE);
+
         }
-        else {
+        else{
+
+            gymName.setEnabled(false);
+            benchPress.setEnabled(false);
+            squat.setEnabled(false);
+            deadlift.setEnabled(false);
+            ohp.setEnabled(false);
+
+            benchProofBtn.setVisibility(View.GONE);
+            benchTextView.setVisibility(View.GONE);
+            benchImageView.setVisibility(View.GONE);
+
+            squatProofBtn.setVisibility(View.GONE);
+            squatTextView.setVisibility(View.GONE);
+            squatImageView.setVisibility(View.GONE);
+
+            deadliftProofBtn.setVisibility(View.GONE);
+            deadliftTextView.setVisibility(View.GONE);
+            deadliftImageView.setVisibility(View.GONE);
+
+            ohpProofBtn.setVisibility(View.GONE);
+            ohpTextView.setVisibility(View.GONE);
+            ohpImageView.setVisibility(View.GONE);
+
             saveChangesBtn.setVisibility(View.INVISIBLE);
+            cancelClaim.setVisibility(View.GONE);
             claimBtn.setVisibility(View.VISIBLE);
         }
     }
@@ -305,38 +489,36 @@ public class ActivityProfile extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data != null && data.getData() != null){
 
-        if (requestCode == 999) {
-            if(resultCode == Activity.RESULT_OK){
-                String bench=data.getStringExtra("Bench");
-                String squat = data.getStringExtra("squat");
-                String deadlift = data.getStringExtra("deadlift");
-                String ohp = data.getStringExtra("ohp");
-                if(bench != null){
-                    benchProofLink = bench;
-                }
-
-                if(squat != null){
-                    squatProofLink = squat;
-                }
-
-                if(deadlift != null){
-                    deadliftLink = deadlift;
-                }
-
-                if(ohp != null){
-                    ohpLink = ohp;
-                }
-
-                claim = true;
-                updateUI();
-
+            if(requestCode == BENCH_REQUEST){
+                mBenchPressUri = data.getData();
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
+            else if(requestCode == SQUAT_REQUEST){
+                mSquatUri = data.getData();
+            }
+            else if (requestCode == DEADLIFT_REQUEST){
+                mDeadliftUri = data.getData();
+            }
+            else if(requestCode == OHP_REQUEST){
+                mOhpUri = data.getData();
+            }
+            else  {
                 Log.v("", "");
-                //Write your code if there's no result
             }
+
+            updateUI();
+
+
+
+            /*VideoView video = this.findViewById(R.id.start_states_bench_video_link);
+            MediaController mediaController = new MediaController(this);
+            video.setVideoURI(uri);
+            video.setMediaController(mediaController);
+            mediaController.setAnchorView(video);
+            video.start();*/
         }
     }
 
