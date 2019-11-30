@@ -1,11 +1,14 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -15,6 +18,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -182,7 +189,7 @@ public class UserProfileModelSingleton {
         });
     }
 
-    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final String benchLink, final String squatLink, final String deadliftLink, final String ohpLink, final DataModelResult<Boolean> callback){
+    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final Uri benchLink, final Uri squatLink, final Uri deadliftLink, final Uri ohpLink, final DataModelResult<Boolean> callback){
 
         final String userId = FirebaseAuth.getInstance().getUid();
 
@@ -195,7 +202,101 @@ public class UserProfileModelSingleton {
                         String pin = data.getPin();
                         Date date = data.getDate();
 
-                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, benchLink, squatLink,deadliftLink, ohpLink);
+                        final String mBenchLink;
+                        if(benchLink == null){
+                            mBenchLink = "";
+                        }
+                        else{
+                            mBenchLink = benchLink.toString();
+                            //delete current bench from storage
+                            StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymBenchVideos").child(userId);
+                            fb.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymBenchVideos").child(userId);
+                                    fb.putFile(benchLink).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            StorageMetadata sm = taskSnapshot.getMetadata();
+                                            if(sm != null){
+                                                StorageReference storage = taskSnapshot.getStorage();
+                                                if(storage != null){
+                                                    storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+                                                            String mNewBenchPbUri = uri.toString();
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+
+                                }
+                            });
+                        }
+
+                        String mSquatLink;
+                        if(squatLink == null){
+                            mSquatLink = "";
+                        }
+                        else{
+                            mSquatLink = squatLink.toString();
+                        }
+
+                        String mDeadliftLink;
+                        if(deadliftLink == null){
+                            mDeadliftLink = "";
+                        }
+                        else{
+                            mDeadliftLink = deadliftLink.toString();
+                        }
+
+                        String mOhpLink;
+                        if(ohpLink == null){
+                            mOhpLink = "";
+                        }
+                        else{
+                            mOhpLink = ohpLink.toString();
+                        }
+
+                      /*  getDatabaseRef().document(userId).update(
+                                "benchPress", bench,
+                                "squat", squat,
+                                "deadlift", deadlift,
+                                "overHeadPress", ohp,
+                                "proofBenchLink", mBenchLink,
+                                "proofSquatLink", mSquatLink,
+                                "proofDeadliftLink", mDeadliftLink,
+                                "proofOhpLink", mOhpLink
+
+                        ).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });*/
+
+                       /* User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mBenchLink, squatLink.toString(),deadliftLink.toString(), ohpLink.toString());
 
                         // setOptions - only changes the field that now has a different value
                         getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -208,7 +309,7 @@ public class UserProfileModelSingleton {
                                     callback.onComplete(false, null);
                                 }
                             }
-                        });
+                        });*/
                     }
                     else {
                         Log.v("User", "NULL");

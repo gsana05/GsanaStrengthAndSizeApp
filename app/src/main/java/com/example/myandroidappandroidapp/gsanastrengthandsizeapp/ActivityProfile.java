@@ -261,7 +261,6 @@ public class ActivityProfile extends AppCompatActivity {
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-// todo kdmddsdslkldkfldkdlfkdlfdkldsfklsdfkfldskdlskdslfkdsfldskdkldfkfddksl
 
                 if(gymName.getText().toString().isEmpty()){
                     alertDialog("Please enter gymName");
@@ -308,10 +307,10 @@ public class ActivityProfile extends AppCompatActivity {
                         Float.valueOf(squat.getText().toString()),
                         Float.valueOf(deadlift.getText().toString()),
                         Float.valueOf(ohp.getText().toString()),
-                        benchProofLink,
-                        squatProofLink,
-                        deadliftLink,
-                        ohpLink,
+                        mBenchPressUri,
+                        mSquatUri,
+                        mDeadliftUri,
+                        mOhpUri,
                         callback
                 );
             }
