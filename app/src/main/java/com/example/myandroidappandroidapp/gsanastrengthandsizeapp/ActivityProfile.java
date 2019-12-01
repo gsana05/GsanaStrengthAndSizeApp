@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -88,7 +89,19 @@ public class ActivityProfile extends AppCompatActivity {
     private ImageView ohpImageView;
     private Uri mOhpUri;
 
-    private String mCurrentFieldValue;
+
+    private static final String MY_PREFS_NAME = "MyPrefsFile";
+    private static final String BENCH_TEXT = "bench_text";
+    private static final String SQUAT_TEXT = "squat_text";
+    private static final String DEADLIFT_TEXT = "deadlift_text";
+    private static final String OHP_TEXT = "ohp_text";
+
+    private String mBenchSavedLocally;
+    private String mSquatSavedLocally;
+    private String mDeadliftSavedLocally;
+    private String mOhpSavedLocally;
+
+    private User mCurrentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,13 +121,7 @@ public class ActivityProfile extends AppCompatActivity {
         benchProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(benchPressValue.toString().equals(benchPress.getText().toString())){
-                    mCurrentFieldValue = null;
-                }
-                else{
-                    mCurrentFieldValue = benchPress.getText().toString();
-                }
-
+                saveInputOnDevice();
                 openFileChooser(BENCH_REQUEST);
             }
         });
@@ -134,6 +141,7 @@ public class ActivityProfile extends AppCompatActivity {
         squatProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveInputOnDevice();
                 openFileChooser(SQUAT_REQUEST);
             }
         });
@@ -151,6 +159,7 @@ public class ActivityProfile extends AppCompatActivity {
         deadliftProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveInputOnDevice();
                 openFileChooser(DEADLIFT_REQUEST);
             }
         });
@@ -168,6 +177,7 @@ public class ActivityProfile extends AppCompatActivity {
         ohpProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveInputOnDevice();
                 openFileChooser(OHP_REQUEST);
             }
         });
@@ -187,41 +197,8 @@ public class ActivityProfile extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onComplete(User data, Exception exception) {
-                if(data != null){
-
-                    gymName.setText(data.getGymName());
-
-                    if(mCurrentFieldValue != null){
-                        benchPress.setText(mCurrentFieldValue);
-                        Log.v("", "");
-                    }
-                    else{
-                        benchPress.setText(data.getBenchPress().toString());
-                    }
-
-                    benchPressValue = data.getBenchPress();
-
-                    deadlift.setText(data.getDeadlift().toString());
-                    deadliftValue = data.getDeadlift();
-
-                    squat.setText(data.getSquat().toString());
-                    squatValue = data.getSquat();
-
-                    ohp.setText(data.getOverHeadPress().toString());
-                    ohpValue = data.getOverHeadPress();
-
-                    benchProofLink = data.getProofBenchLink();
-                    squatProofLink = data.getProofSquatLink();
-                    ohpLink = data.getProofOhpLink();
-                    deadliftLink = data.getProofDeadliftLink();
-                }
-                else {
-                    gymName.setText("no data");
-                    benchPress.setText("no data");
-                    deadlift.setText("no data");
-                    squat.setText("no data");
-                    ohp.setText("no data");
-                }
+               mCurrentUser = data;
+               updateUI();
             }
         };
 
@@ -229,6 +206,8 @@ public class ActivityProfile extends AppCompatActivity {
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // clear out shared preferences
+                deleteInputOnDevice();
                 finish();
             }
         });
@@ -306,6 +285,7 @@ public class ActivityProfile extends AppCompatActivity {
                     @Override
                     public void onComplete(Boolean data, Exception exception) {
                         if(data){
+                            deleteInputOnDevice();
                             alertDialog("Data saved");
                             finish();
                         }
@@ -354,9 +334,10 @@ public class ActivityProfile extends AppCompatActivity {
                 mSquatUri = null;
                 mDeadliftUri = null;
                 mOhpUri = null;
+                deleteInputOnDevice();
                 updateUI();
 
-                userModelSingleton.logout(callbackLogout);
+                //userModelSingleton.logout(callbackLogout);
             }
         });
 
@@ -365,12 +346,29 @@ public class ActivityProfile extends AppCompatActivity {
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveInputOnDevice();
                 Intent intent = new Intent(v.getContext(), ActivitySettings.class);
                 startActivity(intent);
             }
         });
 
         updateUI();
+    }
+
+    public void deleteInputOnDevice(){
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+    }
+
+    public void saveInputOnDevice(){
+        SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(BENCH_TEXT, benchPress.getText().toString());
+        editor.putString(SQUAT_TEXT, squat.getText().toString());
+        editor.putString(DEADLIFT_TEXT, deadlift.getText().toString());
+        editor.putString(OHP_TEXT, ohp.getText().toString());
+
+        editor.apply();
     }
 
     private void openFileChooser(int exercise){
@@ -381,13 +379,61 @@ public class ActivityProfile extends AppCompatActivity {
     }
 
     public void updateUI(){
-        if(isLoggedIn){
-            //logoutUser.setVisibility(View.VISIBLE);
-            //logoutUserSpinner.setVisibility(View.GONE);
+
+        if(mCurrentUser != null){
+
+            gymName.setText(mCurrentUser.getGymName());
+
+            SharedPreferences sharedPreferences = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE);
+            mBenchSavedLocally = sharedPreferences.getString(BENCH_TEXT, "");
+            if(mBenchSavedLocally.isEmpty()){
+                benchPress.setText(mCurrentUser.getBenchPress().toString());
+            }
+            else{
+                benchPress.setText(mBenchSavedLocally);
+            }
+            benchPressValue = mCurrentUser.getBenchPress();
+
+
+            mDeadliftSavedLocally = sharedPreferences.getString(DEADLIFT_TEXT, "");
+            if(mDeadliftSavedLocally.isEmpty()){
+                deadlift.setText(mCurrentUser.getDeadlift().toString());
+            }
+            else{
+                deadlift.setText(mDeadliftSavedLocally);
+            }
+            deadliftValue = mCurrentUser.getDeadlift();
+
+
+            mSquatSavedLocally = sharedPreferences.getString(SQUAT_TEXT, "");
+            if(mSquatSavedLocally.isEmpty()){
+                squat.setText(mCurrentUser.getSquat().toString());
+            }
+            else{
+                squat.setText(mSquatSavedLocally);
+            }
+            squatValue = mCurrentUser.getSquat();
+
+            mOhpSavedLocally = sharedPreferences.getString(OHP_TEXT, "");
+            if(mOhpSavedLocally.isEmpty()){
+                ohp.setText(mCurrentUser.getOverHeadPress().toString());
+            }
+            else{
+                ohp.setText(mOhpSavedLocally);
+            }
+            ohpValue = mCurrentUser.getOverHeadPress();
+
+            benchProofLink = mCurrentUser.getProofBenchLink();
+            squatProofLink = mCurrentUser.getProofSquatLink();
+            ohpLink = mCurrentUser.getProofOhpLink();
+            deadliftLink = mCurrentUser.getProofDeadliftLink();
         }
         else {
-            //logoutUser.setVisibility(View.INVISIBLE);
-            //logoutUserSpinner.setVisibility(View.VISIBLE);
+            gymName.setText("no data");
+            benchPress.setText("no data");
+            deadlift.setText("no data");
+            squat.setText("no data");
+            ohp.setText("no data");
         }
 
         if(mClaim){
