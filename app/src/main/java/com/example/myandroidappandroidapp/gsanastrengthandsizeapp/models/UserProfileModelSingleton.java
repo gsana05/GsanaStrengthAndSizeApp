@@ -1,6 +1,7 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -189,6 +190,100 @@ public class UserProfileModelSingleton {
         });
     }
 
+    private String mNewBenchPbUri;
+    private String mNewSquatPbUri;
+    private String mNewDeadliftPbUri;
+    private String mNewOhpPbUri;
+
+    public void deleteVideoAndSaveNewOne(final String userId, final Uri benchLink, final String storageArea, final DataModelResult<Boolean> callback){
+        //delete current bench from storage
+        StorageReference fb = FirebaseStorage.getInstance().getReference().child(storageArea).child(userId);
+        fb.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                StorageReference fb = FirebaseStorage.getInstance().getReference().child(storageArea).child(userId);
+                fb.putFile(benchLink).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        StorageMetadata sm = taskSnapshot.getMetadata();
+                        if(sm != null){
+                            StorageReference storage = taskSnapshot.getStorage();
+                            if(storage != null){
+                                storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+
+                                        switch (storageArea){
+                                            case "gymBenchVideos": mNewBenchPbUri = uri.toString();
+                                            break;
+                                            case "gymSquatVideos": mNewSquatPbUri = uri.toString();
+                                            break;
+                                            case "gymDeadliftVideos": mNewDeadliftPbUri = uri.toString();
+                                            break;
+                                            case "gymOhpVideos": mNewOhpPbUri = uri.toString();
+                                            break;
+                                        }
+
+                                        callback.onComplete(true, null);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        callback.onComplete(false, e);
+                                        //todo unable to get download url
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false, e);
+                        // todo unable to save new video
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onComplete(false, e);
+                //todo unable to delete video
+            }
+        });
+    }
+
+    public void checkLift(String userId, Uri link, String storageArea, final DataModelResult<Boolean> callback){
+
+        if(link == null){
+           callback.onComplete(false, null);
+        }
+        else{
+            DataModelResult<Boolean> benchCallback = new DataModelResult<Boolean>() {
+                @Override
+                public void onComplete(Boolean data, Exception exception) {
+                    if(data){
+                        //todo success delete old and saved new video
+                        callback.onComplete(true, null);
+                    }
+                    else{
+
+                        if(exception != null){
+                            callback.onComplete(null, exception);
+                        }
+                        else{
+                            callback.onComplete(false, null);
+                        }
+
+                        //todo something went wrong when trying to delete and save a new video
+                    }
+                }
+            };
+
+            deleteVideoAndSaveNewOne(userId, link,storageArea, benchCallback);
+        }
+    }
+
     public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final Uri benchLink, final Uri squatLink, final Uri deadliftLink, final Uri ohpLink, final DataModelResult<Boolean> callback){
 
         final String userId = FirebaseAuth.getInstance().getUid();
@@ -202,63 +297,61 @@ public class UserProfileModelSingleton {
                         String pin = data.getPin();
                         Date date = data.getDate();
 
-                        final String mBenchLink;
-                        if(benchLink == null){
-                            mBenchLink = "";
-                        }
-                        else{
-                            mBenchLink = benchLink.toString();
-                            //delete current bench from storage
-                            StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymBenchVideos").child(userId);
-                            fb.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    StorageReference fb = FirebaseStorage.getInstance().getReference().child("gymBenchVideos").child(userId);
-                                    fb.putFile(benchLink).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            StorageMetadata sm = taskSnapshot.getMetadata();
-                                            if(sm != null){
-                                                StorageReference storage = taskSnapshot.getStorage();
-                                                if(storage != null){
-                                                    storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                        @Override
-                                                        public void onSuccess(Uri uri) {
-                                                            String mNewBenchPbUri = uri.toString();
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
+                        final DataModelResult<Boolean> callbackBench = new DataModelResult<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean data, Exception exception) {
 
-                                                        }
-                                                    });
+                                // If there is ever an exception
+                                if(exception != null){
+                                    callback.onComplete(null, exception);
+                                }
+
+                                // when user has either deleted and saved new video OR does not want to upload a new video
+
+                                DataModelResult<Boolean> callbackSquat = new DataModelResult<Boolean>() {
+                                    @Override
+                                    public void onComplete(Boolean data, Exception exception) {
+                                        // If there is ever an exception
+                                        if(exception != null){
+                                            callback.onComplete(null, exception);
+                                        }
+
+                                        DataModelResult<Boolean> callbackDeadlift = new DataModelResult<Boolean>() {
+                                            @Override
+                                            public void onComplete(Boolean data, Exception exception) {
+                                                // If there is ever an exception
+                                                if(exception != null){
+                                                    callback.onComplete(null, exception);
                                                 }
+
+                                                DataModelResult<Boolean> callbackOhp = new DataModelResult<Boolean>() {
+                                                    @Override
+                                                    public void onComplete(Boolean data, Exception exception) {
+                                                        // If there is ever an exception
+                                                        if(exception != null){
+                                                            callback.onComplete(null, exception);
+                                                        }
+
+                                                        callback.onComplete(true, null);
+                                                    }
+                                                };
+
+                                                checkLift(userId, ohpLink,"gymOhpVideos", callbackOhp );
+
                                             }
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
+                                        };
 
-                                        }
-                                    });
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
+                                        checkLift(userId, deadliftLink, "gymDeadliftVideos", callbackDeadlift);
+                                    }
+                                };
 
-                                }
-                            });
-                        }
+                                checkLift(userId, squatLink, "gymSquatVideos",callbackSquat);
+                            }
+                        };
 
-                        String mSquatLink;
-                        if(squatLink == null){
-                            mSquatLink = "";
-                        }
-                        else{
-                            mSquatLink = squatLink.toString();
-                        }
+                        checkLift(userId, benchLink,"gymBenchVideos", callbackBench);
 
-                        String mDeadliftLink;
+                      /*  String mDeadliftLink;
                         if(deadliftLink == null){
                             mDeadliftLink = "";
                         }
@@ -272,7 +365,7 @@ public class UserProfileModelSingleton {
                         }
                         else{
                             mOhpLink = ohpLink.toString();
-                        }
+                        }*/
 
                       /*  getDatabaseRef().document(userId).update(
                                 "benchPress", bench,
