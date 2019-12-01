@@ -48,6 +48,7 @@ public class ActivityProfile extends AppCompatActivity {
 
     private Boolean claim = false;
     private Button saveChangesBtn;
+    private Button logout;
     private Button claimBtn;
     private int liftType;
 
@@ -297,7 +298,6 @@ public class ActivityProfile extends AppCompatActivity {
                 };
 
                 userProfileModelSingleton.updateUser(
-
                         gymName.getText().toString(),
                         Float.valueOf(benchPress.getText().toString()),
                         Float.valueOf(squat.getText().toString()),
@@ -312,6 +312,8 @@ public class ActivityProfile extends AppCompatActivity {
             }
         });
 
+
+
         final DataModelResult<Boolean> callbackLogout = new DataModelResult<Boolean>(){
 
             @Override
@@ -323,6 +325,14 @@ public class ActivityProfile extends AppCompatActivity {
                 updateUI();
             }
         };
+
+        logout = this.findViewById(R.id.profile_logout_btn);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userModelSingleton.logout(callbackLogout);
+            }
+        });
 
         cancelClaim = this.findViewById(R.id.profile_sign_out_btn);
         logoutUserSpinner = this.findViewById(R.id.profile_sign_out_progress);
@@ -336,8 +346,6 @@ public class ActivityProfile extends AppCompatActivity {
                 mOhpUri = null;
                 deleteInputOnDevice();
                 updateUI();
-
-                //userModelSingleton.logout(callbackLogout);
             }
         });
 
@@ -510,6 +518,7 @@ public class ActivityProfile extends AppCompatActivity {
             saveChangesBtn.setVisibility(View.VISIBLE);
             cancelClaim.setVisibility(View.VISIBLE);
             claimBtn.setVisibility(View.INVISIBLE);
+            logout.setVisibility(View.INVISIBLE);
 
         }
         else{
@@ -539,6 +548,7 @@ public class ActivityProfile extends AppCompatActivity {
             saveChangesBtn.setVisibility(View.INVISIBLE);
             cancelClaim.setVisibility(View.GONE);
             claimBtn.setVisibility(View.VISIBLE);
+            logout.setVisibility(View.VISIBLE);
         }
     }
 

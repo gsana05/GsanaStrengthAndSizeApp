@@ -439,11 +439,11 @@
             <Button
                 android:id="@+id/profile_claim_btn"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/profile_ohp_proof_link"
                 app:layout_constraintStart_toStartOf="@id/profile_heading"
                 app:layout_constraintEnd_toStartOf="@+id/profile_sign_out_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/profile_logout_btn"
                 android:layout_marginTop="20dp"
                 android:text="@string/claim"
                 android:textColor="@color/ssWhite"
@@ -454,9 +454,26 @@
                 />
 
             <Button
+                android:id="@+id/profile_logout_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/profile_claim_btn"
+                app:layout_constraintStart_toStartOf="@id/profile_heading"
+                app:layout_constraintEnd_toStartOf="@+id/profile_sign_out_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="20dp"
+                android:text="@string/log_out"
+                android:textColor="@color/ssWhite"
+                android:textStyle="bold"
+                android:background="@drawable/white_border"
+                android:backgroundTint="@color/ssRed"
+                android:textAllCaps="false"
+                />
+
+            <Button
                 android:id="@+id/profile_save_btn"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/profile_ohp_proof_link"
                 app:layout_constraintStart_toStartOf="@id/profile_heading"
                 app:layout_constraintEnd_toStartOf="@+id/profile_sign_out_btn"
@@ -490,7 +507,7 @@
             <Button
                 android:id="@+id/profile_sign_out_btn"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@+id/profile_save_btn"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_save_btn"
                 app:layout_constraintEnd_toEndOf="@id/profile_heading"

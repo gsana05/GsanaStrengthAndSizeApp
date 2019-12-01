@@ -256,9 +256,11 @@ public class UserProfileModelSingleton {
     public void checkLift(String userId, Uri link, String storageArea, final DataModelResult<Boolean> callback){
 
         if(link == null){
+            // user does not want to upload new video for this exercise
            callback.onComplete(false, null);
         }
         else{
+            // user wants to upload new video for this exercise
             DataModelResult<Boolean> benchCallback = new DataModelResult<Boolean>() {
                 @Override
                 public void onComplete(Boolean data, Exception exception) {
