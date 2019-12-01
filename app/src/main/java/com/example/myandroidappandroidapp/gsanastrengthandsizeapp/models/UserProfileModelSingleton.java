@@ -293,9 +293,13 @@ public class UserProfileModelSingleton {
                 @Override
                 public void onComplete(User data, Exception exception) {
                     if(data != null){
-                        String email = data.getEmail();
-                        String pin = data.getPin();
-                        Date date = data.getDate();
+                        final String email = data.getEmail();
+                        final String pin = data.getPin();
+                        final Date date = data.getDate();
+                        final String currentBenchLink = data.getProofBenchLink();
+                        final String currentSquatLink = data.getProofSquatLink();
+                        final String currentDeadlift = data.getProofDeadliftLink();
+                        final String currentOhp = data.getProofOhpLink();
 
                         final DataModelResult<Boolean> callbackBench = new DataModelResult<Boolean>() {
                             @Override
@@ -332,7 +336,38 @@ public class UserProfileModelSingleton {
                                                             callback.onComplete(null, exception);
                                                         }
 
-                                                        callback.onComplete(true, null);
+                                                        if(mNewBenchPbUri == null){
+                                                            mNewBenchPbUri = currentBenchLink;
+                                                        }
+
+                                                        if(mNewSquatPbUri == null){
+                                                            mNewSquatPbUri = currentSquatLink;
+                                                        }
+
+                                                        if(mNewDeadliftPbUri == null){
+                                                            mNewDeadliftPbUri = currentDeadlift;
+                                                        }
+
+                                                        if(mNewOhpPbUri == null){
+                                                            mNewOhpPbUri = currentOhp;
+                                                        }
+
+                                                        //update database
+                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri);
+
+                                                        // setOptions - only changes the field that now has a different value
+                                                        getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                if(task.isSuccessful()){
+                                                                    callback.onComplete(true, null);
+                                                                }
+                                                                else {
+                                                                    callback.onComplete(false, null);
+                                                                }
+                                                            }
+                                                        });
+
                                                     }
                                                 };
 

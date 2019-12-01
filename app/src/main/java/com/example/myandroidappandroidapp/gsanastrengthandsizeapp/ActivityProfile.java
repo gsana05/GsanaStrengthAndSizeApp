@@ -88,6 +88,7 @@ public class ActivityProfile extends AppCompatActivity {
     private ImageView ohpImageView;
     private Uri mOhpUri;
 
+    private String mCurrentFieldValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,13 @@ public class ActivityProfile extends AppCompatActivity {
         benchProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(benchPressValue.toString().equals(benchPress.getText().toString())){
+                    mCurrentFieldValue = null;
+                }
+                else{
+                    mCurrentFieldValue = benchPress.getText().toString();
+                }
+
                 openFileChooser(BENCH_REQUEST);
             }
         });
@@ -183,7 +191,14 @@ public class ActivityProfile extends AppCompatActivity {
 
                     gymName.setText(data.getGymName());
 
-                    benchPress.setText(data.getBenchPress().toString());
+                    if(mCurrentFieldValue != null){
+                        benchPress.setText(mCurrentFieldValue);
+                        Log.v("", "");
+                    }
+                    else{
+                        benchPress.setText(data.getBenchPress().toString());
+                    }
+
                     benchPressValue = data.getBenchPress();
 
                     deadlift.setText(data.getDeadlift().toString());
@@ -302,6 +317,7 @@ public class ActivityProfile extends AppCompatActivity {
                 };
 
                 userProfileModelSingleton.updateUser(
+
                         gymName.getText().toString(),
                         Float.valueOf(benchPress.getText().toString()),
                         Float.valueOf(squat.getText().toString()),
@@ -377,20 +393,21 @@ public class ActivityProfile extends AppCompatActivity {
         if(mClaim){
 
             gymName.setEnabled(false);
-            benchPress.setEnabled(true);
-            squat.setEnabled(true);
-            deadlift.setEnabled(true);
-            ohp.setEnabled(true);
 
             benchProofBtn.setVisibility(View.VISIBLE);
             if(mBenchPressUri != null){
                 benchTextView.setVisibility(View.VISIBLE);
                 benchTextView.setText(mBenchPressUri.toString());
                 benchImageView.setVisibility(View.VISIBLE);
+                benchPress.setEnabled(true);
+                benchProofBtn.setEnabled(false);
             }
             else{
                 benchTextView.setVisibility(View.GONE);
                 benchImageView.setVisibility(View.GONE);
+                benchPress.setText(benchPressValue.toString());
+                benchPress.setEnabled(false);
+                benchProofBtn.setEnabled(true);
             }
 
             squatProofBtn.setVisibility(View.VISIBLE);
@@ -398,10 +415,15 @@ public class ActivityProfile extends AppCompatActivity {
                 squatTextView.setVisibility(View.VISIBLE);
                 squatTextView.setText(mSquatUri.toString());
                 squatImageView.setVisibility(View.VISIBLE);
+                squat.setEnabled(true);
+                squatProofBtn.setEnabled(false);
             }
             else {
                 squatTextView.setVisibility(View.GONE);
                 squatImageView.setVisibility(View.GONE);
+                squat.setText(squatValue.toString());
+                squat.setEnabled(false);
+                squatProofBtn.setEnabled(true);
             }
 
 
@@ -410,10 +432,15 @@ public class ActivityProfile extends AppCompatActivity {
                 deadliftTextView.setVisibility(View.VISIBLE);
                 deadliftTextView.setText(mDeadliftUri.toString());
                 deadliftImageView.setVisibility(View.VISIBLE);
+                deadlift.setEnabled(true);
+                deadliftProofBtn.setEnabled(false);
             }
             else {
                 deadliftTextView.setVisibility(View.GONE);
                 deadliftImageView.setVisibility(View.GONE);
+                deadlift.setText(deadliftValue.toString());
+                deadlift.setEnabled(false);
+                deadliftProofBtn.setEnabled(true);
             }
 
 
@@ -422,10 +449,15 @@ public class ActivityProfile extends AppCompatActivity {
                 ohpTextView.setVisibility(View.VISIBLE);
                 ohpTextView.setText(mOhpUri.toString());
                 ohpImageView.setVisibility(View.VISIBLE);
+                ohp.setEnabled(true);
+                ohpProofBtn.setEnabled(false);
             }
             else {
                 ohpTextView.setVisibility(View.GONE);
                 ohpImageView.setVisibility(View.GONE);
+                ohp.setText(ohpValue.toString());
+                ohp.setEnabled(false);
+                ohpProofBtn.setEnabled(true);
             }
 
 
