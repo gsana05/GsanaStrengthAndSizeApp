@@ -48,6 +48,8 @@ public class ActivityProfile extends AppCompatActivity {
 
     private Boolean claim = false;
     private Button saveChangesBtn;
+    private ProgressBar saveChangesBtnProgress;
+    private Boolean mSubmitProgress = false;
     private Button logout;
     private Button claimBtn;
     private int liftType;
@@ -252,6 +254,7 @@ public class ActivityProfile extends AppCompatActivity {
             }
         });
 
+        saveChangesBtnProgress = this.findViewById(R.id.profile_save_btn_progress);
         saveChangesBtn = this.findViewById(R.id.profile_save_btn);
         saveChangesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,12 +285,17 @@ public class ActivityProfile extends AppCompatActivity {
                     return;
                 }
 
+                mSubmitProgress = true;
+                updateUI();
+
                 DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
                     @Override
                     public void onComplete(Boolean data, Exception exception) {
                         if(data){
                             deleteInputOnDevice();
                             alertDialog("Data saved");
+                            mSubmitProgress = false;
+                            updateUI();
                             finish();
                         }
                         else {
@@ -388,7 +396,7 @@ public class ActivityProfile extends AppCompatActivity {
 
     public void updateUI(){
 
-        if(mCurrentUser != null){
+        if(mCurrentUser != null && !mSubmitProgress){
 
             gymName.setText(mCurrentUser.getGymName());
 
@@ -435,13 +443,6 @@ public class ActivityProfile extends AppCompatActivity {
             squatProofLink = mCurrentUser.getProofSquatLink();
             ohpLink = mCurrentUser.getProofOhpLink();
             deadliftLink = mCurrentUser.getProofDeadliftLink();
-        }
-        else {
-            gymName.setText("no data");
-            benchPress.setText("no data");
-            deadlift.setText("no data");
-            squat.setText("no data");
-            ohp.setText("no data");
         }
 
         if(mClaim){
@@ -514,8 +515,16 @@ public class ActivityProfile extends AppCompatActivity {
                 ohpProofBtn.setEnabled(true);
             }
 
+            if(mSubmitProgress){
+                saveChangesBtn.setVisibility(View.INVISIBLE);
+                saveChangesBtnProgress.setVisibility(View.VISIBLE);
+            }
+            else{
+                saveChangesBtn.setVisibility(View.VISIBLE);
+                saveChangesBtnProgress.setVisibility(View.INVISIBLE);
+            }
 
-            saveChangesBtn.setVisibility(View.VISIBLE);
+
             cancelClaim.setVisibility(View.VISIBLE);
             claimBtn.setVisibility(View.INVISIBLE);
             logout.setVisibility(View.INVISIBLE);
