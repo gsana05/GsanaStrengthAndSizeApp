@@ -2,15 +2,26 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class League {
 
     String leagueMasterId;
     ArrayList<String> leaguesCreated;
+    private HashMap<String, Boolean> flag;
 
-    public League(String leagueMasterId, ArrayList<String> leaguesCreated) {
+    public League(String leagueMasterId, ArrayList<String> leaguesCreated, HashMap<String, Boolean> flag) {
         this.leagueMasterId = leagueMasterId;
         this.leaguesCreated = leaguesCreated;
+        this.flag = flag;
+    }
+
+    public HashMap<String, Boolean> getFlag() {
+        return flag;
+    }
+
+    public void setFlag(HashMap<String, Boolean> flag) {
+        this.flag = flag;
     }
 
     public String getLeagueMasterId() {

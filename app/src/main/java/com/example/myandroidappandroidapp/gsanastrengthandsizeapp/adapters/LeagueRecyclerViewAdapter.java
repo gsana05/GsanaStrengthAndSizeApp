@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,8 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
     @Override
     public void onBindViewHolder(@NonNull final LeagueRecyclerViewAdapter.MyViewHolder holder, int position) {
+        final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+        final String userId = FirebaseAuth.getInstance().getUid();
         final CreatedLeague createdLeague = createdLeagues.get(position);
 
         Long i = createdLeague.getLeagueStartDate();
@@ -77,12 +80,22 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
 
-                    Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
-                    intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
-                    intent.putExtra("LeagueName", createdLeague.getLeagueName());
-                    v.getContext().startActivity(intent);
+                    DataModelResult<Boolean> isLeagueCreator = new DataModelResult<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data, Exception exception) {
+                            Intent intent = new Intent (v.getContext(), LeagueTableResults.class);
+                            intent.putExtra("IsLeagueCreator", data);
+                            intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                            intent.putExtra("LeagueName", createdLeague.getLeagueName());
+                            v.getContext().startActivity(intent);
+                        }
+                    };
+
+                    leagueModelSingleton.isUserLeagueCreator(userId, createdLeague.getLeaguePin(), isLeagueCreator);
+
+
 
               /*  AlertDialog.Builder builder;
                 builder = new AlertDialog.Builder(v.getContext());
@@ -110,8 +123,6 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             public void onClick(final View v) {
 
                 final String currentSelectedLeague = createdLeague.getLeaguePin();
-                final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                final String userId = FirebaseAuth.getInstance().getUid();
                 if(userId != null){
                     final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
                         @Override

@@ -95,6 +95,29 @@ public class LeagueModelSingleton {
         }
     }
 
+    public void isUserLeagueCreator(final String userId, final String leaguePin, final DataModelResult<Boolean> callback){
+        // check if the league being deleted is by the creator - if so not allowed to delete
+        getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot result = task.getResult();
+                    String userIdFromDatabase = null;
+                    if (result != null) {
+                        userIdFromDatabase = result.getString("userId");
+                    }
+
+                    if(userIdFromDatabase.equals(userId)){
+                        callback.onComplete(true, null); // they are the league creator
+                    }
+                    else{
+                        callback.onComplete(false, null); // they are NOT the league creator
+                    }
+
+                }
+            }
+        });
+    }
 
     public void leaveLeague(final String userId, final String leaveLeaguePin, final DataModelResult<Boolean> callback){
 
@@ -288,7 +311,7 @@ public class LeagueModelSingleton {
 
                     if (userId != null) {
 
-                        final League officialLeague = new League(userId, officialList);
+                        final League officialLeague = new League(userId, officialList, null);
 
                         getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -341,7 +364,8 @@ public class LeagueModelSingleton {
 
                 CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId); // all leagues
 
-                final League officialLeague = new League(userId, officialList); // user leagues
+                HashMap<String, Boolean> flags = new HashMap<>();
+                final League officialLeague = new League(userId, officialList, flags); // user leagues
 
                 if(userId != null){
 

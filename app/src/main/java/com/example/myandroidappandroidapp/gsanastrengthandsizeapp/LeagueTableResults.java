@@ -45,6 +45,7 @@ public class LeagueTableResults extends AppCompatActivity {
     private int filterId;
     private String leaguePin;
     private int mSortValue;
+    private Boolean IsLeagueCreator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,7 @@ public class LeagueTableResults extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
+        IsLeagueCreator = intent.getBooleanExtra("IsLeagueCreator", false);
         leaguePin = intent.getStringExtra("LeaguePin"); // passed into function
         String leagueName = intent.getStringExtra("LeagueName");
         nameOfLeague = this.findViewById(R.id.league_table_results_heading_view_league_name);
@@ -78,9 +80,6 @@ public class LeagueTableResults extends AppCompatActivity {
                 //alertDialog("filter");
             }
         });
-
-
-
     }
 
     @Override
@@ -159,7 +158,7 @@ public class LeagueTableResults extends AppCompatActivity {
                                 break;
                         }
 
-                        mAdapter = new LeagueTableRecyclerViewAdapter(data, type);
+                        mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator);
                         leagueTableRecyclerView.setAdapter(mAdapter);
                         Log.v("", "");
                     }

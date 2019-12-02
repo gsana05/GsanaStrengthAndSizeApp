@@ -42,10 +42,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     private TextView squat;
     private TextView ohp;
     private TextView total;
+    private Boolean isLeagueCreator;
 
-    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type) {
+    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator) {
         this.leagueList = leagueList;
         this.type = type;
+        this.isLeagueCreator = isLeagueCreator;
     }
 
     @NonNull
@@ -75,106 +77,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         bench.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 alertVideoDialog(user.getProofBenchLink(), v);
-
-          /*      final AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(v.getContext());
-                LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-                View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
-                final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
-                MediaController mediaController = new MediaController(v.getContext());
-                Uri myUri = Uri.parse(user.getProofBenchLink());
-
-                video.setVideoURI(myUri);
-                video.setMediaController(mediaController);
-                mediaController.setAnchorView(video);
-                //video.start();
-
-
-
-                builder.setView(inflatedLayout);
-                builder.setCancelable(false);
-                final AlertDialog alert = builder.create();
-                alert.show();
-
-                Button restart;
-                restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
-                restart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        video.seekTo(0);
-                        video.start();
-                    }
-                });
-
-                Button pause;
-                pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
-                pause.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        video.pause();
-                    }
-                });
-
-
-                Button play;
-                play = inflatedLayout.findViewById(R.id.custom_bench_video_play);
-                play.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        video.start();
-                    }
-                });
-
-                Button cancel;
-                cancel = inflatedLayout.findViewById(R.id.custom_bench_video_cancel);
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alert.dismiss();
-                    }
-                });*/
-
-
-
-                /*final TextView message = new TextView(v.getContext());
-
-                final SpannableString s =
-                        new SpannableString("https://www.youtube.com/watch?v=dxnC3Ik3q0U");
-                Linkify.addLinks(s, Linkify.WEB_URLS);
-                message.setText(s);
-                message.setMovementMethod(LinkMovementMethod.getInstance());
-
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("test")
-                        .setCancelable(false)
-                        .setView(message)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();*/
-
-                /*AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage(user.getProofBenchLink())
-                        .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();*/
             }
         });
 
@@ -227,6 +130,29 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         }
         Float totalScore = user.getBenchPress() + user.getDeadlift() + user.getSquat() + user.getOverHeadPress();
         total.setText(totalScore.toString());
+
+
+        // only do this if user created the league
+        if(isLeagueCreator){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(v.getContext());
+                    builder.setMessage("League Creator")
+                            .setCancelable(false)
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    //Creating dialog box
+                    AlertDialog alert = builder.create();
+                    //Setting the title manually
+                    alert.show();
+                }
+            });
+        }
     }
 
     @Override
