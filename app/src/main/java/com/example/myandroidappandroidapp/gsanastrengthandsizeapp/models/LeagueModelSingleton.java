@@ -296,7 +296,7 @@ public class LeagueModelSingleton {
       checkForDuplicates(leaguePin, kok);
     }
 
-    public void getFlags(final DataModelResult<ArrayList<String>> callback){
+    public void getFlags(final String pin, final DataModelResult<ArrayList<String>> callback){
         final String userId = FirebaseAuth.getInstance().getUid();
         if(userId != null){
 
@@ -317,7 +317,13 @@ public class LeagueModelSingleton {
                             }
 
                             if(list != null){
-                                callback.onComplete(list, null);
+                                if(list.contains(pin)){
+                                    //todo stop duplicate requests
+                                    callback.onComplete(null, null);
+                                }
+                                else{
+                                    callback.onComplete(list, null);
+                                }
                             }
                             else{
                                 callback.onComplete(new ArrayList<String>(), null);
@@ -360,6 +366,7 @@ public class LeagueModelSingleton {
                         @Override
                         public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
                             if(leagueFlags != null){
+
                                 leagueFlags.add(pin);
                                 ArrayList<String> officialListFlags = new ArrayList<>(leagueFlags);
 
@@ -389,7 +396,7 @@ public class LeagueModelSingleton {
                     };
 
 
-                    getFlags(flags);
+                    getFlags(pin, flags);
                 }
                 else {
                     callback.onComplete(false, null);
@@ -439,7 +446,7 @@ public class LeagueModelSingleton {
                             }
                         };
 
-                        getFlags(getFlags);
+                        getFlags(null, getFlags);
                     }
 
                 }
