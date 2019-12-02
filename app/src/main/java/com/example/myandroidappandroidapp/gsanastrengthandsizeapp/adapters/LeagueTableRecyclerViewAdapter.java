@@ -3,6 +3,7 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -20,6 +21,7 @@ import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,11 +46,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     private TextView ohp;
     private TextView total;
     private Boolean isLeagueCreator;
+    private ArrayList<String> flags;
+    private String leaguePin;
 
-    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator) {
+    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator, ArrayList<String> flags, String leaguePin) {
         this.leagueList = leagueList;
         this.type = type;
         this.isLeagueCreator = isLeagueCreator;
+        this.flags = flags;
+        this.leaguePin = leaguePin;
     }
 
     @NonNull
@@ -135,6 +141,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         ImageView flag = holder.itemView.findViewById(R.id.league_table_list_item_league_flag);
         flag.setVisibility(View.GONE);
 
+
+        // get the league created and flagged users in this league
+        if(flags != null && flags.contains(user.getPin())){
+            ConstraintLayout layout = holder.itemView.findViewById(R.id.league_table_list_item_constraint);
+            Drawable myIcon = holder.itemView.getContext().getApplicationContext().getResources().getDrawable(R.drawable.red_border);
+            layout.setBackground(myIcon);
+        }
+
         // only do this if user created the league
         if(isLeagueCreator){
 
@@ -156,7 +170,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     };
 
                     LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                    leagueModelSingleton.addFlagToLeague(user.getPin(), addFlag);
+                    leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag);
                 }
             });
 

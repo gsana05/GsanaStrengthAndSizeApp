@@ -350,8 +350,82 @@ public class LeagueModelSingleton {
         }
     }
 
+    public void getLeague(String pin, final DataModelResult<CreatedLeague> callback){
+        getDatabaseRefAllLeagues().document(pin).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-    public void addFlagToLeague(final String pin, final DataModelResult<Boolean> callback){
+                        if(task.isSuccessful()){
+
+                            DocumentSnapshot document = task.getResult();
+
+                            if(document != null){
+                                String leaguePinDatabase = (String) document.get("leaguePin");
+                                String leagueNameDatabase = (String) document.get("leagueName");
+                                Long leagueStartDate = (Long) document.get("leagueStartDate");
+                                String userIdDatabase = (String) document.get("userId");
+                                ArrayList<String> flags = (ArrayList<String>) document.get("flags");
+
+                                CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase, flags);
+
+                                callback.onComplete(createdLeague, null);
+                            }
+                            else{
+                                callback.onComplete(null, null);
+                            }
+                        }
+                        else{
+                            callback.onComplete(null, null);
+                        }
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                callback.onComplete(null, e);
+            }
+        });
+    }
+
+    public void addFlagToLeague(final String pin, final String userId, final DataModelResult<Boolean> callback){
+
+        DataModelResult<CreatedLeague> createdLeague = new DataModelResult<CreatedLeague>() {
+            @Override
+            public void onComplete(CreatedLeague data, Exception exception) {
+
+                if(data != null){
+                    ArrayList<String> flags = data.flags;
+                    if(flags.contains(userId)){
+                        callback.onComplete(false, null);
+                    }
+                    else{
+                        flags.add(userId);
+                        CreatedLeague newCreatedLeague = new CreatedLeague(data.leagueName, data.leaguePin, data.leagueStartDate, data.userId, flags);
+
+                        getDatabaseRefAllLeagues().document(pin).set(newCreatedLeague)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        callback.onComplete(true, null);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onComplete(false, null);
+                            }
+                        });
+                    }
+                }
+
+            }
+        };
+
+        getLeague(pin,createdLeague);
+    }
+
+
+   /* public void addFlagToLeague(final String pin, final DataModelResult<Boolean> callback){
 
         final String userId = FirebaseAuth.getInstance().getUid();
 
@@ -406,7 +480,7 @@ public class LeagueModelSingleton {
 
         getLeagueTable(data);
 
-    }
+    }*/
 
     public void addLeaguePinToUser(final String leaguePin, final DataModelResult<Boolean> callback){
 
@@ -483,7 +557,7 @@ public class LeagueModelSingleton {
                 officialList.add(leaguePin);
                 //todo write league data in a new collection
 
-                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId); // all leagues
+                CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId, new ArrayList<String>()); // all leagues
 
                 ArrayList<String> flags = new ArrayList<>();
                 final League officialLeague = new League(userId, officialList, flags); // user leagues
@@ -573,8 +647,9 @@ public class LeagueModelSingleton {
                                     String leagueNameDatabase = (String) map.get("leagueName");
                                     Long leagueStartDate = (Long) map.get("leagueStartDate");
                                     String userIdDatabase = (String) map.get("userId");
+                                    ArrayList<String> flags = (ArrayList<String>) map.get("flags");
 
-                                    CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase);
+                                    CreatedLeague createdLeague = new CreatedLeague(leagueNameDatabase, leaguePinDatabase, leagueStartDate, userIdDatabase, flags);
                                     list.add(createdLeague);
                                 }
                             }

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/white_border"
     android:paddingBottom="10dp"
+    android:id="@+id/league_table_list_item_constraint"
     >
 
     <androidx.constraintlayout.widget.Guideline

@@ -1,11 +1,13 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -310,6 +312,33 @@ public class UserLeagueTableModelSingleton {
     }
 
 
+    public void getAllFlaggedUsers(String leaguePin, final DataModelResult<ArrayList<String>> callback){
+        getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot result = task.getResult();
+                    if(result != null){
+                        ArrayList<String> list = null;
+                        Map hMap = result.getData();
+                        list = (ArrayList<String>) hMap.get("flags");
+                        if(list != null){
+                            callback.onComplete(list, null);
+                        }
+                        else{
+                            callback.onComplete(null, null);
+                        }
+                    }
+                    else{
+                        callback.onComplete(null, null);
+                    }
+                }
+                else{
+                    callback.onComplete(null, task.getException());
+                }
+            }
+        });
+    }
 
     //League pins and returns leagueMasterId // turn that into a listener if you live update to the leagues for new players
     public void getUsersWithTheSamePin(final String leaguePin, final DataModelResult<ArrayList<String>> callback){

@@ -46,6 +46,7 @@ public class LeagueTableResults extends AppCompatActivity {
     private String leaguePin;
     private int mSortValue;
     private Boolean IsLeagueCreator;
+    private int type = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,17 +121,17 @@ public class LeagueTableResults extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String id = FirebaseAuth.getInstance().getUid();
+        final String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
             leagueTableRecyclerView = this.findViewById(R.id.league_table_results_main_view_recycler_view);
             layoutManager = new LinearLayoutManager(this);
             leagueTableRecyclerView.setLayoutManager(layoutManager);
             usersCallback = new DataModelResult<ArrayList<User>>() {
                 @Override
-                public void onComplete(ArrayList<User> data, Exception exception) {
+                public void onComplete(final ArrayList<User> data, Exception exception) {
                     if(data != null){
                         // sort data by total
-                        int type = -1;
+
                         switch(mSortValue){
                             case UserLeagueTableModelSingleton.benchPress:
                                 Log.v("", "");
@@ -158,9 +159,17 @@ public class LeagueTableResults extends AppCompatActivity {
                                 break;
                         }
 
-                        mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator);
-                        leagueTableRecyclerView.setAdapter(mAdapter);
-                        Log.v("", "");
+                        DataModelResult<ArrayList<String>> leagueFlags = new DataModelResult<ArrayList<String>>() {
+                            @Override
+                            public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
+                                mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator, leagueFlags, leaguePin);
+                                leagueTableRecyclerView.setAdapter(mAdapter);
+                                Log.v("", "");
+                            }
+                        };
+
+                        userLeagueTableModelSingleton.getAllFlaggedUsers(leaguePin, leagueFlags);
+
                     }
                     else {
                         Log.v("", "");
