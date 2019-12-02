@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,9 +132,34 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         Float totalScore = user.getBenchPress() + user.getDeadlift() + user.getSquat() + user.getOverHeadPress();
         total.setText(totalScore.toString());
 
+        ImageView flag = holder.itemView.findViewById(R.id.league_table_list_item_league_flag);
+        flag.setVisibility(View.GONE);
 
         // only do this if user created the league
         if(isLeagueCreator){
+
+            flag.setVisibility(View.VISIBLE);
+            flag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data, Exception exception) {
+                            if(data){
+                                Log.v("", ""); // flagged success
+                            }
+                            else{
+                                Log.v("", "");
+                            }
+                        }
+                    };
+
+                    LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                    leagueModelSingleton.addFlagToLeague(user.getPin(), addFlag);
+                }
+            });
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,7 +223,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             final AlertDialog alert = builder.create();
             alert.show();
 
-            Button restart;
+            /*Button restart;
             restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
             restart.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -205,7 +231,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     video.seekTo(0);
                     video.start();
                 }
-            });
+            });*/
 
             Button pause;
             pause = inflatedLayout.findViewById(R.id.custom_bench_video_pause);

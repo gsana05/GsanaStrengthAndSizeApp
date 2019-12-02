@@ -296,6 +296,111 @@ public class LeagueModelSingleton {
       checkForDuplicates(leaguePin, kok);
     }
 
+    public void getFlags(final DataModelResult<ArrayList<String>> callback){
+        final String userId = FirebaseAuth.getInstance().getUid();
+        if(userId != null){
+
+            getDatabaseRef().document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()){
+                        DocumentSnapshot snapshot = task.getResult();
+                        if(snapshot != null && snapshot.exists()){
+                            /*Date leagueStartDate = snapshot.getDate("leagueCreatedDate");
+                            String leagueName = snapshot.getString("leagueName");
+                            String leaguePin = snapshot.getString("leaguePin");*/
+
+                            ArrayList<String> list = null;
+                            Map hMap = snapshot.getData();
+                            if (hMap != null) {
+                                list = (ArrayList<String>) hMap.get("flag");
+                            }
+
+                            if(list != null){
+                                callback.onComplete(list, null);
+                            }
+                            else{
+                                callback.onComplete(new ArrayList<String>(), null);
+                            }
+
+                            //League league = new League(userId, list);
+
+                        }
+                        else {
+                            callback.onComplete(new ArrayList(), task.getException());
+                        }
+                    }
+                    else {
+                        callback.onComplete(null, task.getException());
+                    }
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callback.onComplete(null, null);
+                }
+            });
+        }
+    }
+
+
+    public void addFlagToLeague(final String pin, final DataModelResult<Boolean> callback){
+
+        final String userId = FirebaseAuth.getInstance().getUid();
+
+
+        DataModelResult<ArrayList<String>> data = new DataModelResult<ArrayList<String>>() {
+            @Override
+            public void onComplete(final ArrayList<String> officialList, Exception exception) {
+
+                if(officialList != null){
+
+                    DataModelResult<ArrayList<String>> flags = new DataModelResult<ArrayList<String>>() {
+                        @Override
+                        public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
+                            if(leagueFlags != null){
+                                leagueFlags.add(pin);
+                                ArrayList<String> officialListFlags = new ArrayList<>(leagueFlags);
+
+                                if (userId != null) {
+
+                                    final League officialLeague = new League(userId, officialList, officialListFlags);
+
+                                    getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if(task.isSuccessful()){
+                                                callback.onComplete(true, null);
+                                            }
+                                            else {
+                                                callback.onComplete(false, task.getException());
+                                            }
+
+                                        }
+                                    });
+                                }
+                            }
+                            else{
+                                callback.onComplete(false, null);
+                            }
+                        }
+                    };
+
+
+                    getFlags(flags);
+                }
+                else {
+                    callback.onComplete(false, null);
+                }
+            }
+        };
+
+        getLeagueTable(data);
+
+    }
+
     public void addLeaguePinToUser(final String leaguePin, final DataModelResult<Boolean> callback){
 
         final String userId = FirebaseAuth.getInstance().getUid();
@@ -307,25 +412,34 @@ public class LeagueModelSingleton {
 
                 if(data != null){
                     data.add(leaguePin);
-                    ArrayList<String> officialList = new ArrayList<>(data);
+                    final ArrayList<String> officialList = new ArrayList<>(data);
 
                     if (userId != null) {
 
-                        final League officialLeague = new League(userId, officialList, null);
 
-                        getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                        DataModelResult<ArrayList<String>> getFlags = new DataModelResult<ArrayList<String>>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                            public void onComplete(ArrayList<String> data, Exception exception) {
+                                final League officialLeague = new League(userId, officialList, data);
 
-                                if(task.isSuccessful()){
-                                    callback.onComplete(true, null);
-                                }
-                                else {
-                                    callback.onComplete(false, task.getException());
-                                }
+                                getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
 
+                                        if(task.isSuccessful()){
+                                            callback.onComplete(true, null);
+                                        }
+                                        else {
+                                            callback.onComplete(false, task.getException());
+                                        }
+
+                                    }
+                                });
                             }
-                        });
+                        };
+
+                        getFlags(getFlags);
                     }
 
                 }
@@ -364,7 +478,7 @@ public class LeagueModelSingleton {
 
                 CreatedLeague createdLeague = new CreatedLeague(leagueName, leaguePin, leagueStartDate.getTime(), userId); // all leagues
 
-                HashMap<String, Boolean> flags = new HashMap<>();
+                ArrayList<String> flags = new ArrayList<>();
                 final League officialLeague = new League(userId, officialList, flags); // user leagues
 
                 if(userId != null){

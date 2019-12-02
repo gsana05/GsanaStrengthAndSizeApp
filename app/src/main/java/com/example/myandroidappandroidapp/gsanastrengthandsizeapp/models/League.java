@@ -8,19 +8,19 @@ public class League {
 
     String leagueMasterId;
     ArrayList<String> leaguesCreated;
-    private HashMap<String, Boolean> flag;
+    private ArrayList<String> flag;
 
-    public League(String leagueMasterId, ArrayList<String> leaguesCreated, HashMap<String, Boolean> flag) {
+    public League(String leagueMasterId, ArrayList<String> leaguesCreated, ArrayList<String> flag) {
         this.leagueMasterId = leagueMasterId;
         this.leaguesCreated = leaguesCreated;
         this.flag = flag;
     }
 
-    public HashMap<String, Boolean> getFlag() {
+    public ArrayList<String> getFlag() {
         return flag;
     }
 
-    public void setFlag(HashMap<String, Boolean> flag) {
+    public void setFlag(ArrayList<String> flag) {
         this.flag = flag;
     }
 
