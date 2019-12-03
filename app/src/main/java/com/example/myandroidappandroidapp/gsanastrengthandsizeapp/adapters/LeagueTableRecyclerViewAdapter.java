@@ -147,7 +147,6 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
         // get the league created and flagged users in this league
         if(flags != null && flags.contains(user.getPin())){
-            unflag.setVisibility(View.VISIBLE);
             ConstraintLayout layout = holder.itemView.findViewById(R.id.league_table_list_item_constraint);
             Drawable myIcon = holder.itemView.getContext().getApplicationContext().getResources().getDrawable(R.drawable.red_border);
             layout.setBackground(myIcon);
@@ -156,43 +155,51 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         // only do this if user created the league
         if(isLeagueCreator){
 
-            flag.setVisibility(View.VISIBLE);
-            flag.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(final View v) {
+            if(flags != null && flags.contains(user.getPin())){
+                unflag.setVisibility(View.VISIBLE);
 
-                    DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
-                        @Override
-                        public void onComplete(Boolean data, Exception exception) {
-                            if(data){
-                                Log.v("", ""); // flagged success
-                                final AlertDialog.Builder builder;
-                                builder = new AlertDialog.Builder(v.getContext());
-                                builder.setMessage("Flagged User")
-                                        .setCancelable(false)
-                                        .setPositiveButton("close", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                                ((LeagueTableResults)v.getContext()).finish();
-                                            }
-                                        });
-                                //Creating dialog box
-                                AlertDialog alert = builder.create();
-                                //Setting the title manually
-                                alert.show();
+            }
+            else{
+                flag.setVisibility(View.VISIBLE);
+                flag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+
+                        DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean data, Exception exception) {
+                                if(data){
+                                    Log.v("", ""); // flagged success
+                                    final AlertDialog.Builder builder;
+                                    builder = new AlertDialog.Builder(v.getContext());
+                                    builder.setMessage("Flagged User")
+                                            .setCancelable(false)
+                                            .setPositiveButton("close", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.dismiss();
+                                                    ((LeagueTableResults)v.getContext()).finish();
+                                                }
+                                            });
+                                    //Creating dialog box
+                                    AlertDialog alert = builder.create();
+                                    //Setting the title manually
+                                    alert.show();
+                                }
+                                else{
+                                    Log.v("", "");
+                                }
                             }
-                            else{
-                                Log.v("", "");
-                            }
-                        }
-                    };
+                        };
 
-                    LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                    leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag);
-                }
-            });
+                        LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                        leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag);
+                    }
+                });
+            }
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+
+           /* holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final AlertDialog.Builder builder;
@@ -209,7 +216,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     //Setting the title manually
                     alert.show();
                 }
-            });
+            });*/
         }
     }
 
