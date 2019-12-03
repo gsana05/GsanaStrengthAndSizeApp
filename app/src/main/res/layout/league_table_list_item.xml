@@ -52,7 +52,20 @@
         app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
         app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_delete_24px"
+        android:tint="@color/ssGreen"
+        android:src="@drawable/ic_flag_24px"
+        />
+
+    <ImageView
+        android:id="@+id/league_table_list_item_league_unflag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:tint="@color/ssBlack"
+        android:src="@drawable/ic_flag_24px"
         />
 
     <TextView

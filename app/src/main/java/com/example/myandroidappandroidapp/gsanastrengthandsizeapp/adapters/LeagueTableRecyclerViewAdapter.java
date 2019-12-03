@@ -139,12 +139,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         Float totalScore = user.getBenchPress() + user.getDeadlift() + user.getSquat() + user.getOverHeadPress();
         total.setText(totalScore.toString());
 
+        ImageView unflag = holder.itemView.findViewById(R.id.league_table_list_item_league_unflag);
+        unflag.setVisibility(View.GONE);
         ImageView flag = holder.itemView.findViewById(R.id.league_table_list_item_league_flag);
         flag.setVisibility(View.GONE);
 
 
         // get the league created and flagged users in this league
         if(flags != null && flags.contains(user.getPin())){
+            unflag.setVisibility(View.VISIBLE);
             ConstraintLayout layout = holder.itemView.findViewById(R.id.league_table_list_item_constraint);
             Drawable myIcon = holder.itemView.getContext().getApplicationContext().getResources().getDrawable(R.drawable.red_border);
             layout.setBackground(myIcon);
