@@ -25,6 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.LeagueTableResults;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
@@ -65,7 +66,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
         final User user = leagueList.get(position);
 
         int pos = position + 1;
@@ -155,13 +156,27 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             flag.setVisibility(View.VISIBLE);
             flag.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
 
                     DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
                         @Override
                         public void onComplete(Boolean data, Exception exception) {
                             if(data){
                                 Log.v("", ""); // flagged success
+                                final AlertDialog.Builder builder;
+                                builder = new AlertDialog.Builder(v.getContext());
+                                builder.setMessage("Flagged User")
+                                        .setCancelable(false)
+                                        .setPositiveButton("close", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                                ((LeagueTableResults)v.getContext()).finish();
+                                            }
+                                        });
+                                //Creating dialog box
+                                AlertDialog alert = builder.create();
+                                //Setting the title manually
+                                alert.show();
                             }
                             else{
                                 Log.v("", "");
