@@ -124,7 +124,7 @@ public class LeagueModelSingleton {
         DataModelResult<ArrayList<String>> callbackLeagues = new DataModelResult<ArrayList<String>>() {
             @Override
             public void onComplete(final ArrayList<String> data, Exception exception) {
-                if(data != null){
+                if(data != null){ // data = list of createdLeagues ids
 
                     // check if the league being deleted is by the creator - if so not allowed to delete
                     getDatabaseRefAllLeagues().document(leaveLeaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -134,10 +134,23 @@ public class LeagueModelSingleton {
                                 DocumentSnapshot result = task.getResult();
                                 String userIdFromDatabase = null;
                                 if (result != null) {
-                                    userIdFromDatabase = result.getString("userId");
+                                    userIdFromDatabase = result.getString("userId"); //id of who created this league
                                 }
+
+                                // check if you are the league creator
+                                if( userIdFromDatabase != null && userIdFromDatabase.equals(userId)){
+                                    // you created the league and you can not leave
+                                    callback.onComplete(false, null);
+                                }
+                                else{
+                                    // if you are not the league creator and want to leave you may
+                                    //data.remove(leaveLeaguePin);
+                                    updateLeagueMembers(userId, data, leaveLeaguePin, callback);
+                                }
+
+
                                 // allow the league creator to leave the league if only they are in it
-                                if(data.size() > 2){ // id there are more than you the creator in the league, you can not leave
+                              /*  if(data.size() > 2){ // id there are more than you the creator in the league, you can not leave
                                     if (userIdFromDatabase != null) {
                                         if(userIdFromDatabase.equals(userId)){ // you can not leave a league you created
                                             callback.onComplete(false, null);
@@ -151,7 +164,7 @@ public class LeagueModelSingleton {
                                 else { // only one user left in league and that is the league creator
                                     //data.remove(leaveLeaguePin); // you can leave a league that you joined
                                     updateLeagueMembers(userId, data, true, callback);
-                                }
+                                }*/
                             }
                         }
                     });
@@ -162,9 +175,45 @@ public class LeagueModelSingleton {
         getLeagueTable(callbackLeagues);
     }
 
-    public void updateLeagueMembers(String userId, final ArrayList<String> data, Boolean lastMember, final DataModelResult<Boolean> callback){
+    public void updateLeagueMembers(String userId, final ArrayList<String> data, String leaguePin,  final DataModelResult<Boolean> callback){
+
+        if(data.size() < 2){ // if there is only 1 league this user is part and that is about to be deleted, just delete the whole document
+            getDatabaseRef().document(userId).delete() /// problem delete the whole node, just delete the one league in the node
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // delete document from userLeagueTables
+                            callback.onComplete(true, null);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    callback.onComplete(false, e);
+                }
+            });
+        }
+        else{
+            data.remove(leaguePin);
+            getDatabaseRef().document(userId).update("leaguesCreated",data )
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                            callback.onComplete(true, null);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.w(TAG, "Error updating document", e);
+                    callback.onComplete(false, e);
+                }
+            });
+        }
+
+
+
         // write data into database
-        if(!lastMember){
+    /*    if(!lastMember){
             getDatabaseRef().document(userId).update("leaguesCreated",data )
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -181,7 +230,8 @@ public class LeagueModelSingleton {
             });
         }
         else { // if the last user in league delete document
-            getDatabaseRef().document(userId).delete()
+
+            getDatabaseRef().document(userId).delete() /// problem delete the whole node, just delete the one league in the node
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -200,7 +250,7 @@ public class LeagueModelSingleton {
                     callback.onComplete(false, e);
                 }
             });
-        }
+        }*/
     }
 
     private void deleteLeague(String leaguePin, final DataModelResult<Boolean> callback){

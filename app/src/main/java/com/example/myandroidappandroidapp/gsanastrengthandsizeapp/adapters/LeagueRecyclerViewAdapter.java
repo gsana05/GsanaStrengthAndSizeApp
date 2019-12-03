@@ -74,6 +74,7 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
 
         if(isSettings){ //leave a league
             leaveLeague.setVisibility(View.VISIBLE);
+            // you need to get
         }
         else { // when in the main activity do this
             leaveLeague.setVisibility(View.GONE);
