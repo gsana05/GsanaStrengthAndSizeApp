@@ -388,6 +388,43 @@ public class LeagueModelSingleton {
         });
     }
 
+    public void deleteFlagToLeague(final String pin, final String userId, final DataModelResult<Boolean> callback){
+        DataModelResult<CreatedLeague> createdLeague = new DataModelResult<CreatedLeague>() {
+            @Override
+            public void onComplete(CreatedLeague data, Exception exception) {
+
+                if(data != null){
+                    ArrayList<String> flags = data.flags;
+                    if(flags.contains(userId)){
+                        flags.remove(userId);
+                        CreatedLeague newCreatedLeague = new CreatedLeague(data.leagueName, data.leaguePin, data.leagueStartDate, data.userId, flags);
+
+                        getDatabaseRefAllLeagues().document(pin).set(newCreatedLeague)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        callback.onComplete(true, null);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onComplete(false, null);
+                            }
+                        });
+
+                    }
+                    else{
+                        // this user is is not in the flagged list
+                        callback.onComplete(false, null);
+                    }
+                }
+
+            }
+        };
+
+        getLeague(pin,createdLeague);
+    }
+
     public void addFlagToLeague(final String pin, final String userId, final DataModelResult<Boolean> callback){
 
         DataModelResult<CreatedLeague> createdLeague = new DataModelResult<CreatedLeague>() {

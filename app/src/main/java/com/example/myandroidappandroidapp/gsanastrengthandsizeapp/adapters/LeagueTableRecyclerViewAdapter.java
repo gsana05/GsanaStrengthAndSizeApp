@@ -67,6 +67,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
     @Override
     public void onBindViewHolder(@NonNull final LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
+        final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
         final User user = leagueList.get(position);
 
         int pos = position + 1;
@@ -157,6 +158,27 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
             if(flags != null && flags.contains(user.getPin())){
                 unflag.setVisibility(View.VISIBLE);
+                unflag.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+
+                        DataModelResult<Boolean> removeFlag = new DataModelResult<Boolean>() {
+                            @Override
+                            public void onComplete(Boolean data, Exception exception) {
+                                if(data){
+                                    alertDialog("User flag has been removed", v);
+                                }
+                                else{
+                                    alertDialog("Unable to remove flag", v);
+                                }
+
+                            }
+                        };
+
+                        leagueModelSingleton.deleteFlagToLeague(leaguePin,user.getPin() ,removeFlag);
+
+                    }
+                });
 
             }
             else{
@@ -170,28 +192,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             public void onComplete(Boolean data, Exception exception) {
                                 if(data){
                                     Log.v("", ""); // flagged success
-                                    final AlertDialog.Builder builder;
-                                    builder = new AlertDialog.Builder(v.getContext());
-                                    builder.setMessage("Flagged User")
-                                            .setCancelable(false)
-                                            .setPositiveButton("close", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.dismiss();
-                                                    ((LeagueTableResults)v.getContext()).finish();
-                                                }
-                                            });
-                                    //Creating dialog box
-                                    AlertDialog alert = builder.create();
-                                    //Setting the title manually
-                                    alert.show();
+                                    alertDialog("User has been flagged", v);
                                 }
                                 else{
-                                    Log.v("", "");
+                                    alertDialog("User unable to be flagged", v);
                                 }
                             }
                         };
 
-                        LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
                         leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag);
                     }
                 });
@@ -238,6 +246,23 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             total = itemView.findViewById(R.id.league_table_list_item_total_result);
 
         }
+    }
+
+    public void alertDialog(String comment, final View v){
+        final AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(v.getContext());
+        builder.setMessage(comment)
+                .setCancelable(false)
+                .setPositiveButton("close", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                        ((LeagueTableResults)v.getContext()).finish();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
     }
 
     public void alertVideoDialog(String link, View v){
