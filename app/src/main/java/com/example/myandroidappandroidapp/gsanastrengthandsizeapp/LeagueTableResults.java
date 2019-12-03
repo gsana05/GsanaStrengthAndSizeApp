@@ -1,6 +1,5 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,11 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,8 +28,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import static java.security.AccessController.getContext;
-
 public class LeagueTableResults extends AppCompatActivity {
 
     private TextView nameOfLeague;
@@ -47,6 +42,8 @@ public class LeagueTableResults extends AppCompatActivity {
     private int mSortValue;
     private Boolean IsLeagueCreator;
     private int type = -1;
+    DataModelResult<ArrayList<String>> leagueFlagsList;
+    ArrayList<DataModelResult<ArrayList<String>>> flagCallbacks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,16 +156,17 @@ public class LeagueTableResults extends AppCompatActivity {
                                 break;
                         }
 
-                        DataModelResult<ArrayList<String>> leagueFlags = new DataModelResult<ArrayList<String>>() {
+                        leagueFlagsList = new DataModelResult<ArrayList<String>>() {
                             @Override
                             public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
+                                flagCallbacks.add(leagueFlagsList);
                                 mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator, leagueFlags, leaguePin);
                                 leagueTableRecyclerView.setAdapter(mAdapter);
                                 Log.v("", "");
                             }
                         };
 
-                        userLeagueTableModelSingleton.getAllFlaggedUsers(leaguePin, leagueFlags);
+                        userLeagueTableModelSingleton.addFlagListener(id,leaguePin ,leagueFlagsList);
 
                     }
                     else {
@@ -206,7 +204,12 @@ public class LeagueTableResults extends AppCompatActivity {
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
             //remove listener
+            flagCallbacks.size();
+            for(DataModelResult<ArrayList<String>> flagListener : flagCallbacks){
+                userLeagueTableModelSingleton.removeFlagListener(id, flagListener);
+            }
             userLeagueTableModelSingleton.removeLeagueTableUserProfileListener(id, usersCallback);
+
         }
     }
 }

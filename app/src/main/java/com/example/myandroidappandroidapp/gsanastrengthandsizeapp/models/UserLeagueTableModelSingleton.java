@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -312,32 +314,116 @@ public class UserLeagueTableModelSingleton {
     }
 
 
-    public void getAllFlaggedUsers(String leaguePin, final DataModelResult<ArrayList<String>> callback){
-        getDatabaseRefAllLeagues().document(leaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+   /* public void addFlagListener(String leaguePin, final DataModelResult<ArrayList<String>> callback){
+        ListenerRegistration ref = getDatabaseRefAllLeagues().document(leaguePin).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot result = task.getResult();
-                    if(result != null){
-                        ArrayList<String> list = null;
-                        Map hMap = result.getData();
-                        list = (ArrayList<String>) hMap.get("flags");
-                        if(list != null){
-                            callback.onComplete(list, null);
-                        }
-                        else{
-                            callback.onComplete(null, null);
-                        }
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if(snapshot != null && snapshot.exists()){
+                    ArrayList<String> list = null;
+                    list = (ArrayList<String>) snapshot.get("flags");
+                    if(list != null){
+                        callback.onComplete(list, null);
                     }
                     else{
                         callback.onComplete(null, null);
                     }
                 }
                 else{
-                    callback.onComplete(null, task.getException());
+                    callback.onComplete(null, e);
                 }
             }
         });
+        mRefsFlags.put(leaguePin, ref);
+    }*/
+
+    private HashMap<String, ListenerRegistration> mRefsFlags = new HashMap<>();
+    private HashMap<String, ArrayList<DataModelResult<ArrayList<String>>>> mProfileCallbacksFalgs = new HashMap<>();
+    private HashMap<String, ArrayList<String>> mCachedProfileFlags = new HashMap<>();
+
+    // returns all the flags for that league
+    public void addFlagListener(final String userId, String pin, final DataModelResult<ArrayList<String>> callback){
+
+        ArrayList<DataModelResult<ArrayList<String>>> callbacks = null;
+
+        if(mProfileCallbacksFalgs.containsKey(userId)){ // does the user already have callbacks
+            if(mProfileCallbacksFalgs.get(userId) != null ){ // check if user callbacks is not null
+                callbacks = mProfileCallbacksFalgs.get(userId); // gets the arrayList of callbacks and sets local variable
+            }
+        }
+        else {
+            callbacks = new ArrayList<>(); // first time getting user data aka has no callbacks
+        }
+
+        if(callbacks != null){
+            if(!callbacks.contains(callback)){ // if it does not contain this callback then add it
+                callbacks.add(callback);
+                mProfileCallbacksFalgs.put(userId, callbacks);
+            }
+        }
+
+
+        if(mCachedProfileFlags.containsKey(userId)){ // if user data has been cached return the cached values do NOT go to database
+            ArrayList<String> cacheList = mCachedProfileFlags.get(userId);
+            callback.onComplete(cacheList, null);
+        }
+
+        if(!mRefsFlags.containsKey(userId)){
+            ListenerRegistration ref = getDatabaseRefAllLeagues().document(pin).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+
+                    ArrayList<DataModelResult<ArrayList<String>>> callbackList = mProfileCallbacksFalgs.get(userId);
+
+                    if(snapshot != null && snapshot.exists()){
+
+                        ArrayList<String> list = null;
+                        Map hMap = snapshot.getData();
+                        if (hMap != null) {
+                            list = (ArrayList<String>) hMap.get("flags");
+                        }
+
+                        if(list != null){
+                            mCachedProfileFlags.put(userId, list); // cache data
+                        }
+
+                        // return the same user data the same amount of times as the length of callBackList
+                        if(callbackList != null){
+                            for(DataModelResult<ArrayList<String>> i : callbackList){
+                                callback.onComplete(list, null);
+                            }
+                        }
+
+                    }
+                    else {
+                        callback.onComplete(new ArrayList<String>(), null);
+                    }
+                }
+            });
+            mRefsFlags.put(userId, ref);
+        }
+    }
+
+    public void removeFlagListener(final String userId, final DataModelResult<ArrayList<String>> callback){
+        // remove firebase listener
+        ArrayList<DataModelResult<ArrayList<String>>> callbackList =  mProfileCallbacksFalgs.get(userId);
+
+        if(callbackList != null && callbackList.contains(callback)){
+            callbackList.remove(callback); // remove all the callbacks one by one
+
+            if(callbackList.size() == 0){ // when they are no callbacks left, its time to remove the firebase listener
+                mProfileCallbacksFalgs.remove(userId); // remove the key from hashmap so there is no reference to it
+
+                // remove firebase listener
+                ListenerRegistration lRef = mRefsFlags.get(userId);
+                if(lRef != null){
+                    lRef.remove();
+                    mRefsFlags.remove(userId);
+                }
+            }
+            else {
+                mProfileCallbacksFalgs.put(userId, callbackList);  // put the callback list back into list without the one just removed
+            }
+        }
     }
 
     //League pins and returns leagueMasterId // turn that into a listener if you live update to the leagues for new players

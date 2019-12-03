@@ -256,7 +256,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                 .setPositiveButton("close", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        ((LeagueTableResults)v.getContext()).finish();
+                        //((LeagueTableResults)v.getContext()).finish();
                     }
                 });
         //Creating dialog box
