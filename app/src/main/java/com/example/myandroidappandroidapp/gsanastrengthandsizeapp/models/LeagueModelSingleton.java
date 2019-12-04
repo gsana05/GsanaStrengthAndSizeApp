@@ -53,6 +53,8 @@ public class LeagueModelSingleton {
         return ourInstance;
     }
 
+    UserLeagueTableModelSingleton userLeagueTableModelSingleton = UserLeagueTableModelSingleton.getInstance();
+
     private void getLeagueTable(final DataModelResult<ArrayList<String>> callback){
         final String userId = FirebaseAuth.getInstance().getUid();
         if(userId != null){
@@ -123,8 +125,8 @@ public class LeagueModelSingleton {
 
         DataModelResult<ArrayList<String>> callbackLeagues = new DataModelResult<ArrayList<String>>() {
             @Override
-            public void onComplete(final ArrayList<String> data, Exception exception) {
-                if(data != null){ // data = list of createdLeagues ids
+            public void onComplete(final ArrayList<String> leaguesYouParticipateIn, Exception exception) {
+                if(leaguesYouParticipateIn != null){ // data = list of createdLeagues ids
 
                     // check if the league being deleted is by the creator - if so not allowed to delete
                     getDatabaseRefAllLeagues().document(leaveLeaguePin).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -139,13 +141,48 @@ public class LeagueModelSingleton {
 
                                 // check if you are the league creator
                                 if( userIdFromDatabase != null && userIdFromDatabase.equals(userId)){
-                                    // you created the league and you can not leave
-                                    callback.onComplete(false, null);
+
+
+                                    DataModelResult<League> league = new DataModelResult<League>() {
+                                        @Override
+                                        public void onComplete(League data, Exception exception) {
+                                            if(data != null){
+                                                ArrayList<String> leaguesYouCreated = data.getOnlyLeaguesYouCreated();
+                                                if(leaguesYouCreated.contains(leaveLeaguePin)){
+                                                    // this user created this league with this pin
+                                                    final DataModelResult<ArrayList<String>> getPinsForThisLeague = new DataModelResult<ArrayList<String>>() {
+                                                        @Override
+                                                        public void onComplete(ArrayList<String> pinsInThisLeague, Exception exception) {
+                                                            if(pinsInThisLeague != null){
+                                                                if(pinsInThisLeague.size() > 1){
+                                                                    // you created the league and you can not leave as you have more than yourself in the league
+                                                                    callback.onComplete(false, null);
+                                                                }
+                                                                else{
+                                                                    // you are the only user left so you may delete the league
+                                                                    Log.v("", "");
+                                                                    updateLeagueMembers(userId, leaguesYouParticipateIn, pinsInThisLeague, leaveLeaguePin, callback);
+                                                                }
+                                                            }
+                                                            else {
+                                                                // you created the league and you can not leave
+                                                                callback.onComplete(false, null);
+                                                            }
+                                                        }
+                                                    };
+                                                    userLeagueTableModelSingleton.getUsersWithTheSamePin(leaveLeaguePin, getPinsForThisLeague);
+                                                }
+                                            }
+                                        }
+                                    };
+
+                                    onlyGetLeaguesThisUserCreated(userId, league);
+
                                 }
                                 else{
                                     // if you are not the league creator and want to leave you may
                                     //data.remove(leaveLeaguePin);
-                                    updateLeagueMembers(userId, data, leaveLeaguePin, callback);
+                                    updateLeagueMembers(userId, leaguesYouParticipateIn, null, leaveLeaguePin, callback);
                                 }
 
 
@@ -175,26 +212,67 @@ public class LeagueModelSingleton {
         getLeagueTable(callbackLeagues);
     }
 
-    public void updateLeagueMembers(String userId, final ArrayList<String> data, String leaguePin,  final DataModelResult<Boolean> callback){
+    public void updateLeagueMembers(final String userId, final ArrayList<String> leaguesYouParticipateIn, final ArrayList<String> pinsInThisLeague , final String leaguePin, final DataModelResult<Boolean> callback){
+        // if there is only 1 league and 1 pin in that league this user is part and that is about to be deleted, just delete the whole document
 
-        if(data.size() < 2){ // if there is only 1 league this user is part and that is about to be deleted, just delete the whole document
-            getDatabaseRef().document(userId).delete() /// problem delete the whole node, just delete the one league in the node
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // delete document from userLeagueTables
-                            callback.onComplete(true, null);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    callback.onComplete(false, e);
-                }
-            });
-        }
-        else{
-            data.remove(leaguePin);
-            getDatabaseRef().document(userId).update("leaguesCreated",data )
+            if(leaguesYouParticipateIn.size() < 2 && pinsInThisLeague != null && pinsInThisLeague.size() < 2){
+                getDatabaseRef().document(userId).delete() /// problem delete the whole node, just delete the one league in the node
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                getDatabaseRefAllLeagues().document(leaguePin).delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                // delete document from userLeagueTables and delete league from all leagues
+                                                callback.onComplete(true, null);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        callback.onComplete(false, null);
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false, e);
+                    }
+                });
+            }
+            else if (pinsInThisLeague != null && pinsInThisLeague.size() < 2){
+                getDatabaseRefAllLeagues().document(leaguePin).delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // delete document from userLeagueTables and delete league from all leagues
+                                leaguesYouParticipateIn.remove(leaguePin);
+                                getDatabaseRef().document(userId).update("leaguesCreated",leaguesYouParticipateIn )
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                callback.onComplete(true, null);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                        callback.onComplete(false, e);
+                                    }
+                                });
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        callback.onComplete(false, null);
+                    }
+                });
+            }
+            else{ // you are not the league creator
+            leaguesYouParticipateIn.remove(leaguePin);
+            getDatabaseRef().document(userId).update("leaguesCreated",leaguesYouParticipateIn )
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -209,9 +287,6 @@ public class LeagueModelSingleton {
                 }
             });
         }
-
-
-
         // write data into database
     /*    if(!lastMember){
             getDatabaseRef().document(userId).update("leaguesCreated",data )
