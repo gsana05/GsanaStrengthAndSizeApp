@@ -153,7 +153,7 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
                                 Log.v("", "");
                                 AlertDialog.Builder builder;
                                 builder = new AlertDialog.Builder(v.getContext());
-                                builder.setMessage("You can not delete a league you created")
+                                builder.setMessage("You can not delete a league you created until you are the only user left in the league")
                                         .setCancelable(false)
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {

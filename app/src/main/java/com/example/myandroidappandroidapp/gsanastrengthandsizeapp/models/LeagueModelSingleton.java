@@ -215,6 +215,7 @@ public class LeagueModelSingleton {
     public void updateLeagueMembers(final String userId, final ArrayList<String> leaguesYouParticipateIn, final ArrayList<String> pinsInThisLeague , final String leaguePin, final DataModelResult<Boolean> callback){
         // if there is only 1 league and 1 pin in that league this user is part and that is about to be deleted, just delete the whole document
 
+        // created the league
             if(leaguesYouParticipateIn.size() < 2 && pinsInThisLeague != null && pinsInThisLeague.size() < 2){
                 getDatabaseRef().document(userId).delete() /// problem delete the whole node, just delete the one league in the node
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -240,7 +241,7 @@ public class LeagueModelSingleton {
                         callback.onComplete(false, e);
                     }
                 });
-            }
+            }// created the league
             else if (pinsInThisLeague != null && pinsInThisLeague.size() < 2){
                 getDatabaseRefAllLeagues().document(leaguePin).delete()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -252,8 +253,25 @@ public class LeagueModelSingleton {
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Log.d(TAG, "DocumentSnapshot successfully updated!");
-                                                callback.onComplete(true, null);
+
+                                                pinsInThisLeague.remove(leaguePin);
+                                                getDatabaseRef().document(userId).update("onlyLeaguesYouCreated",leaguesYouParticipateIn )
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                                Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                                callback.onComplete(true, null);
+                                                            }
+                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Log.w(TAG, "Error updating document", e);
+                                                        callback.onComplete(false, e);
+                                                    }
+                                                });
+
+                                                /*Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                                callback.onComplete(true, null);*/
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
