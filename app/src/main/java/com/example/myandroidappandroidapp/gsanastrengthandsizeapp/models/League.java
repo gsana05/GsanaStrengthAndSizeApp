@@ -9,11 +9,21 @@ public class League {
     String leagueMasterId;
     ArrayList<String> leaguesCreated;
     private ArrayList<String> flag;
+    private ArrayList<String> onlyLeaguesYouCreated;
 
-    public League(String leagueMasterId, ArrayList<String> leaguesCreated, ArrayList<String> flag) {
+    public League(String leagueMasterId, ArrayList<String> leaguesCreated, ArrayList<String> flag, ArrayList<String> onlyLeaguesYouCreated ) {
         this.leagueMasterId = leagueMasterId;
         this.leaguesCreated = leaguesCreated;
         this.flag = flag;
+        this.onlyLeaguesYouCreated = onlyLeaguesYouCreated;
+    }
+
+    public ArrayList<String> getOnlyLeaguesYouCreated() {
+        return onlyLeaguesYouCreated;
+    }
+
+    public void setOnlyLeaguesYouCreated(ArrayList<String> onlyLeaguesYouCreated) {
+        this.onlyLeaguesYouCreated = onlyLeaguesYouCreated;
     }
 
     public ArrayList<String> getFlag() {

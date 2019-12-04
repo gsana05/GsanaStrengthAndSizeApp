@@ -193,7 +193,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 };
 
                 LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                leagueModelSingleton.addToLeague(leagueName.getText().toString(), callback);
+                leagueModelSingleton.addToLeague(leagueName.getText().toString(), callback); // joining a league
             }
         });
     }
@@ -268,7 +268,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 };
 
                 LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-                leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback);
+                leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback); // creating a league
             }
         });
     }
