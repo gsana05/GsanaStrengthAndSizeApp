@@ -314,7 +314,7 @@ public class UserLeagueTableModelSingleton {
     }
 
 
-   /* public void addFlagListener(String leaguePin, final DataModelResult<ArrayList<String>> callback){
+    public void addFlagListener(String leaguePin, final DataModelResult<ArrayList<String>> callback){
         ListenerRegistration ref = getDatabaseRefAllLeagues().document(leaguePin).addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
@@ -334,7 +334,7 @@ public class UserLeagueTableModelSingleton {
             }
         });
         mRefsFlags.put(leaguePin, ref);
-    }*/
+    }
 
     private HashMap<String, ListenerRegistration> mRefsFlags = new HashMap<>();
     private HashMap<String, ArrayList<DataModelResult<ArrayList<String>>>> mProfileCallbacksFalgs = new HashMap<>();

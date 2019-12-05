@@ -156,7 +156,18 @@ public class LeagueTableResults extends AppCompatActivity {
                                 break;
                         }
 
-                        leagueFlagsList = new DataModelResult<ArrayList<String>>() {
+                        DataModelResult<ArrayList<String>> leagueFlags = new DataModelResult<ArrayList<String>>() {
+                            @Override
+                            public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
+                                mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator, leagueFlags, leaguePin);
+                                leagueTableRecyclerView.setAdapter(mAdapter);
+                                Log.v("", "");
+                            }
+                        };
+
+                        userLeagueTableModelSingleton.addFlagListener(leaguePin, leagueFlags);
+
+                        /*leagueFlagsList = new DataModelResult<ArrayList<String>>() {
                             @Override
                             public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
                                 flagCallbacks.add(leagueFlagsList);
@@ -166,7 +177,7 @@ public class LeagueTableResults extends AppCompatActivity {
                             }
                         };
 
-                        userLeagueTableModelSingleton.addFlagListener(id,leaguePin ,leagueFlagsList);
+                        userLeagueTableModelSingleton.addFlagListener(id,leaguePin ,leagueFlagsList);*/
 
                     }
                     else {
@@ -204,10 +215,10 @@ public class LeagueTableResults extends AppCompatActivity {
         String id = FirebaseAuth.getInstance().getUid();
         if(id != null){
             //remove listener
-            flagCallbacks.size();
+           /* flagCallbacks.size();
             for(DataModelResult<ArrayList<String>> flagListener : flagCallbacks){
                 userLeagueTableModelSingleton.removeFlagListener(id, flagListener);
-            }
+            }*/
             userLeagueTableModelSingleton.removeLeagueTableUserProfileListener(id, usersCallback);
 
         }
