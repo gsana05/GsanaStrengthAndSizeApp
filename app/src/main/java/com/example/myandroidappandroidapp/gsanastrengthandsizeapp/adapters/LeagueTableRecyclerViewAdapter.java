@@ -200,7 +200,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             }
                         };
 
-                        leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag);
+                        leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
                     }
                 });
             }

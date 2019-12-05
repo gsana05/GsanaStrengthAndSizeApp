@@ -111,8 +111,9 @@ public class UserLeagueTableModelSingleton {
                                         String squatLink = snapshot.getString("proofSquatLink");
                                         String deadliftLink = snapshot.getString("proofDeadliftLink");
                                         String ohpLink = snapshot.getString("proofOhpLink");
+                                        String pushNotificationToken = snapshot.getString("pushNotificationToken");
 
-                                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, benchLink, squatLink, deadliftLink, ohpLink);
+                                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, benchLink, squatLink, deadliftLink, ohpLink, pushNotificationToken);
 
                                         listOfUser.add(user);
                                     }

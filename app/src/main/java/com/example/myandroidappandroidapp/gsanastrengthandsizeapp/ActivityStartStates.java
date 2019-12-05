@@ -1,5 +1,6 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +27,14 @@ import android.widget.VideoView;
 
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.File;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ActivityStartStates extends AppCompatActivity {
 
@@ -280,7 +287,7 @@ public class ActivityStartStates extends AppCompatActivity {
     public void saveUserStats(){
        //alert("Data has been filled in correctly");
 
-        DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
+        final DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
@@ -297,18 +304,37 @@ public class ActivityStartStates extends AppCompatActivity {
             }
         };
 
-        UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
-        userModelSingleton.saveUserStats(
-                gymName.getText().toString(),
-                Float.valueOf(benchPress.getText().toString()),
-                Float.valueOf(squat.getText().toString()),
-                Float.valueOf(deadlift.getText().toString()),
-                Float.valueOf(overHeadPress.getText().toString()),
-                mBenchPressUri,
-                mSquatUri,
-                mDeadliftUri,
-                mSquatUri,
-                callback);
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token and store in workout profiles
+                        String pushNotificationToken = task.getResult().getToken();
+
+                        UserModelSingleton userModelSingleton = UserModelSingleton.getInstance();
+                        userModelSingleton.saveUserStats(
+                                gymName.getText().toString(),
+                                Float.valueOf(benchPress.getText().toString()),
+                                Float.valueOf(squat.getText().toString()),
+                                Float.valueOf(deadlift.getText().toString()),
+                                Float.valueOf(overHeadPress.getText().toString()),
+                                mBenchPressUri,
+                                mSquatUri,
+                                mDeadliftUri,
+                                mSquatUri,
+                                pushNotificationToken,
+                                callback);
+
+
+                    }
+                });
+
+
     }
 
     public void updateUI(){

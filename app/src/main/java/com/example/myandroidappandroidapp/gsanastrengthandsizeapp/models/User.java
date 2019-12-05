@@ -19,8 +19,9 @@ public class User {
     private String proofSquatLink;
     private String proofDeadliftLink;
     private String proofOhpLink;
+    private String pushNotificationToken;
 
-    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email, String proofBenchLink, String proofSquatLink, String proofDeadliftLink, String proofOhpLink) {
+    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email, String proofBenchLink, String proofSquatLink, String proofDeadliftLink, String proofOhpLink, String pushNotificationToken) {
         this.gymName = gymName;
         this.benchPress = benchPress;
         this.squat = squat;
@@ -33,6 +34,15 @@ public class User {
         this.proofSquatLink = proofSquatLink;
         this.proofDeadliftLink = proofDeadliftLink;
         this.proofOhpLink = proofOhpLink;
+        this.pushNotificationToken = pushNotificationToken;
+    }
+
+    public String getPushNotificationToken() {
+        return pushNotificationToken;
+    }
+
+    public void setPushNotificationToken(String pushNotificationToken) {
+        this.pushNotificationToken = pushNotificationToken;
     }
 
     public String getProofBenchLink() {

@@ -18,6 +18,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -25,6 +27,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Date;
 import java.util.UUID;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class UserModelSingleton {
 
@@ -44,6 +48,8 @@ public class UserModelSingleton {
         return ourInstance;
     }
 
+    private UserProfileModelSingleton userProfileModelSingleton  = UserProfileModelSingleton.getInstance();
+
     public void signUp(final String email, String password, final DataModelResult<Boolean> callback){
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -60,7 +66,7 @@ public class UserModelSingleton {
         });
     }
 
-    public void saveUserStats(final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, final DataModelResult<Boolean> callback){
+    public void saveUserStats(final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, final String pushNotificationToken, final DataModelResult<Boolean> callback){
         final String id = FirebaseAuth.getInstance().getUid();
 
         if(id != null){
@@ -126,7 +132,7 @@ public class UserModelSingleton {
                                                                                                             Uri ohpProofUri = uri;
 
 
-                                                                                                            uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, benchProofUri, squatProofUri, deadliftProofUri, ohpProofUri, callback);
+                                                                                                            uploadUserProfile(id, gymName, benchPress, squat, deadlift, overHeadPress, benchProofUri, squatProofUri, deadliftProofUri, ohpProofUri,pushNotificationToken, callback);
                                                                                                         }
                                                                                                     }).addOnFailureListener(new OnFailureListener() {
                                                                                                         @Override
@@ -200,13 +206,13 @@ public class UserModelSingleton {
         }
     }
 
-    public void uploadUserProfile(final String id, final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, final DataModelResult<Boolean> callback){
+    public void uploadUserProfile(final String id, final String gymName, final Float benchPress, final Float squat, final Float deadlift, final Float overHeadPress, final Uri benchProof, final Uri squatProof, final Uri deadliftProof, final Uri ohpProof, String pushNotificationToken, final DataModelResult<Boolean> callback){
         if(benchProof != null){
             Date date = new Date(System.currentTimeMillis());
             UUID uuid = UUID.randomUUID();
             //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof.toString(), deadliftProof.toString(), ohpProof.toString());
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof.toString(), deadliftProof.toString(), ohpProof.toString(), pushNotificationToken);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -228,7 +234,39 @@ public class UserModelSingleton {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    callback.onComplete(true, null);
+
+
+                    FirebaseInstanceId.getInstance().getInstanceId()
+                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w(TAG, "getInstanceId failed", task.getException());
+                                        return;
+                                    }
+
+                                    // Get new Instance ID token and store in workout profiles
+                                    String token = task.getResult().getToken();
+                                    String userId = FirebaseAuth.getInstance().getUid();
+                                    if(userId != null){
+                                        getDatabaseRef().document(userId).update("pushNotificationToken", token)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                callback.onComplete(true, null);
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                //log in but you have no push notification id
+                                                callback.onComplete(true, e);
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+
                 }
                 else {
                     callback.onComplete(false, task.getException());

@@ -91,8 +91,9 @@ public class UserProfileModelSingleton {
                         String pin = snapshot.getString("pin");
                         String email = snapshot.getString("email");
                         Date date = snapshot.getDate("date");
+                        String pushNotificationToken = snapshot.getString("pushNotificationToken");
 
-                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, null, null,null, null);
+                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, null, null,null, null, pushNotificationToken);
 
                         if(user != null){
                             mCachedProfile.put(userId, user); // cache data
@@ -162,6 +163,7 @@ public class UserProfileModelSingleton {
                     String deadliftLink = documentSnapshot.getString("proofDeadliftLink");
                     String proofSquatLink = documentSnapshot.getString("proofSquatLink");
                     String proofOhpLink = documentSnapshot.getString("proofOhpLink");
+                    String pushNotificationToken = documentSnapshot.getString("pushNotificationToken");
 
                     User user = new User(
                             gymName,
@@ -175,7 +177,8 @@ public class UserProfileModelSingleton {
                             benchLink,
                             proofSquatLink,
                             proofOhpLink,
-                            deadliftLink
+                            deadliftLink,
+                            pushNotificationToken
                             );
 
                     if(user != null){
@@ -302,6 +305,7 @@ public class UserProfileModelSingleton {
                         final String currentSquatLink = data.getProofSquatLink();
                         final String currentDeadlift = data.getProofDeadliftLink();
                         final String currentOhp = data.getProofOhpLink();
+                        final String pushNotificationToken = data.getPushNotificationToken();
 
                         final DataModelResult<Boolean> callbackBench = new DataModelResult<Boolean>() {
                             @Override
@@ -355,7 +359,7 @@ public class UserProfileModelSingleton {
                                                         }
 
                                                         //update database
-                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri);
+                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri, pushNotificationToken);
 
                                                         // setOptions - only changes the field that now has a different value
                                                         getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -387,59 +391,6 @@ public class UserProfileModelSingleton {
                         };
 
                         checkLift(userId, benchLink,"gymBenchVideos", callbackBench);
-
-                      /*  String mDeadliftLink;
-                        if(deadliftLink == null){
-                            mDeadliftLink = "";
-                        }
-                        else{
-                            mDeadliftLink = deadliftLink.toString();
-                        }
-
-                        String mOhpLink;
-                        if(ohpLink == null){
-                            mOhpLink = "";
-                        }
-                        else{
-                            mOhpLink = ohpLink.toString();
-                        }*/
-
-                      /*  getDatabaseRef().document(userId).update(
-                                "benchPress", bench,
-                                "squat", squat,
-                                "deadlift", deadlift,
-                                "overHeadPress", ohp,
-                                "proofBenchLink", mBenchLink,
-                                "proofSquatLink", mSquatLink,
-                                "proofDeadliftLink", mDeadliftLink,
-                                "proofOhpLink", mOhpLink
-
-                        ).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-
-                            }
-                        });*/
-
-                       /* User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mBenchLink, squatLink.toString(),deadliftLink.toString(), ohpLink.toString());
-
-                        // setOptions - only changes the field that now has a different value
-                        getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    callback.onComplete(true, null);
-                                }
-                                else {
-                                    callback.onComplete(false, null);
-                                }
-                            }
-                        });*/
                     }
                     else {
                         Log.v("User", "NULL");
