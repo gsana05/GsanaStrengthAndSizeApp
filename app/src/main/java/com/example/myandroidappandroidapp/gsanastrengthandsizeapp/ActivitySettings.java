@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters.LeagueRecyclerViewAdapter;
@@ -33,6 +34,7 @@ public class ActivitySettings extends AppCompatActivity {
     private TextView tvRules;
     private TextView tvExitLeague;
     private TextView tvHeadingLeaguesYouAreIn;
+    private WebView rules;
 
 
     @Override
@@ -40,6 +42,7 @@ public class ActivitySettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        rules = this.findViewById(R.id.settings_rules);
         tvHeadingLeaguesYouAreIn = this.findViewById(R.id.settings_sub_heading);
         tvRules = this.findViewById(R.id.settings_rules_switch_map);
         tvExitLeague = this.findViewById(R.id.settings_exit_league_switch_list);
@@ -107,12 +110,15 @@ public class ActivitySettings extends AppCompatActivity {
             tvExitLeague.setVisibility(View.INVISIBLE);
             tvHeadingLeaguesYouAreIn.setVisibility(View.VISIBLE);
             leagueTableSettingsRecyclerView.setVisibility(View.VISIBLE);
+            rules.setVisibility(View.GONE);
         }
         else{ // exit leagues
             tvRules.setVisibility(View.INVISIBLE);
             tvExitLeague.setVisibility(View.VISIBLE);
             tvHeadingLeaguesYouAreIn.setVisibility(View.GONE);
             leagueTableSettingsRecyclerView.setVisibility(View.GONE);
+            rules.setVisibility(View.VISIBLE);
+            rules.loadUrl("file:///android_asset/rules.html");
         }
     }
 
