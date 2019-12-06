@@ -2,6 +2,7 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
@@ -28,11 +29,25 @@ public class ActivitySettings extends AppCompatActivity {
     private LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
     private DataModelResult<ArrayList<CreatedLeague>> callbackCreatedLeagues;
 
+    private SwitchCompat switchCompat;
+    private TextView tvRules;
+    private TextView tvExitLeague;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        tvRules = this.findViewById(R.id.settings_rules_switch_map);
+        tvExitLeague = this.findViewById(R.id.settings_exit_league_switch_list);
+        switchCompat = this.findViewById(R.id.settings_switch);
+        switchCompat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUI();
+            }
+        });
 
         leagueTableSettingsRecyclerView = this.findViewById(R.id.settings_recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
@@ -80,6 +95,19 @@ public class ActivitySettings extends AppCompatActivity {
                 finish();
             }
         });
+
+        updateUI();
+    }
+
+    public void updateUI(){
+        if(switchCompat.isChecked()){
+            tvRules.setVisibility(View.VISIBLE);
+            tvExitLeague.setVisibility(View.INVISIBLE);
+        }
+        else{
+            tvRules.setVisibility(View.INVISIBLE);
+            tvExitLeague.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

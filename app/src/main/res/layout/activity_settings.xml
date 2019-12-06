@@ -49,11 +49,51 @@
         android:text="@string/settings"
         />
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/settings_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/settings_heading"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textOff="@string/rules"
+        android:textOn="@string/leagues"
+        android:thumb="@drawable/sw_thumb"
+        app:track="@drawable/sw_track"
+        app:showText="true"
+        app:switchTextAppearance="@style/SwitchTextAppearance"
+        />
+
+    <TextView
+        android:id="@+id/settings_rules_switch_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/settings_switch"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_switch"
+        app:layout_constraintStart_toStartOf="@+id/settings_switch"
+        app:layout_constraintEnd_toStartOf="@+id/settings_exit_league_switch_list"
+        android:text="@string/rules"
+        android:textColor="@color/ssBlack"
+        />
+
+    <TextView
+        android:id="@+id/settings_exit_league_switch_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/settings_switch"
+        app:layout_constraintBottom_toBottomOf="@+id/settings_switch"
+        app:layout_constraintEnd_toEndOf="@+id/settings_switch"
+        app:layout_constraintStart_toEndOf="@+id/settings_rules_switch_map"
+        android:text="@string/leagues"
+        android:textColor="@color/ssBlack"
+        />
+
     <TextView
         android:id="@+id/settings_sub_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/settings_heading"
+        app:layout_constraintTop_toBottomOf="@+id/settings_switch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="10dp"
