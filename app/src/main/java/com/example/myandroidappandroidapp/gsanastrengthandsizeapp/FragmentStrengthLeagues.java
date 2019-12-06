@@ -44,11 +44,29 @@ public class FragmentStrengthLeagues extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_fragment_strength_league_results, container, false);
 
-        Button createLeague = view.findViewById(R.id.fragment_strength_league_results_create_league_btn);
+        final Button createLeague = view.findViewById(R.id.fragment_strength_league_results_create_league_btn);
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createLeague();
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("When you create a league, you are only user allowed to flag users when there is an invalid claim and you are not allowed to leave the league unless you are the only user in the league")
+                        .setCancelable(false)
+                        .setNegativeButton("Not for me", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Yes let's do it", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                createLeague();
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
             }
         });
 
@@ -56,7 +74,25 @@ public class FragmentStrengthLeagues extends Fragment {
         joinLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                joinLeague();
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("When you join a league, you are allowed to leave at any point if you do not agree with the league creator decisions, you may be flagged by the league creator for an invalid claim ")
+                        .setCancelable(false)
+                        .setNegativeButton("Not for me", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("Yes let's do it", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                joinLeague();
+                                dialog.dismiss();
+                            }
+                        });
+                //Creating dialog box
+                AlertDialog alert = builder.create();
+                //Setting the title manually
+                alert.show();
             }
         });
 
@@ -157,7 +193,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 if(leagueName.getText().toString().isEmpty()){
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-                    builder.setMessage("Please enter a league name")
+                    builder.setMessage("Please enter a league pin")
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -233,7 +269,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 if(leagueName.getText().toString().isEmpty()){
                     AlertDialog.Builder builder;
                     builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
-                    builder.setMessage("Please enter league pin")
+                    builder.setMessage("Please enter league name")
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -254,6 +290,7 @@ public class FragmentStrengthLeagues extends Fragment {
                     public void onComplete(Boolean data, Exception exception) {
 
                         if(data){
+                            alertDialog("Rules when creating a league");
                             Toast.makeText(getActivity(),"Data Saved",Toast.LENGTH_SHORT).show();
                             dismissKeyboard();
                             alert.dismiss();
