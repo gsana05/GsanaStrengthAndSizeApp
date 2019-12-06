@@ -1,21 +1,39 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.MyFirebaseMessagingService;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserModelSingleton;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.common.base.Functions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActivityLogIn extends AppCompatActivity {
 
     private Boolean mSignIn = false;
+    private final static String CHANNEL_ID = "CHANNEL_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +96,24 @@ public class ActivityLogIn extends AppCompatActivity {
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
-                    mSignIn = false;
-                    updateUI();
-                    finish();
+                    Task<String> i = sendCallToFirebaseFunctionForPushNotifications("Gareth Sanashee");
+                    i.addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            mSignIn = false;
+                            updateUI();
+                            finish();
+                        }
+                    });
+                    i.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // test code
+                            mSignIn = true;
+                            updateUI();
+                        }
+                    });
+
                 }else {
                     mSignIn = false;
                     updateUI();
@@ -93,6 +126,39 @@ public class ActivityLogIn extends AppCompatActivity {
         userModelSingleton.logIn(email.getText().toString(), password.getText().toString(), callback);
 
     }
+
+    private Task<String> sendCallToFirebaseFunctionForPushNotifications(String pushNotificationToken) {
+        // Create the arguments to the callable function.
+        Map<String, Object> data = new HashMap<>();
+        data.put("pushNotificationToken", pushNotificationToken);
+
+        FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+
+        return mFunctions
+                .getHttpsCallable("sendNotification")
+                .call(data)
+                .continueWith(new Continuation<HttpsCallableResult, String>() {
+                    @Override
+                    public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
+                        // This continuation runs on either success or failure, but if the task
+                        // has failed then getResult() will throw an Exception which will be
+                        // propagated down.
+                        String result = (String) task.getResult().getData();
+                        return result;
+                    }
+                });
+    }
+
+    /*public void notification(String title, String body){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_accounticon)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, builder.build());
+    }*/
 
     public void updateUI(){
         ProgressBar progress = this.findViewById(R.id.log_in_button_progress);
