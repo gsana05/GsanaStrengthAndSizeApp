@@ -283,6 +283,10 @@ public class ActivityProfile extends AppCompatActivity {
                 if(ohp.getText().toString().isEmpty()){
                     alertDialog("Please enter over head press");
                     return;
+
+                }if(mBenchPressUri == null && mSquatUri == null && mDeadliftUri == null && mOhpUri == null){
+                    alertDialog("You have not uploaded any new videos");
+                    return;
                 }
 
                 mSubmitProgress = true;
