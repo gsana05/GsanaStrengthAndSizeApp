@@ -32,6 +32,7 @@ public class ActivitySettings extends AppCompatActivity {
     private SwitchCompat switchCompat;
     private TextView tvRules;
     private TextView tvExitLeague;
+    private TextView tvHeadingLeaguesYouAreIn;
 
 
     @Override
@@ -39,6 +40,7 @@ public class ActivitySettings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        tvHeadingLeaguesYouAreIn = this.findViewById(R.id.settings_sub_heading);
         tvRules = this.findViewById(R.id.settings_rules_switch_map);
         tvExitLeague = this.findViewById(R.id.settings_exit_league_switch_list);
         switchCompat = this.findViewById(R.id.settings_switch);
@@ -100,13 +102,17 @@ public class ActivitySettings extends AppCompatActivity {
     }
 
     public void updateUI(){
-        if(switchCompat.isChecked()){
+        if(switchCompat.isChecked()){ // rules
             tvRules.setVisibility(View.VISIBLE);
             tvExitLeague.setVisibility(View.INVISIBLE);
+            tvHeadingLeaguesYouAreIn.setVisibility(View.VISIBLE);
+            leagueTableSettingsRecyclerView.setVisibility(View.VISIBLE);
         }
-        else{
+        else{ // exit leagues
             tvRules.setVisibility(View.INVISIBLE);
             tvExitLeague.setVisibility(View.VISIBLE);
+            tvHeadingLeaguesYouAreIn.setVisibility(View.GONE);
+            leagueTableSettingsRecyclerView.setVisibility(View.GONE);
         }
     }
 
