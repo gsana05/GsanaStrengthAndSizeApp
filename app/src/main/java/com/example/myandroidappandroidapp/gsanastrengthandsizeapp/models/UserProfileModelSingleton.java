@@ -93,7 +93,9 @@ public class UserProfileModelSingleton {
                         Date date = snapshot.getDate("date");
                         String pushNotificationToken = snapshot.getString("pushNotificationToken");
 
-                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, null, null,null, null, pushNotificationToken);
+                        Float compoundTotalLift = bench.floatValue() + squat.floatValue() + deadlift.floatValue() + ohp.floatValue();
+
+                        User user = new User(gymName, bench.floatValue(), squat.floatValue(), deadlift.floatValue(), ohp.floatValue(), date, pin, email, null, null,null, null, pushNotificationToken, compoundTotalLift);
 
                         if(user != null){
                             mCachedProfile.put(userId, user); // cache data
@@ -165,6 +167,8 @@ public class UserProfileModelSingleton {
                     String proofOhpLink = documentSnapshot.getString("proofOhpLink");
                     String pushNotificationToken = documentSnapshot.getString("pushNotificationToken");
 
+                    Float compoundTotalLift = bench.floatValue() + squat.floatValue() + deadlift.floatValue() + ohp.floatValue();
+
                     User user = new User(
                             gymName,
                             bench.floatValue(),
@@ -178,7 +182,8 @@ public class UserProfileModelSingleton {
                             proofSquatLink,
                             proofOhpLink,
                             deadliftLink,
-                            pushNotificationToken
+                            pushNotificationToken,
+                            compoundTotalLift
                             );
 
                     if(user != null){
@@ -358,8 +363,10 @@ public class UserProfileModelSingleton {
                                                             mNewOhpPbUri = currentOhp;
                                                         }
 
+
+                                                        Float totalCompoundLift = bench + squat + deadlift + ohp;
                                                         //update database
-                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri, pushNotificationToken);
+                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri, pushNotificationToken, totalCompoundLift);
 
                                                         // setOptions - only changes the field that now has a different value
                                                         getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {

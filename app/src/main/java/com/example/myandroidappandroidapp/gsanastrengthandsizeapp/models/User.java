@@ -11,6 +11,7 @@ public class User {
     private Float squat;
     private Float deadlift;
     private Float overHeadPress;
+    private Float compoundLiftTotal;
     private Date date;
     private String pin;
     private String email;
@@ -21,7 +22,7 @@ public class User {
     private String proofOhpLink;
     private String pushNotificationToken;
 
-    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email, String proofBenchLink, String proofSquatLink, String proofDeadliftLink, String proofOhpLink, String pushNotificationToken) {
+    public User(String gymName, Float benchPress, Float squat, Float deadlift, Float overHeadPress, Date date, String pin, String email, String proofBenchLink, String proofSquatLink, String proofDeadliftLink, String proofOhpLink, String pushNotificationToken, Float compoundLiftTotal) {
         this.gymName = gymName;
         this.benchPress = benchPress;
         this.squat = squat;
@@ -35,6 +36,15 @@ public class User {
         this.proofDeadliftLink = proofDeadliftLink;
         this.proofOhpLink = proofOhpLink;
         this.pushNotificationToken = pushNotificationToken;
+        this.compoundLiftTotal = compoundLiftTotal;
+    }
+
+    public Float getCompoundLiftTotal() {
+        return compoundLiftTotal;
+    }
+
+    public void setCompoundLiftTotal(Float compoundLiftTotal) {
+        this.compoundLiftTotal = compoundLiftTotal;
     }
 
     public String getPushNotificationToken() {

@@ -50,6 +50,7 @@ public class LeagueTableResults extends AppCompatActivity {
     private final static int SQUAT =2;
     private final static int DEADLIFT =3;
     private final static int OVER_HEAD_PRESS =4;
+    private final static int TOTAL_COMPOUND_ALL_LIFTS =5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +173,8 @@ public class LeagueTableResults extends AppCompatActivity {
                                 //Log.v("", ""); // sorts by all lifts added together
                                 Collections.sort(data, new SortUserLeague().reversed());
 
+                                getLeaguePosition(data, TOTAL_COMPOUND_ALL_LIFTS);
+
                                 break;
                         }
 
@@ -245,6 +248,8 @@ public class LeagueTableResults extends AppCompatActivity {
                 case DEADLIFT: compouneMove = user.getDeadlift();
                 break;
                 case OVER_HEAD_PRESS: compouneMove = user.getOverHeadPress();
+                break;
+                case TOTAL_COMPOUND_ALL_LIFTS: compouneMove = user.getCompoundLiftTotal();
                 break;
                 default:compouneMove = null;
             }

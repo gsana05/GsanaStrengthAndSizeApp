@@ -212,7 +212,8 @@ public class UserModelSingleton {
             UUID uuid = UUID.randomUUID();
             //String pin = uuid.toString().substring(0,8);
 
-            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof.toString(), deadliftProof.toString(), ohpProof.toString(), pushNotificationToken);
+            Float compoundTotalLift = benchPress + squat + deadlift + overHeadPress;
+            User user = new User(gymName, benchPress, squat, deadlift, overHeadPress, date, id, userEmail, benchProof.toString(), squatProof.toString(), deadliftProof.toString(), ohpProof.toString(), pushNotificationToken, compoundTotalLift);
 
             getDatabaseRef().document(id).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
