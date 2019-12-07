@@ -44,6 +44,12 @@ public class LeagueTableResults extends AppCompatActivity {
     private int type = -1;
     DataModelResult<ArrayList<String>> leagueFlagsList;
     ArrayList<DataModelResult<ArrayList<String>>> flagCallbacks = new ArrayList<>();
+    ArrayList<Integer> positionList = new ArrayList<>();
+
+    private final static int BENCH_PRESS =1;
+    private final static int SQUAT =2;
+    private final static int DEADLIFT =3;
+    private final static int OVER_HEAD_PRESS =4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,33 +139,47 @@ public class LeagueTableResults extends AppCompatActivity {
                             case UserLeagueTableModelSingleton.benchPress:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByBench().reversed());
+
+                                getLeaguePosition(data, BENCH_PRESS);
+
                                 type = UserLeagueTableModelSingleton.benchPress;
                                 break;
                             case UserLeagueTableModelSingleton.deadlift:
                                 Log.v("", "");
-                                Collections.sort(data, new SortUserLeagueBySquat().reversed());
+                                Collections.sort(data, new SortUserLeagueByDeadlift().reversed());
+
+                                getLeaguePosition(data, DEADLIFT);
+
                                 type = UserLeagueTableModelSingleton.deadlift;
                                 break;
                             case UserLeagueTableModelSingleton.squat:
                                 Log.v("", "");
-                                Collections.sort(data, new SortUserLeagueByDeadlift().reversed());
+                                Collections.sort(data, new SortUserLeagueBySquat().reversed());
+
+                                getLeaguePosition(data, SQUAT);
+
                                 type = UserLeagueTableModelSingleton.squat;
                                 break;
                             case UserLeagueTableModelSingleton.ohp:
                                 Log.v("", "");
                                 Collections.sort(data, new SortUserLeagueByOverHeadPress().reversed());
+
+                                getLeaguePosition(data, OVER_HEAD_PRESS);
+
                                 type = UserLeagueTableModelSingleton.ohp;
                                 break;
                             default:
-                                //Log.v("", "");
+                                //Log.v("", ""); // sorts by all lifts added together
                                 Collections.sort(data, new SortUserLeague().reversed());
+
                                 break;
                         }
 
                         DataModelResult<ArrayList<String>> leagueFlags = new DataModelResult<ArrayList<String>>() {
                             @Override
                             public void onComplete(ArrayList<String> leagueFlags, Exception exception) {
-                                mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator, leagueFlags, leaguePin);
+
+                                mAdapter = new LeagueTableRecyclerViewAdapter(data, type, IsLeagueCreator, leagueFlags, leaguePin, positionList);
                                 leagueTableRecyclerView.setAdapter(mAdapter);
                                 Log.v("", "");
                             }
@@ -206,6 +226,41 @@ public class LeagueTableResults extends AppCompatActivity {
                 }
             };
             userLeagueTableModelSingleton.getUsersWithTheSamePin(leaguePin, callback); // passes in leaguePin and returns the leagueMasterId
+        }
+    }
+
+    public void getLeaguePosition(ArrayList<User> data, int exerciseType){
+        positionList.clear();
+        Float mUserExercise = null;
+        int pos = 0;
+        Float compouneMove = null;
+
+        for(User user : data){
+
+            switch(exerciseType){
+                case BENCH_PRESS: compouneMove = user.getBenchPress();
+                break;
+                case SQUAT: compouneMove = user.getSquat();
+                break;
+                case DEADLIFT: compouneMove = user.getDeadlift();
+                break;
+                case OVER_HEAD_PRESS: compouneMove = user.getOverHeadPress();
+                break;
+                default:compouneMove = null;
+            }
+
+            if(compouneMove != null){
+                if(compouneMove.equals(mUserExercise)){
+                    // the same league position
+                    positionList.add(pos);
+                }
+                else{
+                    pos++;
+                    positionList.add(pos);
+                }
+
+                mUserExercise = compouneMove;
+            }
         }
     }
 

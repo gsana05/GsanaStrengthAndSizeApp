@@ -49,13 +49,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     private Boolean isLeagueCreator;
     private ArrayList<String> flags;
     private String leaguePin;
+    private ArrayList<Integer> leaguePosition;
 
-    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator, ArrayList<String> flags, String leaguePin) {
+    public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator, ArrayList<String> flags, String leaguePin, ArrayList<Integer> leaguePosition) {
         this.leagueList = leagueList;
         this.type = type;
         this.isLeagueCreator = isLeagueCreator;
         this.flags = flags;
         this.leaguePin = leaguePin;
+        this.leaguePosition =leaguePosition;
     }
 
     @NonNull
@@ -73,7 +75,13 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         int pos = position + 1;
 
         gymName.setText(user.getGymName());
-        leaguePos.setText(Integer.toString(pos));
+        if(leaguePosition.size() > 0){
+            leaguePos.setText(Integer.toString(leaguePosition.get(position)));
+        }
+        else{
+            leaguePos.setText(Integer.toString(pos));
+        }
+
 
         int col = ContextCompat.getColor(holder.itemView.getContext(), R.color.ssRed);
 
