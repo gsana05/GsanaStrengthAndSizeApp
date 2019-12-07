@@ -175,6 +175,7 @@ public class LeagueTableResults extends AppCompatActivity {
 
                                 getLeaguePosition(data, TOTAL_COMPOUND_ALL_LIFTS);
 
+                                type = UserLeagueTableModelSingleton.totalAllLifts;
                                 break;
                         }
 

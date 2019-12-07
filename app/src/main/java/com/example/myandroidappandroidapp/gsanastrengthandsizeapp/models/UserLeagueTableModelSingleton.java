@@ -48,6 +48,7 @@ public class UserLeagueTableModelSingleton {
     public final static int deadlift = 2;
     public final static int squat = 3;
     public final static int ohp = 4;
+    public final static int totalAllLifts = 5;
 
 
     private HashMap<String, ArrayList<DataModelResult<ArrayList<User>>>> mProfileCallbacks = new HashMap<>();

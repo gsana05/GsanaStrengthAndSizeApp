@@ -140,7 +140,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             }
         });
 
-        if(type == -1){
+        if(type == -1 || type == UserLeagueTableModelSingleton.totalAllLifts){
             TextView tv = holder.itemView.findViewById(R.id.league_table_list_item_total_label);
             tv.setTextColor(col);
             total.setTextColor(col);
