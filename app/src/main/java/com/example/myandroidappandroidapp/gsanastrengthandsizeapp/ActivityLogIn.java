@@ -96,7 +96,10 @@ public class ActivityLogIn extends AppCompatActivity {
             @Override
             public void onComplete(Boolean data, Exception exception) {
                 if(data){
-                    Task<String> i = sendCallToFirebaseFunctionForPushNotifications("Gareth Sanashee");
+                    mSignIn = false;
+                    updateUI();
+                    finish();
+                   /* Task<String> i = sendCallToFirebaseFunctionForPushNotifications("Gareth Sanashee");
                     i.addOnSuccessListener(new OnSuccessListener<String>() {
                         @Override
                         public void onSuccess(String s) {
@@ -112,7 +115,7 @@ public class ActivityLogIn extends AppCompatActivity {
                             mSignIn = true;
                             updateUI();
                         }
-                    });
+                    });*/
 
                 }else {
                     mSignIn = false;
@@ -127,7 +130,7 @@ public class ActivityLogIn extends AppCompatActivity {
 
     }
 
-    private Task<String> sendCallToFirebaseFunctionForPushNotifications(String pushNotificationToken) {
+   /* private Task<String> sendCallToFirebaseFunctionForPushNotifications(String pushNotificationToken) {
         // Create the arguments to the callable function.
         Map<String, Object> data = new HashMap<>();
         data.put("pushNotificationToken", pushNotificationToken);
@@ -147,7 +150,7 @@ public class ActivityLogIn extends AppCompatActivity {
                         return result;
                     }
                 });
-    }
+    }*/
 
     /*public void notification(String title, String body){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)

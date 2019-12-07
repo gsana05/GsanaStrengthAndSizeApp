@@ -83,7 +83,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         }
 
 
-        int col = ContextCompat.getColor(holder.itemView.getContext(), R.color.ssRed);
+        int col = ContextCompat.getColor(holder.itemView.getContext(), R.color.ssGreen);
 
         if(type == UserLeagueTableModelSingleton.benchPress){
             TextView tv = holder.itemView.findViewById(R.id.league_table_list_item_bench_label);
