@@ -295,15 +295,29 @@ public class ActivityProfile extends AppCompatActivity {
                 DataModelResult<Boolean> callback = new DataModelResult<Boolean>() {
                     @Override
                     public void onComplete(Boolean data, Exception exception) {
-                        if(data){
+
+
+                        if(exception != null){
+                            alertDialog(exception.getMessage());
+                            mSubmitProgress = false;
+                            updateUI();
+                        }
+                        else if(data != null && data){
                             deleteInputOnDevice();
                             alertDialog("Data saved");
                             mSubmitProgress = false;
                             updateUI();
                             finish();
                         }
-                        else {
+                        else if(data == null){
                             alertDialog("Data has not been saved");
+                            mSubmitProgress = false;
+                            updateUI();
+                        }
+                        else{
+                            alertDialog("Something has gone wrong");
+                            mSubmitProgress = false;
+                            updateUI();
                         }
 
                     }

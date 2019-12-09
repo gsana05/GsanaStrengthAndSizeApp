@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,9 @@ public class FragmentStrengthLeagues extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private DataModelResult<ArrayList<String>> callback;
     private DataModelResult<ArrayList<CreatedLeague>> callbackCreatedLeagues;
+    private Boolean mIsCreatingLeague = false;
+    private ProgressBar progressBar;
+    private Button createLeague;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -164,6 +168,7 @@ public class FragmentStrengthLeagues extends Fragment {
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
+        progressBar = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create_progress);
         TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
         header.setText("Please enter league pin");
 
@@ -184,11 +189,14 @@ public class FragmentStrengthLeagues extends Fragment {
 
         leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
 
-        Button enterLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
-        enterLeague.setText("Join League");
-        enterLeague.setOnClickListener(new View.OnClickListener() {
+        createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        createLeague.setText("Join League");
+        createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mIsCreatingLeague = true;
+                updateUI();
 
                 if(leagueName.getText().toString().isEmpty()){
                     AlertDialog.Builder builder;
@@ -197,6 +205,8 @@ public class FragmentStrengthLeagues extends Fragment {
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+                                    mIsCreatingLeague = false;
+                                    updateUI();
                                     dialog.dismiss();
                                 }
                             });
@@ -215,14 +225,17 @@ public class FragmentStrengthLeagues extends Fragment {
 
                         if(data){
                             Toast.makeText(getActivity(),"Joined League Successfully",Toast.LENGTH_SHORT).show();
+                            mIsCreatingLeague =false;
                             dismissKeyboard();
                             alert.dismiss();
                         }
                         else {
                             //Toast.makeText(getActivity(),"Not Added",Toast.LENGTH_SHORT).show();
-                            alertDialog("Already part of this league or invalid pin");
+                            alertDialog("Already part of this league or invalid pin - please try again");
+                            mIsCreatingLeague = false;
+                            updateUI();
                             dismissKeyboard();
-                            alert.dismiss();
+                            //alert.dismiss();
                         }
 
                     }
@@ -240,6 +253,8 @@ public class FragmentStrengthLeagues extends Fragment {
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
+
+        progressBar = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create_progress);
 
         TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
         header.setText("Please enter league name");
@@ -260,11 +275,14 @@ public class FragmentStrengthLeagues extends Fragment {
 
         leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
 
-        Button createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
+        createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
         createLeague.setText("Create League");
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mIsCreatingLeague = true;
+                updateUI();
 
                 if(leagueName.getText().toString().isEmpty()){
                     AlertDialog.Builder builder;
@@ -273,6 +291,8 @@ public class FragmentStrengthLeagues extends Fragment {
                             .setCancelable(false)
                             .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
+                                    mIsCreatingLeague = false;
+                                    updateUI();
                                     dialog.dismiss();
                                 }
                             });
@@ -292,6 +312,7 @@ public class FragmentStrengthLeagues extends Fragment {
                         if(data){
                             alertDialog("Rules when creating a league");
                             Toast.makeText(getActivity(),"Data Saved",Toast.LENGTH_SHORT).show();
+                            mIsCreatingLeague = false;
                             dismissKeyboard();
                             alert.dismiss();
                         }
@@ -308,6 +329,17 @@ public class FragmentStrengthLeagues extends Fragment {
                 leagueModelSingleton.setLeagueTable(leagueName.getText().toString(), callback); // creating a league
             }
         });
+    }
+
+    public void updateUI(){
+        if(mIsCreatingLeague){
+            progressBar.setVisibility(View.VISIBLE);
+            createLeague.setVisibility(View.INVISIBLE);
+        }
+        else{
+            progressBar.setVisibility(View.INVISIBLE);
+            createLeague.setVisibility(View.VISIBLE);
+        }
     }
 
     private void alertDialog(String response){

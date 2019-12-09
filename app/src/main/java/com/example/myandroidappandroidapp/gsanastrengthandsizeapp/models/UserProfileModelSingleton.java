@@ -316,91 +316,98 @@ public class UserProfileModelSingleton {
                             @Override
                             public void onComplete(Boolean data, Exception exception) {
 
+                                Log.v("", "");
+
                                 // If there is ever an exception
                                 if(exception != null){
                                     callback.onComplete(null, exception);
                                 }
+                                else{
 
-                                // when user has either deleted and saved new video OR does not want to upload a new video
-
-                                DataModelResult<Boolean> callbackSquat = new DataModelResult<Boolean>() {
-                                    @Override
-                                    public void onComplete(Boolean data, Exception exception) {
-                                        // If there is ever an exception
-                                        if(exception != null){
-                                            callback.onComplete(null, exception);
-                                        }
-
-                                        DataModelResult<Boolean> callbackDeadlift = new DataModelResult<Boolean>() {
-                                            @Override
-                                            public void onComplete(Boolean data, Exception exception) {
-                                                // If there is ever an exception
-                                                if(exception != null){
-                                                    callback.onComplete(null, exception);
-                                                }
-
-                                                DataModelResult<Boolean> callbackOhp = new DataModelResult<Boolean>() {
+                                    DataModelResult<Boolean> callbackSquat = new DataModelResult<Boolean>() {
+                                        @Override
+                                        public void onComplete(Boolean data, Exception exception) {
+                                            // If there is ever an exception
+                                            if(exception != null){
+                                                callback.onComplete(null, exception);
+                                            }
+                                            else{
+                                                DataModelResult<Boolean> callbackDeadlift = new DataModelResult<Boolean>() {
                                                     @Override
                                                     public void onComplete(Boolean data, Exception exception) {
                                                         // If there is ever an exception
                                                         if(exception != null){
                                                             callback.onComplete(null, exception);
                                                         }
+                                                        else{
+                                                            DataModelResult<Boolean> callbackOhp = new DataModelResult<Boolean>() {
+                                                                @Override
+                                                                public void onComplete(Boolean data, Exception exception) {
+                                                                    // If there is ever an exception
+                                                                    if(exception != null){
+                                                                        callback.onComplete(null, exception);
+                                                                    }
+                                                                    else{
 
-                                                        if(mNewBenchPbUri == null){
-                                                            mNewBenchPbUri = currentBenchLink;
-                                                        }
+                                                                        if(mNewBenchPbUri == null){
+                                                                            mNewBenchPbUri = currentBenchLink;
+                                                                        }
 
-                                                        if(mNewSquatPbUri == null){
-                                                            mNewSquatPbUri = currentSquatLink;
-                                                        }
+                                                                        if(mNewSquatPbUri == null){
+                                                                            mNewSquatPbUri = currentSquatLink;
+                                                                        }
 
-                                                        if(mNewDeadliftPbUri == null){
-                                                            mNewDeadliftPbUri = currentDeadlift;
-                                                        }
+                                                                        if(mNewDeadliftPbUri == null){
+                                                                            mNewDeadliftPbUri = currentDeadlift;
+                                                                        }
 
-                                                        if(mNewOhpPbUri == null){
-                                                            mNewOhpPbUri = currentOhp;
-                                                        }
+                                                                        if(mNewOhpPbUri == null){
+                                                                            mNewOhpPbUri = currentOhp;
+                                                                        }
 
+                                                                        Float totalCompoundLift = bench + squat + deadlift + ohp;
+                                                                        //update database
+                                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri, pushNotificationToken, totalCompoundLift);
 
-                                                        Float totalCompoundLift = bench + squat + deadlift + ohp;
-                                                        //update database
-                                                        User user = new User(gymName, bench, squat, deadlift, ohp, date, pin, email, mNewBenchPbUri, mNewSquatPbUri,mNewDeadliftPbUri, mNewOhpPbUri, pushNotificationToken, totalCompoundLift);
+                                                                        // setOptions - only changes the field that now has a different value
+                                                                        getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                            @Override
+                                                                            public void onComplete(@NonNull Task<Void> task) {
 
-                                                        // setOptions - only changes the field that now has a different value
-                                                        getDatabaseRef().document(userId).set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if(task.isSuccessful()){
-                                                                    callback.onComplete(true, null);
+                                                                                if(task.getException() != null){
+                                                                                    callback.onComplete(false, null);
+                                                                                }
+
+                                                                                if(task.isSuccessful()){
+                                                                                    callback.onComplete(true, null);
+                                                                                }
+                                                                                else {
+                                                                                    callback.onComplete(false, null);
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
                                                                 }
-                                                                else {
-                                                                    callback.onComplete(false, null);
-                                                                }
-                                                            }
-                                                        });
-
+                                                            };
+                                                            checkLift(userId, ohpLink,"gymOhpVideos", callbackOhp );
+                                                        }
                                                     }
                                                 };
 
-                                                checkLift(userId, ohpLink,"gymOhpVideos", callbackOhp );
-
+                                                checkLift(userId, deadliftLink, "gymDeadliftVideos", callbackDeadlift);
                                             }
-                                        };
-
-                                        checkLift(userId, deadliftLink, "gymDeadliftVideos", callbackDeadlift);
-                                    }
-                                };
-
-                                checkLift(userId, squatLink, "gymSquatVideos",callbackSquat);
+                                        }
+                                    };
+                                    checkLift(userId, squatLink, "gymSquatVideos",callbackSquat);
+                                }
+                                // when user has either deleted and saved new video OR does not want to upload a new video
                             }
                         };
 
                         checkLift(userId, benchLink,"gymBenchVideos", callbackBench);
                     }
                     else {
-                        Log.v("User", "NULL");
+                        callback.onComplete(false, exception);
                     }
                 }
             };
