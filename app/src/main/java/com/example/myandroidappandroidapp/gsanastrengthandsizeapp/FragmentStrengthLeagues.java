@@ -42,6 +42,7 @@ public class FragmentStrengthLeagues extends Fragment {
     private Boolean mIsCreatingLeague = false;
     private ProgressBar progressBar;
     private Button createLeague;
+    private TextView leagueInfo;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -52,25 +53,7 @@ public class FragmentStrengthLeagues extends Fragment {
         createLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("When you create a league, you are only user allowed to flag users when there is an invalid claim and you are not allowed to leave the league unless you are the only user in the league")
-                        .setCancelable(false)
-                        .setNegativeButton("Not for me", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton("Yes let's do it", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                createLeague();
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();
+               createLeague();
             }
         });
 
@@ -78,25 +61,7 @@ public class FragmentStrengthLeagues extends Fragment {
         joinLeague.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder;
-                builder = new AlertDialog.Builder(getActivity());
-                builder.setMessage("When you join a league, you are allowed to leave at any point if you do not agree with the league creator decisions, you may be flagged by the league creator for an invalid claim ")
-                        .setCancelable(false)
-                        .setNegativeButton("Not for me", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .setPositiveButton("Yes let's do it", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                joinLeague();
-                                dialog.dismiss();
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.show();
+                joinLeague();
             }
         });
 
@@ -169,6 +134,7 @@ public class FragmentStrengthLeagues extends Fragment {
         builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
         progressBar = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create_progress);
+
         TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
         header.setText("Please enter league pin");
 
@@ -188,6 +154,8 @@ public class FragmentStrengthLeagues extends Fragment {
         });
 
         leagueName = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_input);
+        leagueInfo = inflatedLayout.findViewById(R.id.custom_dialog_create_league_info);
+        leagueInfo.setText("When you join a league, you are allowed to leave at any point if you do not agree with the league creator decisions, you may be flagged by the league creator for an invalid claim");
 
         createLeague = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create);
         createLeague.setText("Join League");
@@ -255,6 +223,8 @@ public class FragmentStrengthLeagues extends Fragment {
         View inflatedLayout = getLayoutInflater().inflate(R.layout.custom_dialog_create_league, null);
 
         progressBar = inflatedLayout.findViewById(R.id.custom_dialog_create_league_create_progress);
+        leagueInfo = inflatedLayout.findViewById(R.id.custom_dialog_create_league_info);
+        leagueInfo.setText("When you create a league, you are only user allowed to flag users when there is an invalid claim and you are not allowed to leave the league unless you are the only user in the league");
 
         TextView header = inflatedLayout.findViewById(R.id.custom_dialog_create_league_team_label);
         header.setText("Please enter league name");

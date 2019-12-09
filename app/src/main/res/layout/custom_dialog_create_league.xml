@@ -7,21 +7,37 @@
     android:background="@color/ssBackgroundBlack"
     >
 
+    <TextView
+        android:id="@+id/custom_dialog_create_league_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/custom_dialog_create_league_team_label"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textColor="@color/ssWhite"
+        android:textSize="18sp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:textAlignment="center"
+        />
+
 
     <TextView
         android:id="@+id/custom_dialog_create_league_team_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/custom_dialog_create_league_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/custom_dialog_create_league_team_input"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:text="Enter your league name"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/ssWhite"
-        app:layout_constraintVertical_chainStyle="packed"
         />
 
     <EditText
