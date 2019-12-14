@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -50,6 +51,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     private ArrayList<String> flags;
     private String leaguePin;
     private ArrayList<Integer> leaguePosition;
+    private ProgressBar benchProofBtnProgress;
+    private Button benchProofBtn;
+    private ProgressBar deadliftProofBtnProgress;
+    private Button deadliftProofBtn;
+    private ProgressBar squatProofBtnProgress;
+    private Button squatProofBtn;
+    private ProgressBar ohpProofBtnProgress;
+    private Button ohpProofBtn;
 
     public LeagueTableRecyclerViewAdapter(ArrayList<User> leagueList, int type, Boolean isLeagueCreator, ArrayList<String> flags, String leaguePin, ArrayList<Integer> leaguePosition) {
         this.leagueList = leagueList;
@@ -91,13 +100,16 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             bench.setTextColor(col);
         }
         bench.setText(user.getBenchPress().toString());
-        bench.setOnClickListener(new View.OnClickListener() {
+        benchProofBtn = holder.itemView.findViewById(R.id.league_table_list_item_bench_proof_btn);
+        benchProofBtnProgress = holder.itemView.findViewById(R.id.league_table_list_item_bench_proof_btn_progress);
+        benchProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertVideoDialog(user.getProofBenchLink(), v);
+                benchProofBtn.setVisibility(View.INVISIBLE);
+                benchProofBtnProgress.setVisibility(View.VISIBLE);
+                alertVideoDialog(user.getProofBenchLink(), v, UserLeagueTableModelSingleton.benchPress);
             }
         });
-
 
         if(type == UserLeagueTableModelSingleton.deadlift){
             TextView tv = holder.itemView.findViewById(R.id.league_table_list_item_deadlift_label);
@@ -105,10 +117,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             deadlift.setTextColor(col);
         }
         deadlift.setText(user.getDeadlift().toString());
-        deadlift.setOnClickListener(new View.OnClickListener() {
+
+        deadliftProofBtnProgress = holder.itemView.findViewById(R.id.league_table_list_item_deadlift_proof_btn_progress);
+        deadliftProofBtn = holder.itemView.findViewById(R.id.league_table_list_item_deadlift_proof_btn);
+        deadliftProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertVideoDialog(user.getProofDeadliftLink(), v);
+                deadliftProofBtn.setVisibility(View.INVISIBLE);
+                deadliftProofBtnProgress.setVisibility(View.VISIBLE);
+                alertVideoDialog(user.getProofDeadliftLink(), v, UserLeagueTableModelSingleton.deadlift);
             }
         });
 
@@ -119,10 +136,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             squat.setTextColor(col);
         }
         squat.setText(user.getSquat().toString());
-        squat.setOnClickListener(new View.OnClickListener() {
+        squatProofBtnProgress = holder.itemView.findViewById(R.id.league_table_list_item_squat_proof_btn_progress);
+        squatProofBtn = holder.itemView.findViewById(R.id.league_table_list_item_squat_proof_btn);
+        squatProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertVideoDialog(user.getProofSquatLink(), v);
+                squatProofBtn.setVisibility(View.INVISIBLE);
+                squatProofBtnProgress.setVisibility(View.VISIBLE);
+                alertVideoDialog(user.getProofSquatLink(), v, UserLeagueTableModelSingleton.squat);
             }
         });
 
@@ -133,10 +154,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             ohp.setTextColor(col);
         }
         ohp.setText(user.getOverHeadPress().toString());
-        ohp.setOnClickListener(new View.OnClickListener() {
+
+        ohpProofBtnProgress = holder.itemView.findViewById(R.id.league_table_list_item_ohp_proof_btn_progress);
+        ohpProofBtn = holder.itemView.findViewById(R.id.league_table_list_item_ohp_proof_btn);
+        ohpProofBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertVideoDialog(user.getProofOhpLink(), v);
+                ohpProofBtn.setVisibility(View.INVISIBLE);
+                ohpProofBtnProgress.setVisibility(View.VISIBLE);
+                alertVideoDialog(user.getProofOhpLink(), v, UserLeagueTableModelSingleton.ohp);
             }
         });
 
@@ -273,7 +299,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         alert.show();
     }
 
-    public void alertVideoDialog(String link, View v){
+    public void alertVideoDialog(String link, View v, int videoType){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(v.getContext());
         LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -283,17 +309,30 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         MediaController mediaController = new MediaController(v.getContext());
 
         if(link != null){
+
             Uri myUri = Uri.parse(link);
 
             video.setVideoURI(myUri);
             video.setMediaController(mediaController);
             mediaController.setAnchorView(video);
-            //video.start();
+            video.start();
 
             builder.setView(inflatedLayout);
             builder.setCancelable(false);
             final AlertDialog alert = builder.create();
             alert.show();
+
+            benchProofBtn.setVisibility(View.VISIBLE);
+            benchProofBtnProgress.setVisibility(View.INVISIBLE);
+
+            deadliftProofBtn.setVisibility(View.VISIBLE);
+            deadliftProofBtnProgress.setVisibility(View.INVISIBLE);
+
+            squatProofBtn.setVisibility(View.VISIBLE);
+            squatProofBtnProgress.setVisibility(View.INVISIBLE);
+
+            ohpProofBtn.setVisibility(View.VISIBLE);
+            ohpProofBtnProgress.setVisibility(View.INVISIBLE);
 
             /*Button restart;
             restart = inflatedLayout.findViewById(R.id.custom_bench_video_pause);
