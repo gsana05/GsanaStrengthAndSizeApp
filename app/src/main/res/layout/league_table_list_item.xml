@@ -1,194 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:id="@+id/league_table_list_item_constraint"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/white_border"
-    android:paddingBottom="10dp"
-    android:id="@+id/league_table_list_item_constraint"
-    >
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50"
-        />
+        app:layout_constraintGuide_percent="0.50" />
 
     <TextView
         android:id="@+id/league_table_list_item_gym_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline_1"
         android:text="Gym name"
-        android:textSize="18sp"
         android:textColor="@color/ssBlack"
+        android:textSize="18sp"
         android:textStyle="bold"
-        />
+        app:layout_constraintEnd_toStartOf="@id/guideline_1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/league_table_list_item_league_pos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintStart_toEndOf="@+id/guideline_1"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_league_flag"
         android:text="1st"
-        android:textSize="18sp"
         android:textColor="@color/ssBrown"
+        android:textSize="18sp"
         android:textStyle="bold"
-        />
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_league_flag"
+        app:layout_constraintStart_toEndOf="@+id/guideline_1"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name" />
 
     <ImageView
         android:id="@+id/league_table_list_item_league_flag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:tint="@color/ssGreen"
         android:src="@drawable/ic_flag_24px"
-        />
+        android:tint="@color/ssGreen"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name" />
 
     <ImageView
         android:id="@+id/league_table_list_item_league_unflag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:tint="@color/ssBlack"
         android:src="@drawable/ic_flag_24px"
-        />
+        android:tint="@color/ssBlack"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_gym_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_league_pos"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_gym_name" />
 
     <TextView
         android:id="@+id/league_table_list_item_bench_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_gym_name"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_deadlift_label"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="10dp"
         android:text="Bench:"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_deadlift_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_gym_name" />
 
     <TextView
         android:id="@+id/league_table_list_item_bench_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_bench_label"
         android:text="150kg"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_bench_label" />
+
+    <Button
+        android:id="@+id/league_table_list_item_bench_proof_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_deadlift_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_bench_result"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_bench_result"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssBrown"
+        android:textAllCaps="false"
+        android:text="Proof"
+        android:textColor="@color/ssWhite"
+        />
+
+    <ProgressBar
+        android:id="@+id/league_table_list_item_bench_proof_btn_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_bench_proof_btn"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_list_item_bench_proof_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_proof_btn"
         />
 
     <TextView
         android:id="@+id/league_table_list_item_deadlift_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_squat_label"
         android:text="Deadlift: "
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_squat_label"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label" />
 
     <TextView
         android:id="@+id/league_table_list_item_deadlift_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_deadlift_label"
-        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_deadlift_label"
         android:text="150kg"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_deadlift_label"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_deadlift_label" />
+
+    <Button
+        android:id="@+id/league_table_list_item_deadlift_proof_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toStartOf="@id/guideline_1"
+        app:layout_constraintStart_toEndOf="@id/league_table_list_item_bench_proof_btn"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_deadlift_result"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssBrown"
+        android:text="Proof"
+        android:textColor="@color/ssWhite"
+        android:textAllCaps="false"
+        />
+
+    <ProgressBar
+        android:id="@+id/league_table_list_item_deadlift_proof_btn_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_deadlift_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_deadlift_proof_btn"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_list_item_deadlift_proof_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_deadlift_proof_btn"
         />
 
     <TextView
         android:id="@+id/league_table_list_item_squat_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_deadlift_label"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_ohp_label"
         android:text="Squat"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_ohp_label"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_deadlift_label"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label" />
 
     <TextView
         android:id="@+id/league_table_list_item_squat_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_squat_label"
-        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_squat_label"
         android:text="150kg"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_squat_label"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_squat_label" />
+
+    <Button
+        android:id="@+id/league_table_list_item_squat_proof_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_ohp_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_squat_result"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_squat_result"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssBrown"
+        android:textColor="@color/ssWhite"
+        android:text="Proof"
+        android:textAllCaps="false"
+        />
+
+    <ProgressBar
+        android:id="@+id/league_table_list_item_squat_proof_btn_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_squat_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_squat_proof_btn"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_list_item_squat_proof_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_squat_proof_btn"
         />
 
     <TextView
         android:id="@+id/league_table_list_item_ohp_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_squat_label"
-        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_total_label"
         android:text="OHP"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_total_label"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_squat_label"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label" />
 
     <TextView
         android:id="@+id/league_table_list_item_ohp_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_ohp_label"
-        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_ohp_label"
         android:text="150kg"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_ohp_label"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_ohp_label" />
+
+    <Button
+        android:id="@+id/league_table_list_item_ohp_proof_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_ohp_result"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_ohp_result"
+        app:layout_constraintEnd_toStartOf="@+id/league_table_list_item_total_result"
+        android:background="@drawable/white_border"
+        android:backgroundTint="@color/ssBrown"
+        android:text="Proof"
+        android:textAllCaps="false"
+        android:textColor="@color/ssWhite"
         />
 
+    <ProgressBar
+        android:id="@+id/league_table_list_item_ohp_proof_btn_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_ohp_proof_btn"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_ohp_proof_btn"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_list_item_ohp_proof_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_ohp_proof_btn"
+        />
 
     <TextView
         android:id="@+id/league_table_list_item_total_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
-        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_ohp_label"
-        app:layout_constraintEnd_toEndOf="parent"
         android:text="Total"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/league_table_list_item_bench_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/league_table_list_item_ohp_label"
+        app:layout_constraintTop_toTopOf="@+id/league_table_list_item_bench_label" />
 
     <TextView
         android:id="@+id/league_table_list_item_total_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_total_label"
-        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_total_label"
         android:text="150kg"
-        android:textSize="16sp"
         android:textColor="@color/ssBlack"
-        />
-
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/league_table_list_item_total_label"
+        app:layout_constraintTop_toBottomOf="@+id/league_table_list_item_total_label" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
