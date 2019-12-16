@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
@@ -32,6 +33,8 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataMod
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserProfileModelSingleton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -79,6 +82,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
     @Override
     public void onBindViewHolder(@NonNull final LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
         final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+        final UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
         final User user = leagueList.get(position);
 
         int pos = position + 1;
@@ -221,6 +225,55 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     @Override
                     public void onClick(final View v) {
 
+                        final AlertDialog.Builder builder;
+                        builder = new AlertDialog.Builder(v.getContext());
+
+                        LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_league_creator_edit_scores, null);
+
+                        TextView nameTv = inflatedLayout.findViewById(R.id.custom_league_creator_edit_name);
+                        nameTv.setText(user.getGymName());
+
+                        final EditText benchEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_bench_input);
+                        benchEt.setText(user.getBenchPress().toString());
+                        benchEt.setEnabled(false);
+
+                        final EditText deadliftEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_deadlift_input);
+                        deadliftEt.setText(user.getDeadlift().toString());
+                        deadliftEt.setEnabled(false);
+
+                        final EditText squatEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_squat_input);
+                        squatEt.setText(user.getSquat().toString());
+                        squatEt.setEnabled(false);
+
+                        final EditText ohpEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_ohp_input);
+                        ohpEt.setText(user.getOverHeadPress().toString());
+                        ohpEt.setEnabled(false);
+
+                        Button save = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_remove);
+                        save.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                if(user.getPin().equals(FirebaseAuth.getInstance().getUid())){
+                                    alertDialog("You can not remove yourself as you are the league creator", v);
+                                }
+                                else{
+                                    // remove user from this league
+
+                                }
+
+
+
+                            }
+                        });
+
+                        //Creating dialog box
+                        builder.setView(inflatedLayout);
+                        AlertDialog alert = builder.create();
+                        //Setting the title manually
+                        alert.show();
+
                         DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
                             @Override
                             public void onComplete(Boolean data, Exception exception) {
@@ -234,7 +287,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             }
                         };
 
-                        leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
+                        //leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
                     }
                 });
             }
@@ -306,15 +359,15 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
         View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
         final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
-        MediaController mediaController = new MediaController(v.getContext());
+        //MediaController mediaController = new MediaController(v.getContext());
 
         if(link != null){
 
             Uri myUri = Uri.parse(link);
 
             video.setVideoURI(myUri);
-            video.setMediaController(mediaController);
-            mediaController.setAnchorView(video);
+            //video.setMediaController(mediaController);
+            //mediaController.setAnchorView(video);
             video.start();
 
             builder.setView(inflatedLayout);

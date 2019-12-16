@@ -61,14 +61,14 @@
         android:id="@+id/custom_bench_video_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/custom_bench_video_play"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_bench_video_proof"
         android:background="@color/ssBrown"
         android:text="Close"
-        android:textColor="@color/ssWhite"
         android:textAllCaps="false"
+        android:textColor="@color/ssWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/custom_bench_video_play"
+        app:layout_constraintTop_toBottomOf="@+id/custom_bench_video_proof"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

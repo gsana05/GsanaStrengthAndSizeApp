@@ -324,6 +324,7 @@ public class ActivityProfile extends AppCompatActivity {
                 };
 
                 userProfileModelSingleton.updateUser(
+                        FirebaseAuth.getInstance().getUid(),
                         gymName.getText().toString(),
                         Float.valueOf(benchPress.getText().toString()),
                         Float.valueOf(squat.getText().toString()),

@@ -294,9 +294,7 @@ public class UserProfileModelSingleton {
         }
     }
 
-    public void updateUser(final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final Uri benchLink, final Uri squatLink, final Uri deadliftLink, final Uri ohpLink, final DataModelResult<Boolean> callback){
-
-        final String userId = FirebaseAuth.getInstance().getUid();
+    public void updateUser(final String userId, final String gymName, final Float bench, final Float squat, final Float deadlift, final Float ohp, final Uri benchLink, final Uri squatLink, final Uri deadliftLink, final Uri ohpLink, final DataModelResult<Boolean> callback){
 
         if(userId != null){
             DataModelResult<User> userCallback = new DataModelResult<User>() {
