@@ -250,17 +250,82 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                         ohpEt.setText(user.getOverHeadPress().toString());
                         ohpEt.setEnabled(false);
 
+                        Button flag = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_flag);
+                        flag.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(final View v) {
+                                DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
+                                    @Override
+                                    public void onComplete(Boolean data, Exception exception) {
+                                        if(data){
+                                            Log.v("", ""); // flagged success
+                                            alertDialog("User has been flagged", v);
+                                        }
+                                        else{
+                                            alertDialog("User unable to be flagged", v);
+                                        }
+                                    }
+                                };
+
+                                leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
+                            }
+                        });
+
                         Button save = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_remove);
                         save.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View v) {
+                            public void onClick(final View v) {
 
                                 if(user.getPin().equals(FirebaseAuth.getInstance().getUid())){
                                     alertDialog("You can not remove yourself as you are the league creator", v);
                                 }
                                 else{
                                     // remove user from this league
+                                    final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
+                                        @Override
+                                        public void onComplete(Boolean data, Exception exception) {
 
+                                            if(exception != null){
+                                                Log.v("", "");
+                                            }
+
+                                            if(data){
+                                                Log.v("", "");
+                                                AlertDialog.Builder builder;
+                                                builder = new AlertDialog.Builder(v.getContext());
+                                                builder.setMessage("Success")
+                                                        .setCancelable(false)
+                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int id) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                //Creating dialog box
+                                                AlertDialog alert = builder.create();
+                                                //Setting the title manually
+                                                alert.show();
+                                            }
+                                            else{
+                                                Log.v("", "");
+                                                AlertDialog.Builder builder;
+                                                builder = new AlertDialog.Builder(v.getContext());
+                                                builder.setMessage("You can not delete a league you created until you are the only user left in the league")
+                                                        .setCancelable(false)
+                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int id) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                //Creating dialog box
+                                                AlertDialog alert = builder.create();
+                                                //Setting the title manually
+                                                alert.show();
+                                            }
+
+                                        }
+                                    };
+
+                                    leagueModelSingleton.leaveLeague(user.getPin(), leaguePin,callbackLeaveLeague);
                                 }
 
 
@@ -273,21 +338,6 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                         AlertDialog alert = builder.create();
                         //Setting the title manually
                         alert.show();
-
-                        DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
-                            @Override
-                            public void onComplete(Boolean data, Exception exception) {
-                                if(data){
-                                    Log.v("", ""); // flagged success
-                                    alertDialog("User has been flagged", v);
-                                }
-                                else{
-                                    alertDialog("User unable to be flagged", v);
-                                }
-                            }
-                        };
-
-                        //leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
                     }
                 });
             }
