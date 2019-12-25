@@ -290,7 +290,7 @@ public class ActivityStartStates extends AppCompatActivity {
         final DataModelResult<Boolean> callback = new DataModelResult<Boolean>(){
             @Override
             public void onComplete(Boolean data, Exception exception) {
-                if(data){
+                if(data != null && data){
                     mSaveData = false;
                     updateUI();
                     Toast.makeText(getApplicationContext(),"Data saved successfully",Toast.LENGTH_SHORT).show();
@@ -326,7 +326,7 @@ public class ActivityStartStates extends AppCompatActivity {
                                 mBenchPressUri,
                                 mSquatUri,
                                 mDeadliftUri,
-                                mSquatUri,
+                                mOhpUri,
                                 pushNotificationToken,
                                 callback);
 

@@ -137,7 +137,7 @@ public class UserModelSingleton {
                                                                                                     }).addOnFailureListener(new OnFailureListener() {
                                                                                                         @Override
                                                                                                         public void onFailure(@NonNull Exception e) {
-
+                                                                                                            callback.onComplete(null, e);
                                                                                                         }
                                                                                                     });
                                                                                                 }
@@ -146,7 +146,7 @@ public class UserModelSingleton {
                                                                                     }).addOnFailureListener(new OnFailureListener() {
                                                                                         @Override
                                                                                         public void onFailure(@NonNull Exception e) {
-
+                                                                                            callback.onComplete(null, e);
                                                                                         }
                                                                                     });
 
@@ -155,7 +155,7 @@ public class UserModelSingleton {
                                                                             }).addOnFailureListener(new OnFailureListener() {
                                                                                 @Override
                                                                                 public void onFailure(@NonNull Exception e) {
-
+                                                                                    callback.onComplete(null, e);
                                                                                 }
                                                                             });
                                                                         }
@@ -164,7 +164,7 @@ public class UserModelSingleton {
                                                             }).addOnFailureListener(new OnFailureListener() {
                                                                 @Override
                                                                 public void onFailure(@NonNull Exception e) {
-
+                                                                    callback.onComplete(null, e);
                                                                 }
                                                             });
 
@@ -173,7 +173,7 @@ public class UserModelSingleton {
                                                     }).addOnFailureListener(new OnFailureListener() {
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
-
+                                                            callback.onComplete(null, e);
                                                         }
                                                     });
                                                 }
@@ -182,7 +182,7 @@ public class UserModelSingleton {
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-
+                                            callback.onComplete(null, e);
                                         }
                                     });
 
@@ -191,7 +191,7 @@ public class UserModelSingleton {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-
+                                    callback.onComplete(null, e);
                                 }
                             });
                         }
@@ -200,7 +200,7 @@ public class UserModelSingleton {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
+                    callback.onComplete(null, e);
                 }
             });
         }

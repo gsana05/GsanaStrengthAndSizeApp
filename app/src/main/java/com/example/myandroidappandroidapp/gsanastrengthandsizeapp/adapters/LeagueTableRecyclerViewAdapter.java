@@ -1,13 +1,10 @@
 package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -33,11 +28,9 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataMod
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueModelSingleton;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.User;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserLeagueTableModelSingleton;
-import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.UserProfileModelSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueTableRecyclerViewAdapter.MyLeagueViewHolder> {
 
@@ -79,10 +72,11 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull final LeagueTableRecyclerViewAdapter.MyLeagueViewHolder holder, int position) {
         final LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
-        final UserProfileModelSingleton userProfileModelSingleton = UserProfileModelSingleton.getInstance();
+
         final User user = leagueList.get(position);
 
         int pos = position + 1;
@@ -175,8 +169,8 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             tv.setTextColor(col);
             total.setTextColor(col);
         }
-        Float totalScore = user.getBenchPress() + user.getDeadlift() + user.getSquat() + user.getOverHeadPress();
-        total.setText(totalScore.toString());
+        float totalScore = user.getBenchPress() + user.getDeadlift() + user.getSquat() + user.getOverHeadPress();
+        total.setText(Float.toString(totalScore));
 
         ImageView unflag = holder.itemView.findViewById(R.id.league_table_list_item_league_unflag);
         unflag.setVisibility(View.GONE);
@@ -222,6 +216,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
             else{
                 flag.setVisibility(View.VISIBLE);
                 flag.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onClick(final View v) {
 
@@ -229,7 +224,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                         builder = new AlertDialog.Builder(v.getContext());
 
                         LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_league_creator_edit_scores, null);
+                        @SuppressLint("InflateParams") View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_league_creator_edit_scores, null);
 
                         TextView nameTv = inflatedLayout.findViewById(R.id.custom_league_creator_edit_name);
                         nameTv.setText(user.getGymName());
@@ -325,11 +320,9 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                                         }
                                     };
 
+                                    // league creator removing a user from the league
                                     leagueModelSingleton.leaveLeague(user.getPin(), leaguePin,callbackLeaveLeague);
                                 }
-
-
-
                             }
                         });
 
@@ -370,8 +363,8 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         return leagueList.size();
     }
 
-    public class MyLeagueViewHolder extends RecyclerView.ViewHolder {
-        public MyLeagueViewHolder(@NonNull View itemView) {
+    class MyLeagueViewHolder extends RecyclerView.ViewHolder {
+        MyLeagueViewHolder(@NonNull View itemView) {
             super(itemView);
 
             gymName = itemView.findViewById(R.id.league_table_list_item_gym_name);
@@ -385,7 +378,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         }
     }
 
-    public void alertDialog(String comment, final View v){
+    private void alertDialog(String comment, final View v){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(v.getContext());
         builder.setMessage(comment)
@@ -402,12 +395,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         alert.show();
     }
 
-    public void alertVideoDialog(String link, View v, int videoType){
+    private void alertVideoDialog(String link, View v, int videoType){
         final AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(v.getContext());
         LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
+        @SuppressLint("InflateParams") View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_bench_video, null);
         final VideoView video = inflatedLayout.findViewById(R.id.custom_bench_video_proof);
         //MediaController mediaController = new MediaController(v.getContext());
 
