@@ -91,7 +91,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/ssBrown"
+        android:background="@color/lightGrey"
         app:layout_constraintVertical_weight="0.9"
         />
 
@@ -99,14 +99,13 @@
         android:id="@+id/league_table_results_main_view_sort_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/league_table_results_main_view"
-        app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
-        app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
         android:layout_marginTop="10dp"
-        android:textColor="@color/ssWhite"
-        android:textSize="18sp"
         android:text="League is sorted by: "
-        />
+        android:textColor="@color/ssBackgroundBlack"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
+        app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
+        app:layout_constraintTop_toTopOf="@+id/league_table_results_main_view" />
 
     <TextView
         android:id="@+id/league_table_results_main_view_sort_result"
@@ -116,7 +115,7 @@
         app:layout_constraintStart_toStartOf="@+id/league_table_results_main_view"
         app:layout_constraintEnd_toEndOf="@+id/league_table_results_main_view"
         android:text="All"
-        android:textColor="@color/ssWhite"
+        android:textColor="@color/ssBackgroundBlack"
         android:textSize="18sp"
         android:textStyle="bold"
         />
