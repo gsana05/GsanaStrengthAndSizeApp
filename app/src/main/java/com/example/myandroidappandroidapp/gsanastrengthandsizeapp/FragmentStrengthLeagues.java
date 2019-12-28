@@ -280,7 +280,6 @@ public class FragmentStrengthLeagues extends Fragment {
                     public void onComplete(Boolean data, Exception exception) {
 
                         if(data){
-                            alertDialog("Rules when creating a league");
                             Toast.makeText(getActivity(),"Data Saved",Toast.LENGTH_SHORT).show();
                             mIsCreatingLeague = false;
                             dismissKeyboard();

@@ -3,6 +3,7 @@ package com.example.myandroidappandroidapp.gsanastrengthandsizeapp.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
@@ -22,6 +23,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityCreatorMonitorLeague;
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityProfile;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.LeagueTableResults;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.DataModelResult;
@@ -220,7 +223,18 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     @Override
                     public void onClick(final View v) {
 
-                        final AlertDialog.Builder builder;
+                        Intent intent = new Intent (v.getContext(), ActivityCreatorMonitorLeague.class);
+                        intent.putExtra("gymName", user.getGymName());
+                        intent.putExtra("benchPress", user.getBenchPress());
+                        intent.putExtra("squat", user.getSquat());
+                        intent.putExtra("deadlift", user.getDeadlift());
+                        intent.putExtra("ohp", user.getOverHeadPress());
+                        intent.putExtra("userPin", user.getPin());
+                        intent.putExtra("leaguePin", leaguePin);
+                        v.getContext().startActivity(intent);
+
+
+                     /*   final AlertDialog.Builder builder;
                         builder = new AlertDialog.Builder(v.getContext());
 
                         LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -245,6 +259,12 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                         ohpEt.setText(user.getOverHeadPress().toString());
                         ohpEt.setEnabled(false);
 
+                        //Creating dialog box
+                        builder.setView(inflatedLayout);
+                        final AlertDialog alert = builder.create();
+                        //Setting the title manually
+                        alert.show();
+
                         Button flag = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_flag);
                         flag.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -255,6 +275,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                                         if(data){
                                             Log.v("", ""); // flagged success
                                             alertDialog("User has been flagged", v);
+                                            alert.dismiss();
                                         }
                                         else{
                                             alertDialog("User unable to be flagged", v);
@@ -266,13 +287,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             }
                         });
 
-                        Button save = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_remove);
-                        save.setOnClickListener(new View.OnClickListener() {
+                        Button removeUserBtn = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_remove);
+                        removeUserBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(final View v) {
 
                                 if(user.getPin().equals(FirebaseAuth.getInstance().getUid())){
                                     alertDialog("You can not remove yourself as you are the league creator", v);
+                                    alert.dismiss();
                                 }
                                 else{
                                     // remove user from this league
@@ -292,6 +314,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                                                         .setCancelable(false)
                                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int id) {
+                                                                alert.dismiss();
                                                                 dialog.dismiss();
                                                             }
                                                         });
@@ -309,6 +332,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                             public void onClick(DialogInterface dialog, int id) {
                                                                 dialog.dismiss();
+                                                                alert.dismiss();
                                                             }
                                                         });
                                                 //Creating dialog box
@@ -326,11 +350,14 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             }
                         });
 
-                        //Creating dialog box
-                        builder.setView(inflatedLayout);
-                        AlertDialog alert = builder.create();
-                        //Setting the title manually
-                        alert.show();
+                        Button cancel = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_cancel);
+                        cancel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                alert.dismiss();
+                            }
+                        });*/
+
                     }
                 });
             }
@@ -386,7 +413,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                 .setPositiveButton("close", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        ((LeagueTableResults)v.getContext()).finish();
+                        //((LeagueTableResults)v.getContext()).finish();
                     }
                 });
         //Creating dialog box
