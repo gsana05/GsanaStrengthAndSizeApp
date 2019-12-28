@@ -298,7 +298,8 @@ public class ActivityProfile extends AppCompatActivity {
 
 
                         if(exception != null){
-                            alertDialog(exception.getMessage());
+                            //alertDialog(exception.getMessage());
+                            alertDialog("Unable to save. Your video needs to be 5MB or less");
                             mSubmitProgress = false;
                             updateUI();
                         }

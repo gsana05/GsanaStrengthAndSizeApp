@@ -284,6 +284,22 @@ public class ActivityStartStates extends AppCompatActivity {
         alert.show();
     }
 
+    public void alertDialog(String response){
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setMessage(response)
+                .setCancelable(false)
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        //Creating dialog box
+        AlertDialog alert = builder.create();
+        //Setting the title manually
+        alert.show();
+    }
+
     public void saveUserStats(){
        //alert("Data has been filled in correctly");
 
@@ -299,7 +315,8 @@ public class ActivityStartStates extends AppCompatActivity {
                 else {
                     mSaveData = false;
                     updateUI();
-                    Toast.makeText(getApplicationContext(),"Data did not save",Toast.LENGTH_SHORT).show();
+                    alertDialog("Unable to save. Your video needs to be 5MB or less");
+                    //Toast.makeText(getApplicationContext(),"Data did not save",Toast.LENGTH_SHORT).show();
                 }
             }
         };
