@@ -197,7 +197,18 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                     @Override
                     public void onClick(final View v) {
 
-                        DataModelResult<Boolean> removeFlag = new DataModelResult<Boolean>() {
+                        Intent intent = new Intent (v.getContext(), ActivityCreatorMonitorLeague.class);
+                        intent.putExtra("gymName", user.getGymName());
+                        intent.putExtra("benchPress", user.getBenchPress());
+                        intent.putExtra("squat", user.getSquat());
+                        intent.putExtra("deadlift", user.getDeadlift());
+                        intent.putExtra("ohp", user.getOverHeadPress());
+                        intent.putExtra("userPin", user.getPin());
+                        intent.putExtra("leaguePin", leaguePin);
+                        intent.putExtra("flag", true);
+                        v.getContext().startActivity(intent);
+
+                     /*   DataModelResult<Boolean> removeFlag = new DataModelResult<Boolean>() {
                             @Override
                             public void onComplete(Boolean data, Exception exception) {
                                 if(data){
@@ -210,7 +221,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                             }
                         };
 
-                        leagueModelSingleton.deleteFlagToLeague(leaguePin,user.getPin() ,removeFlag);
+                        leagueModelSingleton.deleteFlagToLeague(leaguePin,user.getPin() ,removeFlag);*/
 
                     }
                 });
@@ -232,132 +243,6 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
                         intent.putExtra("userPin", user.getPin());
                         intent.putExtra("leaguePin", leaguePin);
                         v.getContext().startActivity(intent);
-
-
-                     /*   final AlertDialog.Builder builder;
-                        builder = new AlertDialog.Builder(v.getContext());
-
-                        LayoutInflater getLayoutInflater = (LayoutInflater) v.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        @SuppressLint("InflateParams") View inflatedLayout = getLayoutInflater.inflate(R.layout.custom_league_creator_edit_scores, null);
-
-                        TextView nameTv = inflatedLayout.findViewById(R.id.custom_league_creator_edit_name);
-                        nameTv.setText(user.getGymName());
-
-                        final EditText benchEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_bench_input);
-                        benchEt.setText(user.getBenchPress().toString());
-                        benchEt.setEnabled(false);
-
-                        final EditText deadliftEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_deadlift_input);
-                        deadliftEt.setText(user.getDeadlift().toString());
-                        deadliftEt.setEnabled(false);
-
-                        final EditText squatEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_squat_input);
-                        squatEt.setText(user.getSquat().toString());
-                        squatEt.setEnabled(false);
-
-                        final EditText ohpEt = inflatedLayout.findViewById(R.id.custom_league_creator_edit_ohp_input);
-                        ohpEt.setText(user.getOverHeadPress().toString());
-                        ohpEt.setEnabled(false);
-
-                        //Creating dialog box
-                        builder.setView(inflatedLayout);
-                        final AlertDialog alert = builder.create();
-                        //Setting the title manually
-                        alert.show();
-
-                        Button flag = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_flag);
-                        flag.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(final View v) {
-                                DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
-                                    @Override
-                                    public void onComplete(Boolean data, Exception exception) {
-                                        if(data){
-                                            Log.v("", ""); // flagged success
-                                            alertDialog("User has been flagged", v);
-                                            alert.dismiss();
-                                        }
-                                        else{
-                                            alertDialog("User unable to be flagged", v);
-                                        }
-                                    }
-                                };
-
-                                leagueModelSingleton.addFlagToLeague(leaguePin,user.getPin() ,addFlag); //todo push notification
-                            }
-                        });
-
-                        Button removeUserBtn = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_remove);
-                        removeUserBtn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(final View v) {
-
-                                if(user.getPin().equals(FirebaseAuth.getInstance().getUid())){
-                                    alertDialog("You can not remove yourself as you are the league creator", v);
-                                    alert.dismiss();
-                                }
-                                else{
-                                    // remove user from this league
-                                    final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
-                                        @Override
-                                        public void onComplete(Boolean data, Exception exception) {
-
-                                            if(exception != null){
-                                                Log.v("", "");
-                                            }
-
-                                            if(data){
-                                                Log.v("", "");
-                                                AlertDialog.Builder builder;
-                                                builder = new AlertDialog.Builder(v.getContext());
-                                                builder.setMessage("Success")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                alert.dismiss();
-                                                                dialog.dismiss();
-                                                            }
-                                                        });
-                                                //Creating dialog box
-                                                AlertDialog alert = builder.create();
-                                                //Setting the title manually
-                                                alert.show();
-                                            }
-                                            else{
-                                                Log.v("", "");
-                                                AlertDialog.Builder builder;
-                                                builder = new AlertDialog.Builder(v.getContext());
-                                                builder.setMessage("You can not delete a league you created until you are the only user left in the league")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int id) {
-                                                                dialog.dismiss();
-                                                                alert.dismiss();
-                                                            }
-                                                        });
-                                                //Creating dialog box
-                                                AlertDialog alert = builder.create();
-                                                //Setting the title manually
-                                                alert.show();
-                                            }
-
-                                        }
-                                    };
-
-                                    // league creator removing a user from the league
-                                    leagueModelSingleton.leaveLeague(user.getPin(), leaguePin,callbackLeaveLeague);
-                                }
-                            }
-                        });
-
-                        Button cancel = inflatedLayout.findViewById(R.id.custom_league_creator_edit_btn_cancel);
-                        cancel.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                alert.dismiss();
-                            }
-                        });*/
-
                     }
                 });
             }

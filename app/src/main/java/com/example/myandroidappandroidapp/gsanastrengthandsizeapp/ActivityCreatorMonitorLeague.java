@@ -35,6 +35,7 @@ public class ActivityCreatorMonitorLeague extends AppCompatActivity {
         float ohp = intent.getFloatExtra("ohp", 0f);
         final String userPin = intent.getStringExtra("userPin");
         final String leaguePin = intent.getStringExtra("leaguePin");
+        final Boolean isFlagged = intent.getBooleanExtra("flag", false);
 
         final TextView nameTv = this.findViewById(R.id.custom_league_creator_edit_name);
         nameTv.setText(gymName);
@@ -56,25 +57,53 @@ public class ActivityCreatorMonitorLeague extends AppCompatActivity {
         ohpEt.setEnabled(false);
 
         Button flag = this.findViewById(R.id.custom_league_creator_edit_btn_flag);
-        flag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
-                    @Override
-                    public void onComplete(Boolean data, Exception exception) {
-                        if(data){
-                            Log.v("", ""); // flagged success
-                            alertDialog("User has been flagged", v);
-                        }
-                        else{
-                            alertDialog("User unable to be flagged", v);
-                        }
-                    }
-                };
+        if(isFlagged){
+            flag.setText("Remove flag");
+            flag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    DataModelResult<Boolean> removeFlag = new DataModelResult<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data, Exception exception) {
+                            if(data){
+                                alertDialog("User flag has been removed", v);
+                            }
+                            else{
+                                alertDialog("Unable to remove flag", v);
+                            }
 
-                leagueModelSingleton.addFlagToLeague(leaguePin,userPin ,addFlag); //todo push notification
-            }
-        });
+                        }
+                    };
+
+                    leagueModelSingleton.deleteFlagToLeague(leaguePin,userPin,removeFlag);
+                }
+            });
+        }
+        else{
+            flag.setText("Flag");
+            flag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    DataModelResult<Boolean> addFlag = new DataModelResult<Boolean>() {
+                        @Override
+                        public void onComplete(Boolean data, Exception exception) {
+                            if(data){
+                                Log.v("", ""); // flagged success
+                                alertDialog("User has been flagged", v);
+                            }
+                            else{
+                                alertDialog("User unable to be flagged", v);
+                            }
+                        }
+                    };
+
+                    leagueModelSingleton.addFlagToLeague(leaguePin,userPin ,addFlag); //todo push notification
+                }
+            });
+        }
+
+
+
 
         Button removeUserBtn = this.findViewById(R.id.custom_league_creator_edit_btn_remove);
         removeUserBtn.setOnClickListener(new View.OnClickListener() {

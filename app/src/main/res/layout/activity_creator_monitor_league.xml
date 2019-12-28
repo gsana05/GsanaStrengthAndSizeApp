@@ -117,6 +117,7 @@
         android:background="@drawable/brown_border"
         android:backgroundTint="@color/ssWhite"
         android:textAlignment="center"
+        android:textColor="@color/ssBackgroundBlack"
         />
 
     <TextView
