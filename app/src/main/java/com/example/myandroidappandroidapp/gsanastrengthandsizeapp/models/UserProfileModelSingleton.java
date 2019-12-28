@@ -206,57 +206,45 @@ public class UserProfileModelSingleton {
     public void deleteVideoAndSaveNewOne(final String userId, final Uri benchLink, final String storageArea, final DataModelResult<Boolean> callback){
         //delete current bench from storage
         StorageReference fb = FirebaseStorage.getInstance().getReference().child(storageArea).child(userId);
-        fb.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        fb.putFile(benchLink).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                StorageReference fb = FirebaseStorage.getInstance().getReference().child(storageArea).child(userId);
-                fb.putFile(benchLink).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        StorageMetadata sm = taskSnapshot.getMetadata();
-                        if(sm != null){
-                            StorageReference storage = taskSnapshot.getStorage();
-                            if(storage != null){
-                                storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                StorageMetadata sm = taskSnapshot.getMetadata();
+                if(sm != null){
+                    StorageReference storage = taskSnapshot.getStorage();
+                    if(storage != null){
+                        storage.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
 
-                                        switch (storageArea){
-                                            case "gymBenchVideos": mNewBenchPbUri = uri.toString();
-                                            break;
-                                            case "gymSquatVideos": mNewSquatPbUri = uri.toString();
-                                            break;
-                                            case "gymDeadliftVideos": mNewDeadliftPbUri = uri.toString();
-                                            break;
-                                            case "gymOhpVideos": mNewOhpPbUri = uri.toString();
-                                            break;
-                                        }
+                                switch (storageArea){
+                                    case "gymBenchVideos": mNewBenchPbUri = uri.toString();
+                                        break;
+                                    case "gymSquatVideos": mNewSquatPbUri = uri.toString();
+                                        break;
+                                    case "gymDeadliftVideos": mNewDeadliftPbUri = uri.toString();
+                                        break;
+                                    case "gymOhpVideos": mNewOhpPbUri = uri.toString();
+                                        break;
+                                }
 
-                                        callback.onComplete(true, null);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        callback.onComplete(false, e);
-                                        //todo unable to get download url
-                                    }
-                                });
+                                callback.onComplete(true, null);
                             }
-                        }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                callback.onComplete(false, e);
+                                //todo unable to get download url
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        callback.onComplete(false, e);
-                        // todo unable to save new video
-                    }
-                });
+                }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 callback.onComplete(false, e);
-                //todo unable to delete video
+                // todo unable to save new video
             }
         });
     }
