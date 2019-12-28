@@ -36,7 +36,6 @@ public class ActivityCreatorMonitorLeague extends AppCompatActivity {
         final String userPin = intent.getStringExtra("userPin");
         final String leaguePin = intent.getStringExtra("leaguePin");
 
-
         final TextView nameTv = this.findViewById(R.id.custom_league_creator_edit_name);
         nameTv.setText(gymName);
 

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityCreatorMonitorLeague">
+    tools:context=".ActivityCreatorMonitorLeague"
+    android:background="@color/ssBackgroundBlack"
+    >
 
     <TextView
         android:id="@+id/custom_league_creator_edit_name"
@@ -17,7 +19,7 @@
         android:layout_marginTop="50dp"
         android:text="League members name"
         android:textStyle="bold"
-        android:textColor="@color/ssBlack"
+        android:textColor="@color/ssWhite"
         android:textSize="18sp"
         app:layout_constraintVertical_chainStyle="packed"
         />
@@ -33,7 +35,7 @@
         android:layout_marginTop="20dp"
         android:text="Bench Press"
         android:textStyle="bold"
-        android:textColor="@color/ssBlack"
+        android:textColor="@color/ssWhite"
         android:textSize="18sp"
         />
 
@@ -50,6 +52,8 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/brown_border"
         android:textAlignment="center"
+        android:backgroundTint="@color/ssWhite"
+        android:textColor="@color/ssBackgroundBlack"
         />
 
     <TextView
@@ -63,7 +67,7 @@
         android:layout_marginTop="20dp"
         android:text="Squat"
         android:textStyle="bold"
-        android:textColor="@color/ssBlack"
+        android:textColor="@color/ssWhite"
         android:textSize="18sp"
         />
 
@@ -79,7 +83,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/brown_border"
+        android:backgroundTint="@color/ssWhite"
         android:textAlignment="center"
+        android:textColor="@color/ssBackgroundBlack"
         />
 
     <TextView
@@ -93,7 +99,7 @@
         android:layout_marginTop="20dp"
         android:text="Deadlift"
         android:textStyle="bold"
-        android:textColor="@color/ssBlack"
+        android:textColor="@color/ssWhite"
         android:textSize="18sp"
         />
 
@@ -109,6 +115,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/brown_border"
+        android:backgroundTint="@color/ssWhite"
         android:textAlignment="center"
         />
 
@@ -123,7 +130,7 @@
         android:layout_marginTop="20dp"
         android:text="Over Head Press"
         android:textStyle="bold"
-        android:textColor="@color/ssBlack"
+        android:textColor="@color/ssWhite"
         android:textSize="18sp"
         />
 
@@ -139,7 +146,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/brown_border"
+        android:backgroundTint="@color/ssWhite"
         android:textAlignment="center"
+        android:textColor="@color/ssBackgroundBlack"
         />
 
     <Button
