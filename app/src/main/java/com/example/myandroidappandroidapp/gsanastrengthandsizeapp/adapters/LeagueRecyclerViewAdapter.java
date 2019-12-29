@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityLeaveLeague;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.ActivityLogIn;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.LeagueTableResults;
 import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.R;
@@ -123,73 +125,10 @@ public class LeagueRecyclerViewAdapter extends RecyclerView.Adapter<LeagueRecycl
             @Override
             public void onClick(final View v) {
 
-                final String currentSelectedLeague = createdLeague.getLeaguePin();
-                if(userId != null){
-                    final DataModelResult<Boolean> callbackLeaveLeague = new DataModelResult<Boolean>() {
-                        @Override
-                        public void onComplete(Boolean data, Exception exception) {
-
-                            if(exception != null){
-                                Log.v("", "");
-                            }
-
-                            if(data){
-                                Log.v("", "");
-                                AlertDialog.Builder builder;
-                                builder = new AlertDialog.Builder(v.getContext());
-                                builder.setMessage("Success")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                //Creating dialog box
-                                AlertDialog alert = builder.create();
-                                //Setting the title manually
-                                alert.show();
-                            }
-                            else{
-                                Log.v("", "");
-                                AlertDialog.Builder builder;
-                                builder = new AlertDialog.Builder(v.getContext());
-                                builder.setMessage("You can not delete a league you created until you are the only user left in the league")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                //Creating dialog box
-                                AlertDialog alert = builder.create();
-                                //Setting the title manually
-                                alert.show();
-                            }
-
-                        }
-                    };
-
-                    AlertDialog.Builder builder;
-                    builder = new AlertDialog.Builder(v.getContext());
-                    builder.setMessage("Are you sure you want to leave this league")
-                            .setCancelable(false)
-                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    return;
-                                }
-                            })
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                    leagueModelSingleton.leaveLeague(userId, currentSelectedLeague, callbackLeaveLeague);
-                                }
-                            });
-                    //Creating dialog box
-                    AlertDialog alert = builder.create();
-                    //Setting the title manually
-                    alert.show();
-                }
+                Intent intent = new Intent (v.getContext(), ActivityLeaveLeague.class);
+                intent.putExtra("LeaguePin", createdLeague.getLeaguePin());
+                intent.putExtra("LeagueName", createdLeague.getLeagueName());
+                v.getContext().startActivity(intent);
             }
         });
     }

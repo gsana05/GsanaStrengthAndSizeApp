@@ -23,11 +23,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ActivityCreatorMonitorLeague"
+            android:name=".ActivityLeaveLeague"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden"
             />
+        <activity
+            android:name=".ActivityCreatorMonitorLeague"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ActivityProveLift"
             android:screenOrientation="portrait"

@@ -19,6 +19,7 @@ import com.example.myandroidappandroidapp.gsanastrengthandsizeapp.models.LeagueM
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 public class ActivitySettings extends AppCompatActivity {
 
