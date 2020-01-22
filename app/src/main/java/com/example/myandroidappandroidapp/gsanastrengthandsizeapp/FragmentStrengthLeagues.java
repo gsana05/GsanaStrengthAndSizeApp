@@ -89,7 +89,7 @@ public class FragmentStrengthLeagues extends Fragment {
         };
 
         callback = new DataModelResult<ArrayList<String>>() {
-            @Override
+            @Override // all leagues pins from "leaguesCreated" - all leagues you are part of regardless if you created league or not
             public void onComplete(ArrayList<String> data, Exception exception) {
                 if(data != null){ // data is all league pins for that user
                     LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
@@ -210,6 +210,7 @@ public class FragmentStrengthLeagues extends Fragment {
                 };
 
                 LeagueModelSingleton leagueModelSingleton = LeagueModelSingleton.getInstance();
+                // leagueName is the leaguePin
                 leagueModelSingleton.addToLeague(leagueName.getText().toString(), callback); // joining a league
             }
         });

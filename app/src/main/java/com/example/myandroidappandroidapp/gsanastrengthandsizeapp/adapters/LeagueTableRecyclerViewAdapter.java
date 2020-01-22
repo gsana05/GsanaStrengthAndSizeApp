@@ -191,7 +191,7 @@ public class LeagueTableRecyclerViewAdapter extends RecyclerView.Adapter<LeagueT
         // only do this if user created the league
         if(isLeagueCreator){
 
-            if(flags != null && flags.contains(user.getPin())){
+            if(flags != null && flags.contains(user.getPin())){ // if user has been flagged do this
                 unflag.setVisibility(View.VISIBLE);
                 unflag.setOnClickListener(new View.OnClickListener() {
                     @Override

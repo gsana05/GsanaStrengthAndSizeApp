@@ -130,6 +130,7 @@ public class LeagueTableResults extends AppCompatActivity {
             leagueTableRecyclerView = this.findViewById(R.id.league_table_results_main_view_recycler_view);
             layoutManager = new LinearLayoutManager(this);
             leagueTableRecyclerView.setLayoutManager(layoutManager);
+
             usersCallback = new DataModelResult<ArrayList<User>>() {
                 @Override
                 public void onComplete(final ArrayList<User> data, Exception exception) {

@@ -672,51 +672,11 @@ public class LeagueModelSingleton {
 
         final String userId = FirebaseAuth.getInstance().getUid();
 
-        /*DataModelResult<ArrayList<String>> data = new DataModelResult<ArrayList<String>>() {
-            @Override
-            public void onComplete(ArrayList<String> data, Exception exception) {
-
-                if(data != null){
-                    data.add(leaguePin);
-                    final ArrayList<String> officialList = new ArrayList<>(data);
-
-                    if (userId != null) {
-                        DataModelResult<ArrayList<String>> getFlags = new DataModelResult<ArrayList<String>>() {
-                            @Override
-                            public void onComplete(ArrayList<String> data, Exception exception) {
-                                final League officialLeague = new League(userId, officialList, data, );
-
-                                getDatabaseRef().document(userId).set(officialLeague).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-
-                                        if(task.isSuccessful()){
-                                            callback.onComplete(true, null);
-                                        }
-                                        else {
-                                            callback.onComplete(false, task.getException());
-                                        }
-
-                                    }
-                                });
-                            }
-                        };
-
-                        getFlags(null, getFlags);
-                    }
-
-                }
-                else {
-                    callback.onComplete(false, null);
-                }
-            }
-        };*/
-
         DataModelResult<League> league = new DataModelResult<League>() {
             @Override
             public void onComplete(final League league, Exception exception) {
                 if(league != null){
-                    final ArrayList<String> leaguesCreated = new ArrayList<>(league.leaguesCreated);
+                    final ArrayList<String> leaguesCreated = new ArrayList<>(league.leaguesCreated);//get all leagues you are part of regardless if you created or joined them
                     leaguesCreated.add(leaguePin);
 
                     if (userId != null) {
@@ -923,7 +883,7 @@ public class LeagueModelSingleton {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if(queryDocumentSnapshots != null){
                     ArrayList<DataModelResult<ArrayList<CreatedLeague>>> callbackList = mProfileCallbacksAllLeagues.get(userId);
-                    for(DocumentSnapshot i : queryDocumentSnapshots){
+                    for(DocumentSnapshot i : queryDocumentSnapshots){ // loop through every league
                         HashMap<String, Object> map = (HashMap<String, Object>)i.getData();
 
                         String leaguePinDatabase = (String) map.get("leaguePin");

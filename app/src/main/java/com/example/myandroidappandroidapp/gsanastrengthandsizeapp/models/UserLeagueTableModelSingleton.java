@@ -95,7 +95,7 @@ public class UserLeagueTableModelSingleton {
 
                             for (String id : leagueMasterId) {
                                 Map<String, Object> lp = snapshot.getData();
-                                String p = (String) lp.get("pin");
+                                //String p = (String) lp.get("pin");
                                 String pin = snapshot.getString("pin");
                                 if (pin != null) {
                                     if (id.equals(pin)) {
